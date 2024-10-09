@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color.fromARGB(255, 255, 194, 81);
-const backgroundColor = Color(0xFFededed);
+const primaryColor = Color(0xFF00c27c);
+const backgroundColor = Color(0xFFffffff);
 
 final lightTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
   primaryColor: primaryColor,
   scaffoldBackgroundColor: backgroundColor,
-  hintColor: const Color(0xFF575656),
+  hintColor: const Color(0xFFd6d8d8),
   dividerTheme: const DividerThemeData(
     color: Color.fromARGB(255, 148, 148, 148),
   ),
