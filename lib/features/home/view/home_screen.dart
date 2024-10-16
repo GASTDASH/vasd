@@ -1,5 +1,6 @@
-import 'package:easy_stepper/easy_stepper.dart';
+import 'package:another_stepper/another_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:vasd/features/home/home.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar: Container(
+          height: 70,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 20)],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.home_outlined)),
+              IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.mail_outline)),
+              const CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 32,
+              ),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_outlined)),
+              IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.settings_outlined)),
+            ],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Container(
+          margin: const EdgeInsets.only(top: 32),
+          height: 64,
+          width: 64,
+          child: FloatingActionButton(
+            backgroundColor: theme.primaryColor,
+            elevation: 0,
+            onPressed: () {},
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+              side: const BorderSide(
+                  color: Colors.white,
+                  width: 12,
+                  strokeAlign: BorderSide.strokeAlignOutside),
+            ),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(100),
           child: Padding(
@@ -174,11 +219,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Container(
-                        height: 300,
+                        padding: const EdgeInsets.only(bottom: 12),
                         decoration: BoxDecoration(
                             color: theme.hintColor.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(18)),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(12),
@@ -218,20 +264,68 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const Divider(indent: 12, endIndent: 12),
-                            const EasyStepper(
-                              activeStep: 1,
-                              direction: Axis.vertical,
-                              stepRadius: 10,
-                              lineStyle: LineStyle(
-                                lineType: LineType.dotted,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: AnotherStepper(
+                                iconHeight: 12,
+                                iconWidth: 12,
+                                activeIndex: 0,
+                                activeBarColor: theme.primaryColor,
+                                stepperList: [
+                                  StepperData(
+                                    iconWidget: const CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                    ),
+                                    title: StepperText(
+                                      "Из",
+                                      textStyle: const TextStyle(
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    subtitle: StepperText(
+                                      "Орехово-Зуево, Россия",
+                                      textStyle: const TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                  StepperData(
+                                    iconWidget: const CircleAvatar(
+                                      backgroundColor: Colors.black,
+                                    ),
+                                    title: StepperText(
+                                      "Куда",
+                                      textStyle: const TextStyle(
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    subtitle: StepperText(
+                                      "Екатеринбург, Россия",
+                                      textStyle: const TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                ],
+                                stepperDirection: Axis.vertical,
                               ),
-                              steps: [
-                                EasyStep(
-                                  customStep: SizedBox.shrink(),
-                                ),
-                                EasyStep(customStep: SizedBox.shrink()),
-                              ],
                             ),
+                            const Divider(indent: 12, endIndent: 12),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "Статус: ",
+                                  style: theme.textTheme.bodyLarge,
+                                  children: [
+                                    TextSpan(
+                                      text: "Ваша посылка в пути",
+                                      style: theme.textTheme.bodyLarge
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w800),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -250,34 +344,88 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Our Service",
+                          "Услуги",
                           style: theme.textTheme.titleLarge
                               ?.copyWith(fontWeight: FontWeight.w800),
                         ),
                         TextButton(
                           onPressed: () {},
-                          child: Text("View All",
+                          child: Text("Все",
                               style: theme.textTheme.bodyLarge
                                   ?.copyWith(color: theme.primaryColor)),
                         ),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: SizedBox(
                         height: 150,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: SizedBox(
-                                child: Placeholder(),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context, "/send_package");
+                                },
+                                borderRadius: BorderRadius.circular(18),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                    color: theme.primaryColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.mail_outline,
+                                        size: 48,
+                                        color: theme.primaryColor,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        "Отправить",
+                                        style: theme.textTheme.titleLarge
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.w800),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                            SizedBox(width: 16),
+                            const SizedBox(width: 16),
                             Expanded(
-                              child: SizedBox(
-                                child: Placeholder(),
+                              child: InkWell(
+                                onTap: () {},
+                                borderRadius: BorderRadius.circular(18),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                    color: theme.primaryColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.place_outlined,
+                                        size: 48,
+                                        color: theme.primaryColor,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        "Отследить",
+                                        style: theme.textTheme.titleLarge
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.w800),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -298,13 +446,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Recent Packages",
+                          "Последние посылки",
                           style: theme.textTheme.titleLarge
                               ?.copyWith(fontWeight: FontWeight.w800),
                         ),
                         TextButton(
                           onPressed: () {},
-                          child: Text("View All",
+                          child: Text("Все",
                               style: theme.textTheme.bodyLarge
                                   ?.copyWith(color: theme.primaryColor)),
                         ),
@@ -314,15 +462,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.all(8),
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: 90,
-                            child: Placeholder(),
-                          ),
+                          RecentPackageWidget(),
                           SizedBox(height: 24),
-                          SizedBox(
-                            height: 90,
-                            child: Placeholder(),
-                          ),
+                          RecentPackageWidget(),
                         ],
                       ),
                     ),
