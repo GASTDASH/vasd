@@ -11,6 +11,7 @@ class VASDApp extends StatelessWidget {
       title: 'VASD',
       theme: lightTheme,
       routes: routes,
+      initialRoute: "/login",
     );
   }
 }

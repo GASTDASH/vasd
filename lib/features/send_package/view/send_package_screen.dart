@@ -72,15 +72,15 @@ class _SendPackageScreenState extends State<SendPackageScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         children: [
-                          TextBox(hintText: "Фамилия Имя"),
+                          TextFieldCustom(hintText: "Фамилия Имя"),
                           SizedBox(height: 12),
-                          TextBox(hintText: "Мобильный телефон"),
+                          TextFieldCustom(hintText: "Мобильный телефон"),
                           SizedBox(height: 12),
-                          TextBox(hintText: "Адрес"),
+                          TextFieldCustom(hintText: "Адрес"),
                           SizedBox(height: 12),
-                          TextBox(hintText: "Дата отправки"),
+                          TextFieldCustom(hintText: "Дата отправки"),
                           SizedBox(height: 12),
-                          TextBox(hintText: "Время отправки"),
+                          TextFieldCustom(hintText: "Время отправки"),
                         ],
                       ),
                     ),
@@ -128,7 +128,7 @@ class _SendPackageScreenState extends State<SendPackageScreen> {
                             width: MediaQuery.of(context).size.width,
                           ),
                           const SizedBox(height: 12),
-                          const TextBox(
+                          const TextFieldCustom(
                               hintText:
                                   "Введите сообщение"), // TODO: сделать multiline
                         ],
@@ -139,23 +139,9 @@ class _SendPackageScreenState extends State<SendPackageScreen> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
               SliverToBoxAdapter(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
+                child: ButtonBase(
                   onTap: () {},
-                  child: Ink(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: theme.primaryColor,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Далее",
-                        style: theme.textTheme.bodyLarge
-                            ?.copyWith(color: Colors.white),
-                      ),
-                    ),
-                  ),
+                  text: "Далее",
                 ),
               ),
             ],

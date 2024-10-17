@@ -7,7 +7,7 @@ final lightTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
   primaryColor: primaryColor,
   scaffoldBackgroundColor: backgroundColor,
-  hintColor: const Color(0xFFd6d8d8),
+  hintColor: const Color(0xFFa2aaa8),
   dividerTheme: const DividerThemeData(
     color: Color.fromARGB(255, 148, 148, 148),
   ),
@@ -17,7 +17,7 @@ final lightTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     // headlineLarge: TextStyle(fontFamily: "Bahnschrift"),
-    // headlineMedium: TextStyle(fontFamily: "Bahnschrift"),
+    headlineMedium: TextStyle(fontWeight: FontWeight.w800),
     // headlineSmall: TextStyle(fontFamily: "Bahnschrift"),
     //
     displaySmall: TextStyle(fontWeight: FontWeight.w300),
