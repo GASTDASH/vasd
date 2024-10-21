@@ -95,7 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Text("Ещё нет аккаунта?"),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, "/register");
+                    },
                     child: Text(
                       "Зарегистрироваться",
                       style: TextStyle(color: theme.primaryColor),

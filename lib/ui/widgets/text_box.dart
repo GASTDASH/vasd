@@ -28,8 +28,13 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
       obscureText: !showPassword,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: theme.primaryColor),
+        ),
         hintText: widget.hintText,
-        prefixIcon: Icon(widget.prefixIcon, color: theme.hintColor),
+        prefixIcon: widget.prefixIcon != null
+            ? Icon(widget.prefixIcon, color: theme.hintColor)
+            : null,
         hintStyle:
             const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
         suffixIcon: widget.password
