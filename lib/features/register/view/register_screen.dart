@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Center(child: Text("Logo"))), // TODO: Добавить лого
                 ),
                 const SizedBox(height: 60),
-                Text("Давайте войдем в систему!",
+                Text("Создайте свой новый аккаунт!",
                     style: theme.textTheme.headlineMedium),
                 const SizedBox(height: 12),
                 Text("Введите ваши данные ниже",
@@ -46,11 +46,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const TextFieldCustom(hintText: "Адрес"),
                 const SizedBox(height: 24),
                 ButtonBase(
-                  text: "Войти",
+                  text: "Зарегестрироваться",
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, "/home");
+                    Navigator.pushReplacementNamed(context, "/login");
                   },
                 ),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

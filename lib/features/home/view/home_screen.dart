@@ -1,6 +1,7 @@
 import 'package:another_stepper/another_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:vasd/features/home/home.dart';
+import 'package:vasd/features/home/widgets/home_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,65 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Icon(Icons.add, color: Colors.white),
           ),
         ),
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            color: theme.primaryColor.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Icon(
-                          Icons.place_outlined,
-                          color: theme.primaryColor,
-                          size: 32,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Ваше местоположение"),
-                        SizedBox(
-                          width: 250,
-                          child: Text(
-                            "Орехово-Зуево, Московская обл.",
-                            style: theme.textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w800),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Image.network("https://i.imgur.com/caImSzp.png"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        appBar: const HomeAppBar(),
         body: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -156,33 +99,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      prefixIcon:
-                                          const Icon(Icons.mail_outlined),
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      hintText: "Номер заказа",
-                                      hintStyle: TextStyle(
-                                        color: theme.hintColor,
+                                  child: Center(
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        prefixIcon:
+                                            const Icon(Icons.mail_outlined),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintText: "Номер заказа",
+                                        hintStyle: TextStyle(
+                                          color: theme.hintColor,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Container(
-                                height: 60,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                  color: theme.primaryColor,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Icon(
-                                  Icons.qr_code,
-                                  color: Colors.white,
-                                  size: 34,
+                              InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: () {},
+                                child: Ink(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                    color: theme.primaryColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.qr_code,
+                                    color: Colors.white,
+                                    size: 34,
+                                  ),
                                 ),
                               ),
                             ],
