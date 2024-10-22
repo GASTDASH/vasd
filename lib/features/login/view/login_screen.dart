@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ButtonBase(
                   text: "Войти",
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, "/home");
+                    Navigator.pushReplacementNamed(context, "/");
                   },
                 ),
                 const SizedBox(height: 24),

@@ -5,9 +5,11 @@ import 'package:vasd/features/new_password/view/new_password_screen.dart';
 import 'package:vasd/features/otp_verification/otp_verification.dart';
 import 'package:vasd/features/profile/view/profile_screen.dart';
 import 'package:vasd/features/register/register.dart';
+import 'package:vasd/features/router/view/router_screen.dart';
 import 'package:vasd/features/send_package/send_package.dart';
 
 final routes = {
+  "/": (context) => const RouterScreen(),
   "/home": (context) => const HomeScreen(),
   "/send_package": (context) => const SendPackageScreen(),
   "/login": (context) => const LoginScreen(),
