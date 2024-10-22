@@ -60,9 +60,6 @@ class PasswordUpdatedDialog extends StatelessWidget {
                         context, "/home", (route) => true);
                   },
                 ),
-                // child: Container(
-                //   decoration: BoxDecoration(color: theme.primaryColor),
-                // ),
               ),
             ],
           ),

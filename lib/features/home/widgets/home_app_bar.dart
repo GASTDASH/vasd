@@ -53,15 +53,19 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
             const Expanded(child: SizedBox.expand()),
             InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, "/profile");
+              },
               child: Ink(
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
                   borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage("https://i.imgur.com/867trdy.jpeg"),
+                  ),
                 ),
-                child: Image.network("https://i.imgur.com/caImSzp.png"),
               ),
             ),
           ],
