@@ -27,6 +27,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
     return TextField(
       obscureText: !showPassword,
       decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(20),
         border: const OutlineInputBorder(),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: theme.primaryColor),

@@ -25,17 +25,52 @@ class _RouterScreenState extends State<RouterScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.home_outlined)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.mail_outline)),
+            IconButton(
+              onPressed: () {
+                selectedPage = "/home";
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.home_outlined,
+                color: selectedPage == "/home" ? theme.primaryColor : null,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                selectedPage = "/packages";
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.mail_outline,
+                color: selectedPage == "/packages" ? theme.primaryColor : null,
+              ),
+            ),
             const CircleAvatar(
               backgroundColor: Colors.transparent,
               radius: 32,
             ),
             IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_outlined)),
+              onPressed: () {
+                selectedPage = "/notifications";
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.notifications_outlined,
+                color: selectedPage == "/notifications"
+                    ? theme.primaryColor
+                    : null,
+              ),
+            ),
             IconButton(
-                onPressed: () {}, icon: const Icon(Icons.settings_outlined)),
+              onPressed: () {
+                selectedPage = "/settings";
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.settings_outlined,
+                color: selectedPage == "/settings" ? theme.primaryColor : null,
+              ),
+            ),
           ],
         ),
       ),
