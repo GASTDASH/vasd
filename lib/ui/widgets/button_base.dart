@@ -24,7 +24,11 @@ class ButtonBase extends StatelessWidget {
       child: Ink(
         height: 60,
         decoration: BoxDecoration(
-          color: outlined ? null : theme.primaryColor,
+          color: outlined
+              ? null
+              : onTap == null
+                  ? theme.hintColor.withOpacity(0.1)
+                  : theme.primaryColor,
           borderRadius: BorderRadius.circular(16),
           border: outlined ? Border.all(color: theme.hintColor) : null,
         ),
@@ -40,8 +44,12 @@ class ButtonBase extends StatelessWidget {
                   : const SizedBox.shrink(),
               Text(
                 text,
-                style: theme.textTheme.bodyLarge
-                    ?.copyWith(color: outlined ? Colors.black : Colors.white),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                    color: outlined
+                        ? Colors.black
+                        : onTap == null
+                            ? theme.hintColor
+                            : Colors.white),
               ),
             ],
           ),

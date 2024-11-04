@@ -9,6 +9,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -35,13 +38,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("Введите ваши данные ниже",
                     style: TextStyle(color: theme.hintColor)),
                 const SizedBox(height: 24),
-                const TextFieldCustom(
-                    hintText: "Эл. почта", prefixIcon: Icons.mail_outline),
+                TextFieldCustom(
+                  hintText: "Эл. почта",
+                  prefixIcon: Icons.mail_outline,
+                  controller: emailController,
+                ),
                 const SizedBox(height: 16),
-                const TextFieldCustom(
-                    hintText: "Пароль",
-                    prefixIcon: Icons.lock_outline,
-                    password: true),
+                TextFieldCustom(
+                  hintText: "Пароль",
+                  prefixIcon: Icons.lock_outline,
+                  password: true,
+                  controller: passwordController,
+                ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -55,9 +63,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 ButtonBase(
                   text: "Войти",
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, "/");
-                  },
+                  onTap: (emailController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty)
+                      ? () {
+                          Navigator.pushReplacementNamed(context, "/");
+                        }
+                      : null,
                 ),
                 const SizedBox(height: 24),
                 const Row(
