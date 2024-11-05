@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
 import 'package:vasd/ui/ui.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -9,6 +10,8 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+  final codeController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -26,9 +29,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(18),
           child: ButtonBase(
-            onTap: () {
-              Navigator.pushNamed(context, "/new_password");
-            },
+            onTap: (codeController.text.length == 4)
+                ? () {
+                    Navigator.pushNamed(context, "/new_password");
+                  }
+                : null,
             text: "Проверить",
           ),
         ),
@@ -42,9 +47,29 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               Text("Код подтверждения был отправлен на [...]",
                   style: TextStyle(color: theme.hintColor)),
               const SizedBox(height: 24),
-              const SizedBox(
-                height: 100,
-                child: Placeholder(),
+              Center(
+                child: SizedBox(
+                  height: 100,
+                  child: Pinput(
+                    controller: codeController,
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                    defaultPinTheme: PinTheme(
+                      width: 86,
+                      height: 90,
+                      textStyle: const TextStyle(
+                          fontSize: 32,
+                          color: Color.fromRGBO(30, 60, 87, 1),
+                          fontWeight: FontWeight.w600),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: const Color.fromRGBO(234, 243, 236, 1)),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 12),
               Align(
@@ -55,7 +80,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     style: theme.textTheme.bodyMedium,
                     children: [
                       TextSpan(
-                        text: "00:52",
+                        text: "0:52",
                         style: theme.textTheme.bodyMedium
                             ?.copyWith(color: theme.primaryColor),
                       ),
