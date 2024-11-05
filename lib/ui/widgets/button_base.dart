@@ -36,7 +36,12 @@ class ButtonBase extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              prefixIcon != null ? Icon(prefixIcon) : const SizedBox.shrink(),
+              prefixIcon != null
+                  ? Icon(
+                      prefixIcon,
+                      color: outlined ? null : Colors.white,
+                    )
+                  : const SizedBox.shrink(),
               prefixIcon != null
                   ? const SizedBox(
                       width: 8,
