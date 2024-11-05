@@ -9,7 +9,7 @@ class RouterScreen extends StatefulWidget {
 }
 
 class _RouterScreenState extends State<RouterScreen> {
-  String selectedPage = "/home";
+  String selectedPage = "/home/home";
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +27,24 @@ class _RouterScreenState extends State<RouterScreen> {
           children: [
             IconButton(
               onPressed: () {
-                selectedPage = "/home";
+                selectedPage = "/home/home";
                 setState(() {});
               },
               icon: Icon(
                 Icons.home_outlined,
-                color: selectedPage == "/home" ? theme.primaryColor : null,
+                color: selectedPage == "/home/home" ? theme.primaryColor : null,
               ),
             ),
             IconButton(
               onPressed: () {
-                selectedPage = "/packages";
+                selectedPage = "/home/packages";
                 setState(() {});
               },
               icon: Icon(
                 Icons.mail_outline,
-                color: selectedPage == "/packages" ? theme.primaryColor : null,
+                color: selectedPage == "/home/packages"
+                    ? theme.primaryColor
+                    : null,
               ),
             ),
             const CircleAvatar(
@@ -51,24 +53,26 @@ class _RouterScreenState extends State<RouterScreen> {
             ),
             IconButton(
               onPressed: () {
-                selectedPage = "/notifications";
+                selectedPage = "/home/notifications";
                 setState(() {});
               },
               icon: Icon(
                 Icons.notifications_outlined,
-                color: selectedPage == "/notifications"
+                color: selectedPage == "/home/notifications"
                     ? theme.primaryColor
                     : null,
               ),
             ),
             IconButton(
               onPressed: () {
-                selectedPage = "/settings";
+                selectedPage = "/home/settings";
                 setState(() {});
               },
               icon: Icon(
                 Icons.settings_outlined,
-                color: selectedPage == "/settings" ? theme.primaryColor : null,
+                color: selectedPage == "/home/settings"
+                    ? theme.primaryColor
+                    : null,
               ),
             ),
           ],

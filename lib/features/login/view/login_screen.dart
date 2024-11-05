@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: (emailController.text.isNotEmpty &&
                           passwordController.text.isNotEmpty)
                       ? () {
-                          Navigator.pushReplacementNamed(context, "/");
+                          Navigator.pushReplacementNamed(context, "/home");
                         }
                       : null,
                 ),

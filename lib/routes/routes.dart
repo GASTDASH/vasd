@@ -12,11 +12,11 @@ import 'package:vasd/features/send_package/send_package.dart';
 import 'package:vasd/features/settings/view/settings_screen.dart';
 
 final routes = {
-  "/": (context) => const RouterScreen(),
-  "/home": (context) => const HomeScreen(),
-  "/packages": (context) => const PackagesScreen(),
-  "/notifications": (context) => const NotificationsScreen(),
-  "/settings": (context) => const SettingsScreen(),
+  "/home": (context) => const RouterScreen(),
+  "/home/home": (context) => const HomeScreen(),
+  "/home/packages": (context) => const PackagesScreen(),
+  "/home/notifications": (context) => const NotificationsScreen(),
+  "/home/settings": (context) => const SettingsScreen(),
   //
   "/send_package": (context) => const SendPackageScreen(),
   "/profile": (context) => const ProfileScreen(),

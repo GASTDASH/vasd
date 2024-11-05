@@ -33,7 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.all(18),
           child: ButtonBase(
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, "/", (route) => true);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/home", (route) => true);
             },
             text: "Сохранить",
           ),

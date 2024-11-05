@@ -57,7 +57,7 @@ class PasswordUpdatedDialog extends StatelessWidget {
                   text: "Вернуться домой",
                   onTap: () {
                     Navigator.pushNamedAndRemoveUntil(
-                        context, "/", (route) => true);
+                        context, "/home", (route) => true);
                   },
                 ),
               ),
