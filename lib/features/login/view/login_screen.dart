@@ -42,6 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: "Эл. почта",
                   prefixIcon: Icons.mail_outline,
                   controller: emailController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFieldCustom(
@@ -49,6 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefixIcon: Icons.lock_outline,
                   password: true,
                   controller: passwordController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
                 ),
                 Align(
                   alignment: Alignment.centerRight,

@@ -9,6 +9,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final cityController = TextEditingController();
+  final addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -35,21 +41,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Text("Введите ваши данные ниже",
                     style: TextStyle(color: theme.hintColor)),
                 const SizedBox(height: 24),
-                const TextFieldCustom(hintText: "Имя пользователя"),
+                TextFieldCustom(
+                  hintText: "Имя пользователя",
+                  controller: usernameController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
                 const SizedBox(height: 16),
-                const TextFieldCustom(hintText: "Эл. почта"),
+                TextFieldCustom(
+                  hintText: "Эл. почта",
+                  controller: emailController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
                 const SizedBox(height: 16),
-                const TextFieldCustom(hintText: "Номер телефона"),
+                TextFieldCustom(
+                  hintText: "Номер телефона",
+                  controller: phoneController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
                 const SizedBox(height: 16),
-                const TextFieldCustom(hintText: "Город"),
+                TextFieldCustom(
+                  hintText: "Город",
+                  controller: cityController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
                 const SizedBox(height: 16),
-                const TextFieldCustom(hintText: "Адрес"),
+                TextFieldCustom(
+                  hintText: "Адрес",
+                  controller: addressController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
                 const SizedBox(height: 24),
                 ButtonBase(
-                  text: "Зарегестрироваться",
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, "/login");
-                  },
+                  text: "Зарегистрироваться",
+                  onTap: (usernameController.text.isNotEmpty &&
+                          emailController.text.isNotEmpty &&
+                          phoneController.text.isNotEmpty &&
+                          cityController.text.isNotEmpty &&
+                          addressController.text.isNotEmpty)
+                      ? () {
+                          Navigator.pushReplacementNamed(context, "/login");
+                        }
+                      : null,
                 ),
                 const SizedBox(height: 24),
                 Row(

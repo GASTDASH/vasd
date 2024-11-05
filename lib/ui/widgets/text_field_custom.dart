@@ -7,6 +7,7 @@ class TextFieldCustom extends StatefulWidget {
     this.prefixIcon,
     this.password = false,
     this.controller,
+    this.onChanged,
   });
   // : assert();
 
@@ -14,6 +15,7 @@ class TextFieldCustom extends StatefulWidget {
   final IconData? prefixIcon;
   final bool password;
   final TextEditingController? controller;
+  final void Function(String)? onChanged;
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -27,9 +29,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
     final theme = Theme.of(context);
 
     return TextField(
-      // onChanged: (value) {
-      //   setState(() {});
-      // }, // TODO
+      onChanged: widget.onChanged,
       controller: widget.controller,
       obscureText: !showPassword,
       decoration: InputDecoration(
