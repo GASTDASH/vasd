@@ -84,7 +84,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SettingsButton(
                   icon: Icons.edit_outlined,
                   text: "Редактировать профиль",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, "/profile");
+                  },
                 ),
                 const Divider(thickness: 0.2, height: 0),
                 SettingsButton(
