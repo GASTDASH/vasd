@@ -9,7 +9,29 @@ class RouterScreen extends StatefulWidget {
 }
 
 class _RouterScreenState extends State<RouterScreen> {
-  String selectedPage = "/home/home";
+  List<String> pages = [
+    "/home/home",
+    "/home/packages",
+    "/home/notifications",
+    "/home/settings",
+  ];
+
+  int selectedPage = 0;
+  final pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _openPage(int index) {
+    setState(() {
+      selectedPage = index;
+      pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,24 +49,20 @@ class _RouterScreenState extends State<RouterScreen> {
           children: [
             IconButton(
               onPressed: () {
-                selectedPage = "/home/home";
-                setState(() {});
+                _openPage(0);
               },
               icon: Icon(
                 Icons.home_outlined,
-                color: selectedPage == "/home/home" ? theme.primaryColor : null,
+                color: selectedPage == 0 ? theme.primaryColor : null,
               ),
             ),
             IconButton(
               onPressed: () {
-                selectedPage = "/home/packages";
-                setState(() {});
+                _openPage(1);
               },
               icon: Icon(
                 Icons.mail_outline,
-                color: selectedPage == "/home/packages"
-                    ? theme.primaryColor
-                    : null,
+                color: selectedPage == 1 ? theme.primaryColor : null,
               ),
             ),
             const CircleAvatar(
@@ -53,26 +71,20 @@ class _RouterScreenState extends State<RouterScreen> {
             ),
             IconButton(
               onPressed: () {
-                selectedPage = "/home/notifications";
-                setState(() {});
+                _openPage(2);
               },
               icon: Icon(
                 Icons.notifications_outlined,
-                color: selectedPage == "/home/notifications"
-                    ? theme.primaryColor
-                    : null,
+                color: selectedPage == 2 ? theme.primaryColor : null,
               ),
             ),
             IconButton(
               onPressed: () {
-                selectedPage = "/home/settings";
-                setState(() {});
+                _openPage(3);
               },
               icon: Icon(
                 Icons.settings_outlined,
-                color: selectedPage == "/home/settings"
-                    ? theme.primaryColor
-                    : null,
+                color: selectedPage == 3 ? theme.primaryColor : null,
               ),
             ),
           ],
@@ -97,7 +109,17 @@ class _RouterScreenState extends State<RouterScreen> {
           child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
-      body: routes[selectedPage]!(context),
+      /* body: routes[selectedPage]!(context), */
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        children: [
+          routes['/home/home']!(context),
+          routes['/home/packages']!(context),
+          routes['/home/notifications']!(context),
+          routes['/home/settings']!(context),
+        ],
+      ),
     );
   }
 }

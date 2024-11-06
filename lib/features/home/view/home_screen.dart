@@ -1,6 +1,7 @@
 import 'package:another_stepper/another_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:vasd/features/home/home.dart';
+import 'package:vasd/features/otp_verification/otp_verification.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final trackContainerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -23,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: SizedBox(
+                  key: trackContainerKey,
                   height: 160,
                   child: Container(
                     decoration: BoxDecoration(
@@ -303,7 +307,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(width: 16),
                             Expanded(
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Scrollable.ensureVisible(
+                                      trackContainerKey.currentContext!,
+                                      duration: const Duration(seconds: 1));
+                                },
                                 borderRadius: BorderRadius.circular(18),
                                 child: Ink(
                                   decoration: BoxDecoration(
