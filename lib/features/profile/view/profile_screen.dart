@@ -39,65 +39,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
             text: "Сохранить",
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            children: [
-              Center(
-                child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      // TODO: Edit photo
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: const DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  "https://i.imgur.com/867trdy.jpeg"),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            height: 30,
-                            width: 30,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              children: [
+                Center(
+                  child: SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () {
+                        // TODO: Edit photo
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: theme.primaryColor,
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: Colors.white),
-                            ),
-                            child: const Icon(
-                              Icons.edit_outlined,
-                              color: Colors.white,
-                              size: 16,
+                              borderRadius: BorderRadius.circular(12),
+                              image: const DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                    "https://i.imgur.com/867trdy.jpeg"),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: theme.primaryColor,
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: Colors.white),
+                              ),
+                              child: const Icon(
+                                Icons.edit_outlined,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              const TextFieldCustom(hintText: "Имя пользователя"),
-              const SizedBox(height: 12),
-              const TextFieldCustom(hintText: "Эл. почта"),
-              const SizedBox(height: 12),
-              const TextFieldCustom(hintText: "Телефон"),
-              const SizedBox(height: 12),
-              const TextFieldCustom(hintText: "Город"),
-              const SizedBox(height: 12),
-              const TextFieldCustom(hintText: "Адрес"),
-            ],
+                const SizedBox(height: 24),
+                const TextFieldCustom(hintText: "Имя пользователя"),
+                const SizedBox(height: 12),
+                const TextFieldCustom(hintText: "Эл. почта"),
+                const SizedBox(height: 12),
+                const TextFieldCustom(hintText: "Телефон"),
+                const SizedBox(height: 12),
+                const TextFieldCustom(hintText: "Город"),
+                const SizedBox(height: 12),
+                const TextFieldCustom(hintText: "Адрес"),
+              ],
+            ),
           ),
         ),
       ),
