@@ -10,7 +10,7 @@ class ServiceButton extends StatelessWidget {
 
   final void Function()? onTap;
   final String text;
-  final IconData icon;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +29,7 @@ class ServiceButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 48,
-                color: theme.primaryColor,
-              ),
+              icon,
               const SizedBox(height: 12),
               Text(
                 text,

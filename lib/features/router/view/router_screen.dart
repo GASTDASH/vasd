@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vasd/routes/routes.dart';
 
 class RouterScreen extends StatefulWidget {
@@ -48,21 +49,26 @@ class _RouterScreenState extends State<RouterScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              onPressed: () {
-                _openPage(0);
-              },
-              icon: Icon(
-                Icons.home_outlined,
-                color: selectedPage == 0 ? theme.primaryColor : null,
+              onPressed: () => _openPage(0),
+              icon: SvgPicture.asset(
+                "assets/icons/home.svg",
+                colorFilter: ColorFilter.mode(
+                  selectedPage == 0 ? theme.primaryColor : Colors.black,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
             IconButton(
               onPressed: () {
                 _openPage(1);
               },
-              icon: Icon(
-                Icons.mail_outline,
-                color: selectedPage == 1 ? theme.primaryColor : null,
+              icon: SvgPicture.asset(
+                "assets/icons/cube.svg",
+                colorFilter: ColorFilter.mode(
+                  selectedPage == 1 ? theme.primaryColor : Colors.black,
+                  BlendMode.srcIn,
+                ),
+                height: 32,
               ),
             ),
             const CircleAvatar(
@@ -73,18 +79,25 @@ class _RouterScreenState extends State<RouterScreen> {
               onPressed: () {
                 _openPage(2);
               },
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: selectedPage == 2 ? theme.primaryColor : null,
+              icon: SvgPicture.asset(
+                "assets/icons/bell.svg",
+                colorFilter: ColorFilter.mode(
+                  selectedPage == 2 ? theme.primaryColor : Colors.black,
+                  BlendMode.srcIn,
+                ),
+                height: 28,
               ),
             ),
             IconButton(
               onPressed: () {
                 _openPage(3);
               },
-              icon: Icon(
-                Icons.settings_outlined,
-                color: selectedPage == 3 ? theme.primaryColor : null,
+              icon: SvgPicture.asset(
+                "assets/icons/settings.svg",
+                colorFilter: ColorFilter.mode(
+                  selectedPage == 3 ? theme.primaryColor : Colors.black,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ],

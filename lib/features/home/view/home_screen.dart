@@ -1,5 +1,6 @@
 import 'package:another_stepper/another_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vasd/features/home/home.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -61,7 +62,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: TextField(
                                       decoration: InputDecoration(
                                         prefixIcon:
-                                            const Icon(Icons.mail_outlined),
+                                            // const Icon(Icons.mail_outlined),
+                                            Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SvgPicture.asset(
+                                            "assets/icons/box.svg",
+                                            colorFilter: const ColorFilter.mode(
+                                                Colors.black, BlendMode.srcIn),
+                                          ),
+                                        ),
                                         border: const OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                         ),
@@ -134,7 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(12),
+                              padding:
+                                  const EdgeInsets.all(8).copyWith(top: 14),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -142,7 +152,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Row(
                                     children: [
                                       const SizedBox(width: 4),
-                                      const Icon(Icons.mail_outline),
+                                      Container(
+                                          height: 50,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(6),
+                                            child: SvgPicture.asset(
+                                              "assets/icons/cube.svg",
+                                            ),
+                                          )),
                                       const SizedBox(width: 12),
                                       Column(
                                         mainAxisAlignment:
@@ -274,7 +297,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () {
                                 Navigator.pushNamed(context, "/send_package");
                               },
-                              icon: Icons.mail_outline,
+                              icon: SvgPicture.asset(
+                                "assets/icons/delivery_truck.svg",
+                                colorFilter: ColorFilter.mode(
+                                    theme.primaryColor, BlendMode.srcIn),
+                                height: 50,
+                              ),
                               text: "Отправить",
                             ),
                             const SizedBox(width: 16),
@@ -284,7 +312,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     trackContainerKey.currentContext!,
                                     duration: const Duration(seconds: 1));
                               },
-                              icon: Icons.place_outlined,
+                              icon: SvgPicture.asset(
+                                "assets/icons/location_arrow.svg",
+                                colorFilter: ColorFilter.mode(
+                                    theme.primaryColor, BlendMode.srcIn),
+                                height: 50,
+                              ),
                               text: "Отследить",
                             ),
                           ],

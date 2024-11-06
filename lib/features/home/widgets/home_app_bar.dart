@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSize {
   const HomeAppBar({
@@ -26,10 +27,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                   decoration: BoxDecoration(
                       color: theme.primaryColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12)),
-                  child: Icon(
-                    Icons.place_outlined,
-                    color: theme.primaryColor,
-                    size: 32,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SvgPicture.asset(
+                      "assets/icons/map_marker.svg",
+                      colorFilter:
+                          ColorFilter.mode(theme.primaryColor, BlendMode.srcIn),
+                    ),
                   ),
                 ),
               ),

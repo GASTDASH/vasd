@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vasd/features/settings/settings.dart';
 import 'package:vasd/ui/ui.dart';
 
@@ -82,7 +83,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 14, color: theme.hintColor)),
                 const SizedBox(height: 24),
                 SettingsButton(
-                  icon: Icons.edit_outlined,
+                  icon: SvgPicture.asset(
+                    "assets/icons/edit.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  ),
                   text: "Редактировать профиль",
                   onTap: () {
                     Navigator.pushNamed(context, "/profile");
@@ -90,38 +95,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Divider(thickness: 0.2, height: 0),
                 SettingsButton(
-                  icon: Icons.place_outlined,
+                  icon: SvgPicture.asset(
+                    "assets/icons/map_marker.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  ),
                   text: "Мой адрес",
                   onTap: () {},
                 ),
                 const Divider(thickness: 0.2, height: 0),
                 SettingsButton(
-                  icon: Icons.mail_outline,
+                  icon: SvgPicture.asset(
+                    "assets/icons/box.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  ),
                   text: "Мои заказы",
                   onTap: () {},
                 ),
                 const Divider(thickness: 0.2, height: 0),
                 SettingsButton(
-                  icon: Icons.lock_outline,
+                  icon: SvgPicture.asset(
+                    "assets/icons/lock.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  ),
                   text: "Сменить пароль",
                   onTap: () {},
                 ),
                 const Divider(thickness: 0.2, height: 0),
                 SettingsButton(
-                  icon: Icons.shield_outlined,
+                  icon: SvgPicture.asset("assets/icons/banner.svg",
+                      colorFilter: const ColorFilter.mode(
+                          Colors.black, BlendMode.srcIn)),
                   text: "Политика конфиденциальности",
                   onTap: () {},
                 ),
                 const Divider(thickness: 0.2, height: 0),
                 SettingsButton(
-                  icon: Icons.description_outlined,
+                  icon: SvgPicture.asset("assets/icons/terms.svg",
+                      colorFilter: const ColorFilter.mode(
+                          Colors.black, BlendMode.srcIn)),
                   text: "Условия использования",
                   onTap: () {},
                 ),
                 const SizedBox(height: 24),
                 ButtonBase(
                   text: "Выйти",
-                  prefixIcon: Icons.logout_rounded,
+                  prefixIcon: const Icon(Icons.logout_rounded),
                   onTap: () {
                     Navigator.pushNamedAndRemoveUntil(
                         context, "/login", (route) => false);

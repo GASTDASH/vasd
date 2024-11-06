@@ -27,13 +27,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Placeholder(
-                      child:
-                          Center(child: Text("Logo"))), // TODO: Добавить лого
-                ),
+                SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset("assets/images/logo.jpg")),
                 const SizedBox(height: 60),
                 Text("Создайте свой новый аккаунт!",
                     style: theme.textTheme.headlineMedium),

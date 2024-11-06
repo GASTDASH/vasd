@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vasd/ui/ui.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,12 +25,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 100,
                   width: 100,
-                  child: Placeholder(
-                      child:
-                          Center(child: Text("Logo"))), // TODO: Добавить лого
+                  child: Image.asset("assets/images/logo.jpg"),
                 ),
                 const SizedBox(height: 60),
                 Text("Давайте войдем в систему!",
@@ -96,8 +95,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {},
                         text: "Google",
                         outlined: true,
-                        prefixIcon:
-                            Icons.g_mobiledata, // TODO: Заменить иконки на SVG
+                        prefixIcon: SvgPicture.asset(
+                          "assets/icons/google.svg",
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black, BlendMode.srcIn),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -106,8 +108,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {},
                         text: "Facebook",
                         outlined: true,
-                        prefixIcon:
-                            Icons.facebook, // TODO: Заменить иконки на SVG
+                        prefixIcon: SvgPicture.asset(
+                          "assets/icons/facebook.svg",
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black, BlendMode.srcIn),
+                        ),
                       ),
                     ),
                   ],

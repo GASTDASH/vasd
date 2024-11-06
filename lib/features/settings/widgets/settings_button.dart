@@ -8,7 +8,7 @@ class SettingsButton extends StatelessWidget {
     this.onTap,
   });
 
-  final IconData icon;
+  final Widget icon;
   final String text;
   final void Function()? onTap;
 
@@ -26,7 +26,7 @@ class SettingsButton extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 32),
+                icon,
                 const SizedBox(width: 10),
                 Text(text, style: theme.textTheme.bodyLarge),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RecentPackageWidget extends StatelessWidget {
   const RecentPackageWidget({
@@ -35,6 +36,10 @@ class RecentPackageWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: SvgPicture.asset("assets/icons/cube.svg"),
                 ),
               ),
               const SizedBox(width: 10),

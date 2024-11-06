@@ -12,7 +12,7 @@ class ButtonBase extends StatelessWidget {
   final String text;
   final Function()? onTap;
   final bool outlined;
-  final IconData? prefixIcon; //TODO: Заменить на SVG
+  final Widget? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +36,7 @@ class ButtonBase extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              prefixIcon != null
-                  ? Icon(
-                      prefixIcon,
-                      color: outlined ? null : Colors.white,
-                    )
-                  : const SizedBox.shrink(),
+              prefixIcon ?? const SizedBox.shrink(),
               prefixIcon != null
                   ? const SizedBox(
                       width: 8,
