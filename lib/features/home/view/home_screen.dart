@@ -1,7 +1,6 @@
 import 'package:another_stepper/another_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:vasd/features/home/home.dart';
-import 'package:vasd/features/otp_verification/otp_verification.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -271,74 +270,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, "/send_package");
-                                },
-                                borderRadius: BorderRadius.circular(18),
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                    color: theme.primaryColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.mail_outline,
-                                        size: 48,
-                                        color: theme.primaryColor,
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        "Отправить",
-                                        style: theme.textTheme.titleLarge
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w800),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            ServiceButton(
+                              onTap: () {
+                                Navigator.pushNamed(context, "/send_package");
+                              },
+                              icon: Icons.mail_outline,
+                              text: "Отправить",
                             ),
                             const SizedBox(width: 16),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  Scrollable.ensureVisible(
-                                      trackContainerKey.currentContext!,
-                                      duration: const Duration(seconds: 1));
-                                },
-                                borderRadius: BorderRadius.circular(18),
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                    color: theme.primaryColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.place_outlined,
-                                        size: 48,
-                                        color: theme.primaryColor,
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        "Отследить",
-                                        style: theme.textTheme.titleLarge
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w800),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            ServiceButton(
+                              onTap: () {
+                                Scrollable.ensureVisible(
+                                    trackContainerKey.currentContext!,
+                                    duration: const Duration(seconds: 1));
+                              },
+                              icon: Icons.place_outlined,
+                              text: "Отследить",
                             ),
                           ],
                         ),
