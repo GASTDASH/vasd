@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vasd/features/notifications/widgets/notification_card.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -29,65 +30,34 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Сегодня", style: TextStyle(color: theme.hintColor)),
-                NotificationCard(theme: theme),
-                const Divider(thickness: 0.2, height: 0)
+                const NotificationCard(
+                  title: "Посылка готова к отправке",
+                  text: "Ваша посылка скоро будет отправлена из [...] в [...]",
+                  icon: Icons.mail_outline,
+                ),
+                const NotificationCard(
+                  title: "Посылка была отправлена",
+                  text:
+                      "Ваша посылка была отправлена из [...] и скоро будет будет в [...]",
+                  icon: Icons.local_shipping_outlined,
+                ),
+                const NotificationCard(
+                  title: "Посылка была доставлена",
+                  text: "Ваша посылка была успешно доставлена в [...]",
+                  icon: Icons.mark_email_read_outlined,
+                ),
+                //
+                const SizedBox(height: 24),
+                //
+                Text("Вчера", style: TextStyle(color: theme.hintColor)),
+                const NotificationCard(
+                  title: "Посылка была доставлена",
+                  text: "Ваша посылка была успешно доставлена в [...]",
+                  icon: Icons.mark_email_read_outlined,
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-//TODO
-//TODO
-//TODO
-//TODO
-//TODO
-//TODO
-//TODO
-class NotificationCard extends StatelessWidget {
-  const NotificationCard({
-    super.key,
-    required this.theme,
-  });
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Ink(
-        padding: const EdgeInsets.all(6),
-        height: 100,
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 32,
-              backgroundColor: theme.primaryColor.withOpacity(0.1),
-              child: Icon(
-                Icons.mail_outline,
-                size: 32,
-                color: theme.primaryColor,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("The package is ready to be sent",
-                      style: theme.textTheme.bodyLarge),
-                  const SizedBox(height: 4),
-                  Text("Your package has been sent from New York to New Jersey",
-                      style: TextStyle(color: theme.hintColor)),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
