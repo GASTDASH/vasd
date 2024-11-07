@@ -129,8 +129,9 @@ class _SendPackageScreenState extends State<SendPackageScreen> {
                           ),
                           const SizedBox(height: 12),
                           const TextFieldCustom(
-                              hintText:
-                                  "Введите сообщение"), // TODO: сделать multiline
+                            hintText: "Введите сообщение",
+                            multiline: true,
+                          ),
                         ],
                       ),
                     ),

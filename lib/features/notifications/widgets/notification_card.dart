@@ -24,8 +24,9 @@ class NotificationCard extends StatelessWidget {
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.delete_outline, color: Colors.white),
-            Text("Удалить", style: TextStyle(color: Colors.white)),
+            Icon(Icons.done_all_rounded, color: Colors.white),
+            SizedBox(width: 8),
+            Text("Прочитано", style: TextStyle(color: Colors.white)),
             SizedBox(width: 20)
           ],
         ),

@@ -142,7 +142,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 24),
                 ButtonBase(
                   text: "Выйти",
-                  prefixIcon: const Icon(Icons.logout_rounded),
+                  prefixIcon: const Icon(
+                    Icons.logout_rounded,
+                    color: Colors.white,
+                  ),
                   onTap: () {
                     Navigator.pushNamedAndRemoveUntil(
                         context, "/login", (route) => false);

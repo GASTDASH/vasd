@@ -8,14 +8,15 @@ class TextFieldCustom extends StatefulWidget {
     this.password = false,
     this.controller,
     this.onChanged,
-  });
-  // : assert();
+    this.multiline = false,
+  }) : assert(!password || !multiline);
 
   final String? hintText;
   final IconData? prefixIcon;
   final bool password;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
+  final bool multiline;
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -25,13 +26,21 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
   bool showPassword = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.password) showPassword = true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return TextField(
       onChanged: widget.onChanged,
       controller: widget.controller,
-      obscureText: !showPassword,
+      obscureText: showPassword,
+      keyboardType: widget.multiline ? TextInputType.multiline : null,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(20),
         border: const OutlineInputBorder(),
@@ -51,7 +60,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                     showPassword = !showPassword;
                   });
                 },
-                icon: showPassword
+                icon: !showPassword
                     ? Icon(Icons.visibility_outlined, color: theme.hintColor)
                     : Icon(Icons.visibility_off_outlined,
                         color: theme.hintColor))

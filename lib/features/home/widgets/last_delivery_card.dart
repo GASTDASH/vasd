@@ -89,14 +89,18 @@ class LastDeliveryCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: AnotherStepper(
-                      iconHeight: 12,
-                      iconWidth: 12,
+                      iconHeight: 48,
+                      iconWidth: 48,
+                      barThickness: 4,
                       activeIndex: 0,
                       activeBarColor: theme.primaryColor,
+                      verticalGap: 32,
                       stepperList: [
                         StepperData(
-                          iconWidget: const CircleAvatar(
-                            backgroundColor: Colors.black,
+                          iconWidget: CircleAvatar(
+                            backgroundColor: theme.primaryColor,
+                            child: const Icon(Icons.local_shipping,
+                                color: Colors.white),
                           ),
                           title: StepperText(
                             "Из",
@@ -110,8 +114,9 @@ class LastDeliveryCard extends StatelessWidget {
                           ),
                         ),
                         StepperData(
-                          iconWidget: const CircleAvatar(
-                            backgroundColor: Colors.black,
+                          iconWidget: CircleAvatar(
+                            backgroundColor: theme.hintColor,
+                            child: const Icon(Icons.inbox, color: Colors.white),
                           ),
                           title: StepperText(
                             "Куда",

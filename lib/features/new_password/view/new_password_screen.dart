@@ -33,11 +33,15 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             onTap: (passwordController.text.isNotEmpty &&
                     passwordConfirmController.text.isNotEmpty)
                 ? () async {
-                    // Navigator.pushNamed(context, "/new_password");
-                    await showDialog(
-                      context: context,
-                      builder: (context) => const PasswordUpdatedDialog(),
-                    );
+                    if (checkPassword()) {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => const PasswordUpdatedDialog());
+                    } else {
+                      await showDialog(
+                          context: context,
+                          builder: (_) => const PasswordsNotEqualsDialog());
+                    }
                   }
                 : null,
             text: "Сохранить",
@@ -79,4 +83,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
       ),
     );
   }
+
+  bool checkPassword() =>
+      passwordController.text == passwordConfirmController.text;
 }

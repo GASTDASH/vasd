@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vasd/ui/widgets/passwords_not_equals_dialog.dart';
 import 'package:vasd/ui/ui.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
   final cityController = TextEditingController();
   final addressController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -77,16 +80,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     setState(() {});
                   },
                 ),
+                const SizedBox(height: 16),
+                TextFieldCustom(
+                  hintText: "Пароль",
+                  controller: passwordController,
+                  password: true,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFieldCustom(
+                  hintText: "Подтверждение пароля",
+                  controller: passwordConfirmController,
+                  password: true,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
                 const SizedBox(height: 24),
                 ButtonBase(
                   text: "Зарегистрироваться",
-                  onTap: (usernameController.text.isNotEmpty &&
-                          emailController.text.isNotEmpty &&
-                          phoneController.text.isNotEmpty &&
-                          cityController.text.isNotEmpty &&
-                          addressController.text.isNotEmpty)
-                      ? () {
-                          Navigator.pushReplacementNamed(context, "/login");
+                  onTap: (checkTextFieldsNotEmpty())
+                      ? () async {
+                          if (checkPassword()) {
+                            Navigator.pushReplacementNamed(context, "/login");
+                          } else {
+                            await showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const PasswordsNotEqualsDialog(),
+                            );
+                          }
                         }
                       : null,
                 ),
@@ -113,4 +138,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+  bool checkTextFieldsNotEmpty() =>
+      usernameController.text.isNotEmpty &&
+      emailController.text.isNotEmpty &&
+      phoneController.text.isNotEmpty &&
+      cityController.text.isNotEmpty &&
+      addressController.text.isNotEmpty &&
+      passwordController.text.isNotEmpty &&
+      passwordConfirmController.text.isNotEmpty;
+
+  bool checkPassword() =>
+      passwordController.text == passwordConfirmController.text;
 }
