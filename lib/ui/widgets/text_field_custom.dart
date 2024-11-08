@@ -9,14 +9,21 @@ class TextFieldCustom extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.multiline = false,
-  }) : assert(!password || !multiline);
+    this.onTap,
+    this.enabled = true,
+    this.suffixIcon,
+  })  : assert(!password || !multiline),
+        assert(!password || suffixIcon == null);
 
+  final bool multiline;
+  final bool password;
+  final bool enabled;
   final String? hintText;
   final IconData? prefixIcon;
-  final bool password;
+  final IconData? suffixIcon;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
-  final bool multiline;
+  final void Function()? onTap;
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -37,13 +44,18 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
     final theme = Theme.of(context);
 
     return TextField(
+      enabled: widget.enabled,
+      onTap: widget.onTap,
       onChanged: widget.onChanged,
       controller: widget.controller,
       obscureText: showPassword,
       keyboardType: widget.multiline ? TextInputType.multiline : null,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(20),
-        border: const OutlineInputBorder(),
+        border: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.hintColor, width: 1)),
+        disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.hintColor, width: 1)),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: theme.primaryColor),
         ),
@@ -64,7 +76,12 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                     ? Icon(Icons.visibility_outlined, color: theme.hintColor)
                     : Icon(Icons.visibility_off_outlined,
                         color: theme.hintColor))
-            : null,
+            : widget.suffixIcon != null
+                ? Icon(
+                    widget.suffixIcon,
+                    size: 32,
+                  )
+                : null,
       ),
     );
   }
