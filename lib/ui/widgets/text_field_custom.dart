@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TextFieldCustom extends StatefulWidget {
   const TextFieldCustom({
     super.key,
-    required this.hintText,
+    this.hintText,
     this.prefixIcon,
     this.password = false,
     this.controller,
@@ -12,12 +12,14 @@ class TextFieldCustom extends StatefulWidget {
     this.onTap,
     this.enabled = true,
     this.suffixIcon,
+    this.label,
   })  : assert(!password || !multiline),
         assert(!password || suffixIcon == null);
 
   final bool multiline;
   final bool password;
   final bool enabled;
+  final String? label;
   final String? hintText;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
@@ -51,6 +53,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
       obscureText: showPassword,
       keyboardType: widget.multiline ? TextInputType.multiline : null,
       decoration: InputDecoration(
+        label: widget.label != null ? Text(widget.label!) : null,
         contentPadding: const EdgeInsets.all(20),
         border: OutlineInputBorder(
             borderSide: BorderSide(color: theme.hintColor, width: 1)),
