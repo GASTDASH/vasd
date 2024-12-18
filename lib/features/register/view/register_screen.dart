@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:vasd/ui/widgets/passwords_not_equals_dialog.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:vasd/repositories/auth/auth_interface.dart';
 import 'package:vasd/ui/ui.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,8 +17,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
-  final cityController = TextEditingController();
-  final addressController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
 
@@ -25,15 +27,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.symmetric(horizontal: 18),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: Image.asset("assets/images/logo.jpg")),
+                const SizedBox(height: 32),
+                SvgPicture.asset("assets/images/CDEK_logo.svg"),
                 const SizedBox(height: 60),
                 Text("Создайте свой новый аккаунт!",
                     style: theme.textTheme.headlineMedium),
@@ -66,22 +66,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextFieldCustom(
-                  hintText: "Город",
-                  controller: cityController,
-                  onChanged: (_) {
-                    setState(() {});
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFieldCustom(
-                  hintText: "Адрес",
-                  controller: addressController,
-                  onChanged: (_) {
-                    setState(() {});
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFieldCustom(
                   hintText: "Пароль",
                   controller: passwordController,
                   password: true,
@@ -103,14 +87,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   text: "Зарегистрироваться",
                   onTap: (checkTextFieldsNotEmpty())
                       ? () async {
-                          if (checkPassword()) {
-                            Navigator.pushReplacementNamed(context, "/login");
-                          } else {
+                          try {
+                            final userId = await register(
+                              name: usernameController.text,
+                              email: emailController.text,
+                              phone: phoneController.text,
+                              password: passwordController.text,
+                            );
+
+                            GetIt.I<Talker>().debug("User ID: $userId");
+
                             await showDialog(
                               context: context,
-                              builder: (context) =>
-                                  const PasswordsNotEqualsDialog(),
+                              builder: (context) => SuccessDialog(
+                                title: "Успешно",
+                                text: "Пользователь успешно зарегистрирован",
+                                buttonText: "Отлично",
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(context, "/login");
+                                },
+                              ),
                             );
+                          } on AuthException catch (e) {
+                            await showDialog(
+                              context: context,
+                              builder: (context) => ErrorDialog(
+                                title: "Ошибка",
+                                text: e.message,
+                              ),
+                            );
+                          } catch (e) {
+                            GetIt.I<Talker>().error(e.toString());
                           }
                         }
                       : null,
@@ -143,11 +151,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       usernameController.text.isNotEmpty &&
       emailController.text.isNotEmpty &&
       phoneController.text.isNotEmpty &&
-      cityController.text.isNotEmpty &&
-      addressController.text.isNotEmpty &&
       passwordController.text.isNotEmpty &&
       passwordConfirmController.text.isNotEmpty;
 
   bool checkPassword() =>
       passwordController.text == passwordConfirmController.text;
+
+  Future<String?> register({
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
+    if (!checkPassword()) {
+      await showDialog(
+        context: context,
+        builder: (context) => const ErrorDialog(
+          title: "Пароли не совпадают",
+          text: "Проверьте правильность введённых данных",
+        ),
+      );
+    } else {
+      final res = await GetIt.I<AuthInterface>().signUpWithEmailPassword(
+        name: name,
+        email: email,
+        phone: phone,
+        password: password,
+      );
+
+      return res;
+    }
+    return null;
+  }
 }

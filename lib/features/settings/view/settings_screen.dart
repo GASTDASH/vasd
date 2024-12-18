@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:vasd/features/settings/settings.dart';
+import 'package:vasd/repositories/auth/auth_interface.dart';
 import 'package:vasd/ui/ui.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -146,9 +148,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icons.logout_rounded,
                     color: Colors.white,
                   ),
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/login", (route) => false);
+                  onTap: () async {
+                    try {
+                      await GetIt.I<AuthInterface>().logout();
+
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/login", (route) => false);
+                    } catch (e) {
+                      await showDialog(
+                        context: context,
+                        builder: (context) => ErrorDialog(
+                          title: "Ошибка",
+                          text: e.toString(),
+                        ),
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 24),

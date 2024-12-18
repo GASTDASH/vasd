@@ -45,12 +45,60 @@ class _CalculateDeliveryCostScreenState
           ),
           centerTitle: true,
         ),
+        bottomNavigationBar: currentStep >= 1
+            ? Container(
+                height: 200,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                  boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 10)],
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Ваш расчёт",
+                            style: theme.textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "${cityFromController.text} → ${cityToController.text}",
+                            style: theme.textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.shopping_bag_outlined,
+                                  color: theme.hintColor),
+                              Text(
+                                selectedPackageSize != null
+                                    ? selectedPackageSize!.size
+                                    : "",
+                                style: theme.textTheme.titleMedium
+                                    ?.copyWith(color: theme.hintColor),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : null,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Stepper(
-                /* currentStep: currentStep, */
+                currentStep: currentStep,
+                physics: const NeverScrollableScrollPhysics(),
                 controlsBuilder: (context, details) => const Row(),
                 onStepTapped: (value) => setState(() {
                   if (currentStep > value) {
@@ -59,118 +107,87 @@ class _CalculateDeliveryCostScreenState
                 }),
                 steps: [
                   Step(
-                    isActive: currentStep >= 0,
-                    stepStyle: currentStep >= 0 ? stepStyle : null,
-                    title: Text(
-                      "Основные параметры",
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    content: currentStep == 0
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 12),
-                              TextFieldCustom(
-                                label: "Откуда",
-                                controller: cityFromController,
-                              ),
-                              const SizedBox(height: 12),
-                              TextFieldCustom(
-                                label: "Куда",
-                                controller: cityToController,
-                              ),
-                              const SizedBox(height: 32),
-                              Text(
-                                "Вес и размер посылки",
-                                style: theme.textTheme.titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 12),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(4),
-                                onTap: () async {
-                                  final packageSizes =
-                                      await PackageSizeLocalRepo().getItems();
+                      isActive: currentStep >= 0,
+                      stepStyle: currentStep >= 0 ? stepStyle : null,
+                      title: Text(
+                        "Основные параметры",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 12),
+                          TextFieldCustom(
+                            label: "Откуда",
+                            controller: cityFromController,
+                          ),
+                          const SizedBox(height: 12),
+                          TextFieldCustom(
+                            label: "Куда",
+                            controller: cityToController,
+                          ),
+                          const SizedBox(height: 32),
+                          Text(
+                            "Вес и размер посылки",
+                            style: theme.textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(height: 12),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(4),
+                            onTap: () async {
+                              final packageSizes =
+                                  await PackageSizeLocalRepo().getItems();
 
-                                  final PackageSize? packageSize =
-                                      await showDialog(
-                                    context: context,
-                                    builder: (context) => PackageSizeDialog(
-                                      packageSizes: packageSizes,
-                                    ),
-                                  );
+                              final PackageSize? packageSize = await showDialog(
+                                context: context,
+                                builder: (context) => PackageSizeDialog(
+                                  packageSizes: packageSizes,
+                                ),
+                              );
 
-                                  if (packageSize != null) {
-                                    setState(() =>
-                                        selectedPackageSize = packageSize);
-                                  }
-                                },
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.black54),
-                                      borderRadius: BorderRadius.circular(4)),
-                                  height: 62,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Text(
-                                        selectedPackageSize != null
-                                            ? selectedPackageSize!.title
-                                            : "Размер посылки",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                              if (packageSize != null) {
+                                setState(
+                                    () => selectedPackageSize = packageSize);
+                              }
+                            },
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: Colors.black54),
+                                  borderRadius: BorderRadius.circular(4)),
+                              height: 62,
+                              width: MediaQuery.of(context).size.width,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Text(
+                                    selectedPackageSize != null
+                                        ? selectedPackageSize!.title
+                                        : "Размер посылки",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 32),
-                              ButtonBase(
-                                onTap: cityFromController.text.isNotEmpty &&
-                                        cityToController.text.isNotEmpty &&
-                                        selectedPackageSize != null
-                                    ? () {
-                                        setState(() => currentStep = 1);
-                                      }
-                                    : null,
-                                text: "Рассчитать",
-                              ),
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    "${cityFromController.text} → ${cityToController.text}",
-                                    style: theme.textTheme.titleMedium,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // TODO Circle avatar icon
-                                      Text(
-                                        selectedPackageSize != null
-                                            ? selectedPackageSize!.title
-                                            : "",
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(color: theme.hintColor),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                  ),
+                          const SizedBox(height: 32),
+                          ButtonBase(
+                            onTap: cityFromController.text.isNotEmpty &&
+                                    cityToController.text.isNotEmpty &&
+                                    selectedPackageSize != null
+                                ? () {
+                                    setState(() => currentStep = 1);
+                                  }
+                                : null,
+                            text: "Рассчитать",
+                          ),
+                        ],
+                      )),
                   Step(
                     isActive: currentStep >= 1,
                     stepStyle: currentStep >= 1 ? stepStyle : null,
@@ -178,8 +195,28 @@ class _CalculateDeliveryCostScreenState
                       "Выбор услуги",
                       style: theme.textTheme.titleLarge,
                     ),
-                    content: const Column(
-                      children: [],
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            typeCard(
+                              minCost: 400,
+                              minDays: 3,
+                              maxDays: 5,
+                              description: "Только из пункта в пункт СДЭК",
+                            ),
+                            const SizedBox(width: 12),
+                            typeCard(
+                              minCost: 680,
+                              minDays: 2,
+                              maxDays: 3,
+                              description: "Можно вызвать курьера",
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                   Step(
@@ -240,6 +277,58 @@ class _CalculateDeliveryCostScreenState
                 ],
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded typeCard({
+    required int minCost,
+    required int minDays,
+    required int maxDays,
+    required String description,
+  }) {
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: () {},
+        child: Ink(
+          height: 110,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: const [
+              BoxShadow(color: Colors.black26, blurRadius: 10),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "от $minCost ₽",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "$minDays-$maxDays рабочих дней",
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
           ),
         ),
       ),

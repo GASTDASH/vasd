@@ -53,7 +53,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   });
                 },
                 title: "Код через СМС",
-                subtitle: "(406) 555-0120",
+                subtitle: "Введите номер телефона",
                 icon: Icons.message_outlined,
               ),
               const SizedBox(height: 12),
@@ -65,7 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   });
                 },
                 title: "Код через эл. почту",
-                subtitle: "johnson@gmail.com",
+                subtitle: "Введите адрес эл. почты",
                 icon: Icons.mail_outline,
               ),
             ],

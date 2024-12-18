@@ -61,8 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius: BorderRadius.circular(12),
                               image: const DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    "https://i.imgur.com/867trdy.jpeg"),
+                                image: AssetImage("assets/images/guest.png"),
                               ),
                             ),
                           ),

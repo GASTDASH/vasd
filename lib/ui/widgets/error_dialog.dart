@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:vasd/ui/ui.dart';
 
-class PasswordsNotEqualsDialog extends StatelessWidget {
-  const PasswordsNotEqualsDialog({
+class ErrorDialog extends StatelessWidget {
+  const ErrorDialog({
     super.key,
+    required this.title,
+    required this.text,
   });
+
+  final String title;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +18,8 @@ class PasswordsNotEqualsDialog extends StatelessWidget {
     return BaseDialog(
       icon: const Icon(Icons.close_rounded, color: Colors.white, size: 40),
       color: theme.colorScheme.error,
-      title: "Пароли не совпадают",
-      text: "Проверьте правильность введённых данных",
+      title: title,
+      text: text,
     );
   }
 }

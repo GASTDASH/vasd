@@ -39,6 +39,11 @@ dependencies:
   another_stepper: ^1.2.2
   pinput: ^5.0.0
   flutter_svg: ^2.0.13
+  supabase_flutter: ^2.8.1
+  talker_flutter: ^4.5.2
+  get_it: ^8.0.3
+  loading_indicator: ^3.1.1
+  flutter_bloc: ^8.1.6
 
 dev_dependencies:
   flutter_test:

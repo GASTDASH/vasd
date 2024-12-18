@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as Supabase;
+import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,20 +19,54 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final authBloc = context.read<AuthBloc>();
 
-    return SafeArea(
-      child: Scaffold(
+    return BlocListener<AuthBloc, AuthState>(
+      bloc: authBloc,
+      listener: (context, state) {
+        if (state is AuthLoadingState) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => const LoadingDialog(),
+          );
+        } else if (state is AuthErrorState) {
+          var errorText = "Unexpected Error";
+
+          if (state.error is Supabase.AuthException) {
+            if ((state.error as Supabase.AuthException).code ==
+                "invalid_credentials") {
+              errorText = "Неправильный логин или пароль";
+            } else {
+              errorText = state.error.toString();
+            }
+          }
+
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(errorText),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ));
+        } else if (state is AuthAuthorizedState) {
+          Navigator.of(context).pushReplacementNamed("/home");
+        }
+      },
+      listenWhen: (previous, current) {
+        if (previous is AuthLoadingState) {
+          Navigator.pop(context);
+        }
+        return true;
+      },
+      child: SafeArea(
+          child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.asset("assets/images/logo.jpg"),
-                ),
+                const SizedBox(height: 32),
+                SvgPicture.asset("assets/images/CDEK_logo.svg"),
                 const SizedBox(height: 60),
                 Text("Давайте войдем в систему!",
                     style: theme.textTheme.headlineMedium),
@@ -70,8 +107,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: "Войти",
                   onTap: (emailController.text.isNotEmpty &&
                           passwordController.text.isNotEmpty)
-                      ? () {
-                          Navigator.pushReplacementNamed(context, "/home");
+                      ? () async {
+                          authBloc.add(
+                            AuthLoginEvent(
+                                email: emailController.text,
+                                password: passwordController.text),
+                          );
+                          // try {
+                          //   // setState(() {
+                          //   //   isLoading = true;
+                          //   // });
+
+                          //   final navigator = Navigator.of(context);
+
+                          //   await GetIt.I<AuthInterface>().loginWithEmailPassword(
+                          //     email: emailController.text,
+                          //     password: passwordController.text,
+                          //   );
+
+                          //   navigator.pushReplacementNamed("/home");
+                          // } on AuthException catch (e) {
+                          //   if (context.mounted) {
+                          //     await showDialog(
+                          //       context: context,
+                          //       builder: (context) => ErrorDialog(
+                          //         title: "Ошибка",
+                          //         text: e.message,
+                          //       ),
+                          //     );
+                          //   }
+                          // } finally {
+                          //   // setState(() {
+                          //   //   isLoading = false;
+                          //   // });
+                          // }
                         }
                       : null,
                 ),
@@ -137,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
+      )),
     );
   }
 }

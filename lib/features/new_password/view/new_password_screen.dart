@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vasd/features/new_password/new_password.dart';
 import 'package:vasd/ui/ui.dart';
+import 'package:vasd/ui/widgets/success_dialog.dart';
 
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});
@@ -35,12 +35,25 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 ? () async {
                     if (checkPassword()) {
                       await showDialog(
-                          context: context,
-                          builder: (context) => const PasswordUpdatedDialog());
+                        context: context,
+                        builder: (context) => SuccessDialog(
+                          title: "Пароль успешно обновлён",
+                          text: "Ваш пароль был успешно обновлён",
+                          buttonText: "Вернуться домой",
+                          onTap: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/home", (route) => true);
+                          },
+                        ),
+                      );
                     } else {
                       await showDialog(
-                          context: context,
-                          builder: (_) => const PasswordsNotEqualsDialog());
+                        context: context,
+                        builder: (_) => const ErrorDialog(
+                          title: "Пароли не совпадают",
+                          text: "Проверьте правильность введённых данных",
+                        ),
+                      );
                     }
                   }
                 : null,
