@@ -8,6 +8,8 @@ class AuthLoadingState extends AuthState {}
 
 class AuthUnauthorizedState extends AuthState {}
 
+class AuthSignedUpState extends AuthUnauthorizedState {}
+
 class AuthAuthorizedState extends AuthState {
   AuthAuthorizedState({
     required this.userId,
@@ -16,7 +18,7 @@ class AuthAuthorizedState extends AuthState {
   final String userId;
 }
 
-class AuthErrorState extends AuthState {
+class AuthErrorState extends AuthUnauthorizedState {
   AuthErrorState({
     required this.error,
   });

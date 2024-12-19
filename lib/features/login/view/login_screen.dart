@@ -113,34 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 email: emailController.text,
                                 password: passwordController.text),
                           );
-                          // try {
-                          //   // setState(() {
-                          //   //   isLoading = true;
-                          //   // });
-
-                          //   final navigator = Navigator.of(context);
-
-                          //   await GetIt.I<AuthInterface>().loginWithEmailPassword(
-                          //     email: emailController.text,
-                          //     password: passwordController.text,
-                          //   );
-
-                          //   navigator.pushReplacementNamed("/home");
-                          // } on AuthException catch (e) {
-                          //   if (context.mounted) {
-                          //     await showDialog(
-                          //       context: context,
-                          //       builder: (context) => ErrorDialog(
-                          //         title: "Ошибка",
-                          //         text: e.message,
-                          //       ),
-                          //     );
-                          //   }
-                          // } finally {
-                          //   // setState(() {
-                          //   //   isLoading = false;
-                          //   // });
-                          // }
                         }
                       : null,
                 ),
