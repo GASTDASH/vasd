@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vasd/ui/ui.dart';
-import 'package:vasd/ui/widgets/success_dialog.dart';
 
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});

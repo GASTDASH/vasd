@@ -1,27 +1,34 @@
 part of 'auth_bloc.dart';
 
-sealed class AuthState {}
+sealed class AuthState {
+  AuthState({
+    this.error,
+  });
+
+  final Object? error;
+}
 
 final class AuthInitial extends AuthState {}
 
 class AuthLoadingState extends AuthState {}
 
-class AuthUnauthorizedState extends AuthState {}
+class AuthUnauthorizedState extends AuthState {
+  AuthUnauthorizedState({
+    super.error,
+  });
+}
 
-class AuthSignedUpState extends AuthUnauthorizedState {}
+class AuthSignedUpState extends AuthUnauthorizedState {
+  AuthSignedUpState({
+    super.error,
+  });
+}
 
 class AuthAuthorizedState extends AuthState {
   AuthAuthorizedState({
+    super.error,
     required this.userId,
   });
 
   final String userId;
-}
-
-class AuthErrorState extends AuthUnauthorizedState {
-  AuthErrorState({
-    required this.error,
-  });
-
-  final Object error;
 }

@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
             ),
           );
-        } else if (state is AuthErrorState) {
+        } else if (state.error != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(state.error.toString()),
             backgroundColor: Colors.red,

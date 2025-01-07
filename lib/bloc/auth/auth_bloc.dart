@@ -19,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         emit(AuthAuthorizedState(userId: userId));
       } catch (e) {
-        emit(AuthErrorState(error: e));
+        emit(AuthUnauthorizedState(error: e));
       }
     });
     on<AuthSignUpEvent>((event, emit) async {
@@ -35,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         emit(AuthSignedUpState());
       } catch (e) {
-        emit(AuthErrorState(error: e));
+        emit(AuthUnauthorizedState(error: e));
       }
     });
     on<AuthSignOutEvent>((event, emit) async {
@@ -46,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         emit(AuthUnauthorizedState());
       } catch (e) {
-        emit(AuthAuthorizedState(userId: event.userId));
+        emit(AuthAuthorizedState(userId: event.userId, error: e));
       }
     });
   }

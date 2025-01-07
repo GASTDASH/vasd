@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context: context,
             builder: (context) => const LoadingDialog(),
           );
-        } else if (state is AuthErrorState) {
+        } else if (state.error != null) {
           var errorText = "Unexpected Error";
 
           if (state.error is Supabase.AuthException) {
