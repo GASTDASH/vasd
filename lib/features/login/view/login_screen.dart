@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as Supabase;
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
 
@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state.error != null) {
           var errorText = "Unexpected Error";
 
-          if (state.error is Supabase.AuthException) {
-            if ((state.error as Supabase.AuthException).code ==
+          if (state.error is supabase.AuthException) {
+            if ((state.error as supabase.AuthException).code ==
                 "invalid_credentials") {
               errorText = "Неправильный логин или пароль";
             } else {
