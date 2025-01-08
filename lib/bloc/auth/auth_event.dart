@@ -12,6 +12,14 @@ class AuthLoginEvent extends AuthEvent {
   final String password;
 }
 
+class AuthLoginSavedEvent extends AuthEvent {
+  AuthLoginSavedEvent({
+    required this.userId,
+  });
+
+  final String userId;
+}
+
 class AuthSignUpEvent extends AuthEvent {
   AuthSignUpEvent({
     required this.email,

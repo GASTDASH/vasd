@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:vasd/bloc/auth/auth_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkSavedLogin() async {
+    final authBloc = context.read<AuthBloc>();
     final Session? session = GetIt.I<SupabaseClient>().auth.currentSession;
 
     await Future.delayed(const Duration(seconds: 5));
@@ -26,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // if (false) { // Остановка для удобной вёрстки
     if (mounted) {
       if (session != null) {
+        authBloc.add(AuthLoginSavedEvent(userId: session.user.id));
         Navigator.of(context).pushReplacementNamed("/home");
       } else {
         Navigator.of(context).pushReplacementNamed("/login");

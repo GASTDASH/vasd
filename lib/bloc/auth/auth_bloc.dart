@@ -7,7 +7,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthInterface authRepo;
 
-  AuthBloc({required this.authRepo}) : super(AuthInitial()) {
+  AuthBloc({required this.authRepo}) : super(AuthUnauthorizedState()) {
     on<AuthLoginEvent>((event, emit) async {
       emit(AuthLoadingState());
 
@@ -21,6 +21,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } catch (e) {
         emit(AuthUnauthorizedState(error: e));
       }
+    });
+    on<AuthLoginSavedEvent>((event, emit) {
+      emit(AuthAuthorizedState(userId: event.userId));
     });
     on<AuthSignUpEvent>((event, emit) async {
       emit(AuthLoadingState());

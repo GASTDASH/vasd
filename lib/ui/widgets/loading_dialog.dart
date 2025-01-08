@@ -12,6 +12,8 @@ class _LoadingDialogState extends State<LoadingDialog> {
   @override
   Widget build(BuildContext context) {
     return const Dialog(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
       child: SizedBox(
         height: 200,
         width: 250,

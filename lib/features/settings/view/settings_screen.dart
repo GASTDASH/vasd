@@ -71,37 +71,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               onTap: () {
                                 // TODO: Edit photo
                               },
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      image: const DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            "https://i.imgur.com/867trdy.jpeg"),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Container(
-                                      height: 30,
-                                      width: 30,
+                              child: Hero(
+                                tag: "avatar",
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
-                                        color: theme.primaryColor,
-                                        borderRadius: BorderRadius.circular(50),
-                                        border: Border.all(color: Colors.white),
-                                      ),
-                                      child: const Icon(
-                                        Icons.edit_outlined,
-                                        color: Colors.white,
-                                        size: 16,
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: const DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(
+                                              "assets/images/guest.png"),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          color: theme.primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border:
+                                              Border.all(color: Colors.white),
+                                        ),
+                                        child: const Icon(
+                                          Icons.edit_outlined,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

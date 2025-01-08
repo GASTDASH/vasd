@@ -37,6 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
             if ((state.error as supabase.AuthException).code ==
                 "invalid_credentials") {
               errorText = "Неправильный логин или пароль";
+            } else if (state.error.toString().contains("host")) {
+              errorText =
+                  "Невозможно подключиться к серверу. Проверьте подключение к интернету";
             } else {
               errorText = state.error.toString();
             }
