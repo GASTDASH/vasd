@@ -220,6 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     } else {
+      // TODO Заменить на обращение к блоку
       final res = await GetIt.I<AuthInterface>().signUpWithEmailPassword(
         name: name,
         email: email,

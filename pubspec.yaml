@@ -45,6 +45,7 @@ dependencies:
   loading_indicator: ^3.1.1
   flutter_bloc: ^8.1.6
   talker_bloc_logger: ^4.6.0
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

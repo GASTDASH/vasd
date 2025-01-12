@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:vasd/features/calculate_delivery_cost/widgets/package_size_dialog.dart';
+import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/ui/ui.dart';
@@ -15,10 +17,14 @@ class CalculateDeliveryCostScreen extends StatefulWidget {
 class _CalculateDeliveryCostScreenState
     extends State<CalculateDeliveryCostScreen> {
   final cityFromController = TextEditingController();
+  String cityFromText = "";
   final cityToController = TextEditingController();
+  String cityToText = "";
   PackageSize? selectedPackageSize;
 
   int currentStep = 0;
+
+  List<String> addresses = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,37 +61,40 @@ class _CalculateDeliveryCostScreenState
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Ваш расчёт",
-                            style: theme.textTheme.titleLarge
-                                ?.copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            "${cityFromController.text} → ${cityToController.text}",
-                            style: theme.textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.shopping_bag_outlined,
-                                  color: theme.hintColor),
-                              Text(
-                                selectedPackageSize != null
-                                    ? selectedPackageSize!.size
-                                    : "",
-                                style: theme.textTheme.titleMedium
-                                    ?.copyWith(color: theme.hintColor),
-                              ),
-                            ],
-                          ),
-                        ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Ваш расчёт",
+                              style: theme.textTheme.titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              "$cityFromText →\n$cityToText",
+                              style: theme.textTheme.titleMedium,
+                              maxLines: 3,
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.shopping_bag_outlined,
+                                    color: theme.hintColor),
+                                Text(
+                                  selectedPackageSize != null
+                                      ? selectedPackageSize!.size
+                                      : "",
+                                  style: theme.textTheme.titleMedium
+                                      ?.copyWith(color: theme.hintColor),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -117,14 +126,42 @@ class _CalculateDeliveryCostScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 12),
-                          TextFieldCustom(
-                            label: "Откуда",
-                            controller: cityFromController,
+                          Autocomplete<String>(
+                            optionsBuilder: (textEditingValue) async {
+                              return await GetIt.I<AddressCompleterInterface>()
+                                  .getAddresses(textEditingValue.text);
+                            },
+                            onSelected: (option) =>
+                                setState(() => cityFromText = option),
+                            fieldViewBuilder: (context, textEditingController,
+                                focusNode, onFieldSubmitted) {
+                              return TextFieldCustom(
+                                onEditingComplete: onFieldSubmitted,
+                                focusNode: focusNode,
+                                label: "Откуда",
+                                controller: textEditingController,
+                                onChanged: (_) => setState(() {}),
+                              );
+                            },
                           ),
                           const SizedBox(height: 12),
-                          TextFieldCustom(
-                            label: "Куда",
-                            controller: cityToController,
+                          Autocomplete<String>(
+                            optionsBuilder: (textEditingValue) async {
+                              return await GetIt.I<AddressCompleterInterface>()
+                                  .getAddresses(textEditingValue.text);
+                            },
+                            onSelected: (option) =>
+                                setState(() => cityToText = option),
+                            fieldViewBuilder: (context, textEditingController,
+                                focusNode, onFieldSubmitted) {
+                              return TextFieldCustom(
+                                onEditingComplete: onFieldSubmitted,
+                                focusNode: focusNode,
+                                label: "Куда",
+                                controller: textEditingController,
+                                onChanged: (_) => setState(() {}),
+                              );
+                            },
                           ),
                           const SizedBox(height: 32),
                           Text(
@@ -177,8 +214,8 @@ class _CalculateDeliveryCostScreenState
                           ),
                           const SizedBox(height: 32),
                           ButtonBase(
-                            onTap: cityFromController.text.isNotEmpty &&
-                                    cityToController.text.isNotEmpty &&
+                            onTap: cityFromText.isNotEmpty &&
+                                    cityToText.isNotEmpty &&
                                     selectedPackageSize != null
                                 ? () {
                                     setState(() => currentStep = 1);
@@ -199,20 +236,27 @@ class _CalculateDeliveryCostScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 12),
-                        Row(
+                        Column(
                           children: [
+                            // TODO
                             typeCard(
                               minCost: 400,
                               minDays: 3,
                               maxDays: 5,
                               description: "Только из пункта в пункт СДЭК",
+                              onTap: () => setState(() {
+                                currentStep = 2;
+                              }),
                             ),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: 12, height: 12),
                             typeCard(
                               minCost: 680,
                               minDays: 2,
                               maxDays: 3,
                               description: "Можно вызвать курьера",
+                              onTap: () => setState(() {
+                                currentStep = 2;
+                              }),
                             ),
                           ],
                         )
@@ -226,8 +270,34 @@ class _CalculateDeliveryCostScreenState
                       "Что ещё понадобится?",
                       style: theme.textTheme.titleLarge,
                     ),
-                    content: const Column(
-                      children: [],
+                    content: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        blurRadius: 5,
+                                        color: Colors.black12,
+                                      )
+                                    ],
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    children: [
+                                      Text("data"),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                   Step(
@@ -283,55 +353,58 @@ class _CalculateDeliveryCostScreenState
     );
   }
 
-  Expanded typeCard({
+  Widget typeCard({
     required int minCost,
     required int minDays,
     required int maxDays,
     required String description,
+    required void Function() onTap,
   }) {
-    return Expanded(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: () {},
-        child: Ink(
-          height: 110,
-          decoration: BoxDecoration(
-            color: Colors.white,
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
             borderRadius: BorderRadius.circular(18),
-            boxShadow: const [
-              BoxShadow(color: Colors.black26, blurRadius: 10),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
+            onTap: onTap,
+            child: Ink(
+              height: 110,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "от $minCost ₽",
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "от $minCost ₽",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "$minDays-$maxDays рабочих дней",
+                          style: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                      ],
                     ),
                     Text(
-                      "$minDays-$maxDays рабочих дней",
-                      style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w500),
+                      description,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ],
                 ),
-                Text(
-                  description,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
