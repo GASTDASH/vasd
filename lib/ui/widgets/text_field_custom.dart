@@ -13,6 +13,8 @@ class TextFieldCustom extends StatefulWidget {
     this.enabled = true,
     this.suffixIcon,
     this.label,
+    this.focusNode,
+    this.onEditingComplete,
   })  : assert(!password || !multiline),
         assert(!password || suffixIcon == null);
 
@@ -26,6 +28,8 @@ class TextFieldCustom extends StatefulWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function()? onTap;
+  final FocusNode? focusNode;
+  final void Function()? onEditingComplete;
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -51,6 +55,9 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
       onChanged: widget.onChanged,
       controller: widget.controller,
       obscureText: showPassword,
+      focusNode: widget.focusNode,
+      onEditingComplete: widget.onEditingComplete,
+      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       keyboardType: widget.multiline ? TextInputType.multiline : null,
       decoration: InputDecoration(
         label: widget.label != null ? Text(widget.label!) : null,
