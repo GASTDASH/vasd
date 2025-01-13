@@ -112,11 +112,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        const Text("Username username",
-                            style: TextStyle(
+                        Text(
+                            context.read<AuthBloc>().authRepo.user?.name ??
+                                "Error",
+                            style: const TextStyle(
                                 fontSize: 21, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 4),
-                        Text("username@gmail.com",
+                        Text(
+                            context.read<AuthBloc>().authRepo.user?.email ??
+                                "Error",
                             style: TextStyle(
                                 fontSize: 14, color: theme.hintColor)),
                         const SizedBox(height: 24),
