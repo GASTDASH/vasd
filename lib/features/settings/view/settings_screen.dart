@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/features/settings/settings.dart';
 import 'package:vasd/ui/ui.dart';
+import 'package:vasd/ui/widgets/avatar_container.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -57,145 +58,117 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   centerTitle: true,
                 ),
-                body: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(18),
-                    child: Column(
-                      children: [
-                        Center(
-                          child: SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: () {
-                                // TODO: Edit photo
-                              },
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    await authBloc.authRepo.getUser();
+
+                    setState(() {});
+                  },
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Column(
+                        children: [
+                          const Center(
+                            child: SizedBox(
+                              height: 100,
+                              width: 100,
                               child: Hero(
                                 tag: "avatar",
                                 child: Stack(
                                   children: [
-                                    Container(
-                                      margin: const EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        image: const DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                              "assets/images/guest.png"),
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          color: theme.primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border:
-                                              Border.all(color: Colors.white),
-                                        ),
-                                        child: const Icon(
-                                          Icons.edit_outlined,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ),
+                                    AvatarContainer(),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                            context.read<AuthBloc>().authRepo.user?.name ??
-                                "Error",
-                            style: const TextStyle(
-                                fontSize: 21, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 4),
-                        Text(
-                            context.read<AuthBloc>().authRepo.user?.email ??
-                                "Error",
-                            style: TextStyle(
-                                fontSize: 14, color: theme.hintColor)),
-                        const SizedBox(height: 24),
-                        SettingsButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/edit.svg",
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black, BlendMode.srcIn),
-                          ),
-                          text: "Редактировать профиль",
-                          onTap: () {
-                            Navigator.pushNamed(context, "/profile");
-                          },
-                        ),
-                        const Divider(thickness: 0.2, height: 0),
-                        SettingsButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/map_marker.svg",
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black, BlendMode.srcIn),
-                          ),
-                          text: "Мой адрес",
-                          onTap: () {},
-                        ),
-                        const Divider(thickness: 0.2, height: 0),
-                        SettingsButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/box.svg",
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black, BlendMode.srcIn),
-                          ),
-                          text: "Мои заказы",
-                          onTap: () {},
-                        ),
-                        const Divider(thickness: 0.2, height: 0),
-                        SettingsButton(
-                          icon: SvgPicture.asset(
-                            "assets/icons/lock.svg",
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black, BlendMode.srcIn),
-                          ),
-                          text: "Сменить пароль",
-                          onTap: () {},
-                        ),
-                        const Divider(thickness: 0.2, height: 0),
-                        SettingsButton(
-                          icon: SvgPicture.asset("assets/icons/banner.svg",
+                          const SizedBox(height: 12),
+                          Text(
+                              context.read<AuthBloc>().authRepo.user?.name ??
+                                  "Error",
+                              style: const TextStyle(
+                                  fontSize: 21, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 4),
+                          Text(
+                              context.read<AuthBloc>().authRepo.user?.email ??
+                                  "Error",
+                              style: TextStyle(
+                                  fontSize: 14, color: theme.hintColor)),
+                          const SizedBox(height: 24),
+                          SettingsButton(
+                            icon: SvgPicture.asset(
+                              "assets/icons/edit.svg",
                               colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn)),
-                          text: "Политика конфиденциальности",
-                          onTap: () {},
-                        ),
-                        const Divider(thickness: 0.2, height: 0),
-                        SettingsButton(
-                          icon: SvgPicture.asset("assets/icons/terms.svg",
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn)),
-                          text: "Условия использования",
-                          onTap: () {},
-                        ),
-                        const SizedBox(height: 24),
-                        ButtonBase(
-                          text: "Выйти",
-                          prefixIcon: const Icon(
-                            Icons.logout_rounded,
-                            color: Colors.white,
+                                  Colors.black, BlendMode.srcIn),
+                            ),
+                            text: "Редактировать профиль",
+                            onTap: () {
+                              Navigator.pushNamed(context, "/profile");
+                            },
                           ),
-                          onTap: () async {
-                            authBloc.add(
-                              AuthSignOutEvent(userId: state.userId),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                      ],
+                          const Divider(thickness: 0.2, height: 0),
+                          SettingsButton(
+                            icon: SvgPicture.asset(
+                              "assets/icons/map_marker.svg",
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.black, BlendMode.srcIn),
+                            ),
+                            text: "Мой адрес",
+                            onTap: () {},
+                          ),
+                          const Divider(thickness: 0.2, height: 0),
+                          SettingsButton(
+                            icon: SvgPicture.asset(
+                              "assets/icons/box.svg",
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.black, BlendMode.srcIn),
+                            ),
+                            text: "Мои заказы",
+                            onTap: () {},
+                          ),
+                          const Divider(thickness: 0.2, height: 0),
+                          SettingsButton(
+                            icon: SvgPicture.asset(
+                              "assets/icons/lock.svg",
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.black, BlendMode.srcIn),
+                            ),
+                            text: "Сменить пароль",
+                            onTap: () {},
+                          ),
+                          const Divider(thickness: 0.2, height: 0),
+                          SettingsButton(
+                            icon: SvgPicture.asset("assets/icons/banner.svg",
+                                colorFilter: const ColorFilter.mode(
+                                    Colors.black, BlendMode.srcIn)),
+                            text: "Политика конфиденциальности",
+                            onTap: () {},
+                          ),
+                          const Divider(thickness: 0.2, height: 0),
+                          SettingsButton(
+                            icon: SvgPicture.asset("assets/icons/terms.svg",
+                                colorFilter: const ColorFilter.mode(
+                                    Colors.black, BlendMode.srcIn)),
+                            text: "Условия использования",
+                            onTap: () {},
+                          ),
+                          const SizedBox(height: 24),
+                          ButtonBase(
+                            text: "Выйти",
+                            prefixIcon: const Icon(
+                              Icons.logout_rounded,
+                              color: Colors.white,
+                            ),
+                            onTap: () async {
+                              authBloc.add(
+                                AuthSignOutEvent(),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vasd/repositories/auth/auth.dart';
 
@@ -12,18 +14,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoadingState());
 
       try {
-        String userId = await authRepo.loginWithEmailPassword(
+        await authRepo.loginWithEmailPassword(
           email: event.email,
           password: event.password,
         );
 
-        emit(AuthAuthorizedState(userId: userId));
+        await authRepo.getUser();
+
+        emit(AuthAuthorizedState());
       } catch (e) {
         emit(AuthUnauthorizedState(error: e));
       }
     });
-    on<AuthLoginSavedEvent>((event, emit) {
-      emit(AuthAuthorizedState(userId: event.userId));
+    on<AuthLoginSavedEvent>((event, emit) async {
+      await authRepo.getUser();
+
+      emit(AuthAuthorizedState());
     });
     on<AuthSignUpEvent>((event, emit) async {
       emit(AuthLoadingState());
@@ -49,7 +55,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         emit(AuthUnauthorizedState());
       } catch (e) {
-        emit(AuthAuthorizedState(userId: event.userId, error: e));
+        emit(AuthAuthorizedState(error: e));
+      }
+    });
+    on<AuthUploadPhotoEvent>((event, emit) async {
+      emit(AuthLoadingState());
+
+      try {
+        await authRepo.uploadPhoto(event.imageBytes);
+
+        await authRepo.getUser();
+
+        emit(AuthAuthorizedState());
+      } catch (e) {
+        emit(AuthAuthorizedState(error: e));
       }
     });
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:vasd/ui/widgets/avatar_container.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSize {
   const HomeAppBar({
@@ -65,14 +66,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                 child: Ink(
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: const DecorationImage(
-                      fit: BoxFit.cover,
-                      // image: NetworkImage("https://i.imgur.com/867trdy.jpeg"),
-                      image: AssetImage("assets/images/guest.png"),
-                    ),
-                  ),
+                  // TODO
+                  child: const AvatarContainer(),
                 ),
               ),
             ],

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:vasd/repositories/auth/models/user.dart';
 
@@ -6,9 +8,9 @@ import './auth_interface.dart';
 class AuthSupabaseRepo implements AuthInterface {
   AuthSupabaseRepo(this.supabaseClient);
 
-  final supabase.SupabaseClient supabaseClient;
   @override
   User? user;
+  final supabase.SupabaseClient supabaseClient;
 
   @override
   Future<String> loginWithEmailPassword({
@@ -24,8 +26,6 @@ class AuthSupabaseRepo implements AuthInterface {
     if (res.user == null) {
       throw const supabase.AuthException("User is null!");
     }
-
-    await getUser();
 
     return res.user!.id;
   }
@@ -62,7 +62,18 @@ class AuthSupabaseRepo implements AuthInterface {
     await supabaseClient.auth.signOut();
   }
 
-  //TODO: наверное надо перенести в интерфейс
+  @override
+  Future<String> uploadPhoto(Uint8List imageBytes) async {
+    final userId = user?.id;
+    if (userId == null) throw Exception("User is null");
+
+    final imagePath = "/$userId/avatar";
+    supabaseClient.storage.from("avatars").uploadBinary(imagePath, imageBytes);
+
+    return supabaseClient.storage.from("avatars").getPublicUrl(imagePath);
+  }
+
+  @override
   Future<User?> getUser() async {
     var user = (await supabaseClient.auth.getUser()).user;
     if (user != null) {
@@ -71,7 +82,9 @@ class AuthSupabaseRepo implements AuthInterface {
         email: user.email,
         name: user.userMetadata?["name"],
         phone: user.userMetadata?["phone"],
-        photoUrl: user.userMetadata?["photoUrl"],
+        photoUrl: supabaseClient.storage
+            .from("avatars")
+            .getPublicUrl("/${user.id}/avatar"),
       );
     }
 

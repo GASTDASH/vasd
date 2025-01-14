@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vasd/repositories/auth/models/user.dart';
 
 abstract class AuthInterface {
@@ -16,4 +18,8 @@ abstract class AuthInterface {
   });
 
   Future<void> logout();
+
+  Future<User?> getUser();
+
+  Future<dynamic> uploadPhoto(Uint8List imageBytes);
 }

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // if (false) { // Остановка для удобной вёрстки
     if (mounted) {
       if (session != null) {
-        authBloc.add(AuthLoginSavedEvent(userId: session.user.id));
+        authBloc.add(AuthLoginSavedEvent());
         Navigator.of(context).pushReplacementNamed("/home");
       } else {
         Navigator.of(context).pushReplacementNamed("/login");

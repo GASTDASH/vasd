@@ -12,13 +12,7 @@ class AuthLoginEvent extends AuthEvent {
   final String password;
 }
 
-class AuthLoginSavedEvent extends AuthEvent {
-  AuthLoginSavedEvent({
-    required this.userId,
-  });
-
-  final String userId;
-}
+class AuthLoginSavedEvent extends AuthEvent {}
 
 class AuthSignUpEvent extends AuthEvent {
   AuthSignUpEvent({
@@ -34,10 +28,12 @@ class AuthSignUpEvent extends AuthEvent {
   final String phone;
 }
 
-class AuthSignOutEvent extends AuthEvent {
-  AuthSignOutEvent({
-    required this.userId,
+class AuthSignOutEvent extends AuthEvent {}
+
+class AuthUploadPhotoEvent extends AuthEvent {
+  AuthUploadPhotoEvent({
+    required this.imageBytes,
   });
 
-  final String userId;
+  final Uint8List imageBytes;
 }

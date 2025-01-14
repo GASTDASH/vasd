@@ -27,8 +27,5 @@ class AuthSignedUpState extends AuthUnauthorizedState {
 class AuthAuthorizedState extends AuthState {
   AuthAuthorizedState({
     super.error,
-    required this.userId,
   });
-
-  final String userId;
 }

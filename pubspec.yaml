@@ -46,6 +46,8 @@ dependencies:
   flutter_bloc: ^8.1.6
   talker_bloc_logger: ^4.6.0
   dio: ^5.7.0
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

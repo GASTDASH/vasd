@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
+import 'package:vasd/ui/widgets/avatar_container.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -50,23 +54,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: 100,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () {
+                      onTap: () async {
+                        final bloc = context.read<AuthBloc>();
+
                         // TODO: Edit photo
+                        final picker = ImagePicker();
+                        final XFile? image =
+                            await picker.pickImage(source: ImageSource.gallery);
+                        if (image == null) return;
+                        final imageBytes = await image.readAsBytes();
+                        bloc.authRepo.uploadPhoto(imageBytes);
                       },
                       child: Hero(
                         tag: "avatar",
                         child: Stack(
                           children: [
-                            Container(
-                              margin: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: const DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage("assets/images/guest.png"),
-                                ),
-                              ),
-                            ),
+                            const AvatarContainer(),
                             Align(
                               alignment: Alignment.bottomRight,
                               child: Container(
