@@ -68,7 +68,11 @@ class AuthSupabaseRepo implements AuthInterface {
     if (userId == null) throw Exception("User is null");
 
     final imagePath = "/$userId/avatar";
-    supabaseClient.storage.from("avatars").uploadBinary(imagePath, imageBytes);
+    await supabaseClient.storage.from("avatars").uploadBinary(
+          imagePath,
+          imageBytes,
+          fileOptions: const supabase.FileOptions(upsert: true),
+        );
 
     return supabaseClient.storage.from("avatars").getPublicUrl(imagePath);
   }

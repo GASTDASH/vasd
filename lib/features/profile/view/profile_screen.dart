@@ -17,97 +17,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.chevron_left_rounded, size: 40),
-          ),
-          title: Text(
-            "Профиль",
-            style: theme.textTheme.titleLarge
-                ?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          centerTitle: true,
-        ),
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.all(18),
-          child: ButtonBase(
-            onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, "/home", (route) => true);
-            },
-            text: "Сохранить",
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              children: [
-                Center(
-                  child: SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () async {
-                        final bloc = context.read<AuthBloc>();
+    return BlocBuilder<AuthBloc, AuthState>(
+      bloc: context.read<AuthBloc>(),
+      builder: (context, state) {
+        return SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.chevron_left_rounded, size: 40),
+              ),
+              title: Text(
+                "Профиль",
+                style: theme.textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
+              centerTitle: true,
+            ),
+            bottomNavigationBar: Container(
+              padding: const EdgeInsets.all(18),
+              child: ButtonBase(
+                onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/home", (route) => true);
+                },
+                text: "Сохранить",
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () async {
+                            final bloc = context.read<AuthBloc>();
 
-                        // TODO: Edit photo
-                        final picker = ImagePicker();
-                        final XFile? image =
-                            await picker.pickImage(source: ImageSource.gallery);
-                        if (image == null) return;
-                        final imageBytes = await image.readAsBytes();
-                        bloc.authRepo.uploadPhoto(imageBytes);
-                      },
-                      child: Hero(
-                        tag: "avatar",
-                        child: Stack(
-                          children: [
-                            const AvatarContainer(),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  color: theme.primaryColor,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: Colors.white),
+                            // TODO: Edit photo
+                            final picker = ImagePicker();
+                            final XFile? image = await picker.pickImage(
+                                source: ImageSource.gallery);
+                            if (image == null) return;
+                            final imageBytes = await image.readAsBytes();
+                            bloc.add(
+                              AuthUploadPhotoEvent(imageBytes: imageBytes),
+                            );
+                          },
+                          child: Hero(
+                            tag: "avatar",
+                            child: Stack(
+                              children: [
+                                const AvatarContainer(),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    decoration: BoxDecoration(
+                                      color: theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(color: Colors.white),
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit_outlined,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.edit_outlined,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 24),
+                    const TextFieldCustom(hintText: "Имя пользователя"),
+                    const SizedBox(height: 12),
+                    const TextFieldCustom(hintText: "Эл. почта"),
+                    const SizedBox(height: 12),
+                    const TextFieldCustom(hintText: "Телефон"),
+                    const SizedBox(height: 12),
+                    const TextFieldCustom(hintText: "Город"),
+                    const SizedBox(height: 12),
+                    const TextFieldCustom(hintText: "Адрес"),
+                  ],
                 ),
-                const SizedBox(height: 24),
-                const TextFieldCustom(hintText: "Имя пользователя"),
-                const SizedBox(height: 12),
-                const TextFieldCustom(hintText: "Эл. почта"),
-                const SizedBox(height: 12),
-                const TextFieldCustom(hintText: "Телефон"),
-                const SizedBox(height: 12),
-                const TextFieldCustom(hintText: "Город"),
-                const SizedBox(height: 12),
-                const TextFieldCustom(hintText: "Адрес"),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
