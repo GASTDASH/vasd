@@ -7,7 +7,10 @@ import 'package:vasd/ui/widgets/photo_container.dart';
 class AvatarContainer extends StatelessWidget {
   const AvatarContainer({
     super.key,
+    this.margin = const EdgeInsets.all(6),
   });
+
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +22,20 @@ class AvatarContainer extends StatelessWidget {
           imageUrl: photoUrl,
           placeholder: (context, url) =>
               const Center(child: CircularProgressIndicator()),
-          imageBuilder: (context, imageProvider) =>
-              PhotoContainer(imageProvider: imageProvider),
+          imageBuilder: (context, imageProvider) => PhotoContainer(
+            imageProvider: imageProvider,
+            margin: margin,
+          ),
+          errorWidget: (context, url, error) => PhotoContainer(
+            imageProvider: const AssetImage("assets/images/guest.png"),
+            margin: margin,
+          ),
         );
       } else {
-        return const PhotoContainer(
-            imageProvider: AssetImage("assets/images/guest.png"));
+        return PhotoContainer(
+          imageProvider: const AssetImage("assets/images/guest.png"),
+          margin: margin,
+        );
       }
     });
   }

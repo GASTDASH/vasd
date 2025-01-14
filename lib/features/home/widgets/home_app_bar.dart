@@ -66,8 +66,10 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                 child: Ink(
                   height: 50,
                   width: 50,
-                  // TODO
-                  child: const AvatarContainer(),
+                  child: const Hero(
+                    tag: "avatar",
+                    child: AvatarContainer(margin: EdgeInsets.zero),
+                  ),
                 ),
               ),
             ],
