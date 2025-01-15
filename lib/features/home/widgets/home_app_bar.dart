@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/widgets/avatar_container.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSize {
@@ -66,9 +68,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                 child: Ink(
                   height: 50,
                   width: 50,
-                  child: const Hero(
+                  child: Hero(
                     tag: "avatar",
-                    child: AvatarContainer(margin: EdgeInsets.zero),
+                    child: AvatarContainer(
+                      photoUrl:
+                          context.read<AuthBloc>().authRepo.user!.photoUrl,
+                      margin: EdgeInsets.zero,
+                    ),
                   ),
                 ),
               ),

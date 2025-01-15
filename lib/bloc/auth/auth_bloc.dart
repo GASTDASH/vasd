@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vasd/repositories/auth/auth.dart';
 
@@ -62,7 +63,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoadingState());
 
       try {
-        await authRepo.uploadPhoto(event.imageBytes);
+        var photoUrl = await authRepo.uploadPhoto(event.imageBytes);
+        CachedNetworkImage.evictFromCache(photoUrl);
 
         await authRepo.getUser();
 

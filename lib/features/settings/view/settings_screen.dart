@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -60,7 +61,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 body: RefreshIndicator(
                   onRefresh: () async {
-                    await authBloc.authRepo.getUser();
+                    final user = await authBloc.authRepo.getUser();
+                    final photoUrl = user?.photoUrl;
+
+                    if (photoUrl != null) {
+                      CachedNetworkImage.evictFromCache(photoUrl);
+                    }
 
                     setState(() {});
                   },
@@ -69,7 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.all(18),
                       child: Column(
                         children: [
-                          const Center(
+                          Center(
                             child: SizedBox(
                               height: 100,
                               width: 100,
@@ -77,7 +83,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 tag: "avatar",
                                 child: Stack(
                                   children: [
-                                    AvatarContainer(),
+                                    AvatarContainer(
+                                        photoUrl:
+                                            authBloc.authRepo.user!.photoUrl),
                                   ],
                                 ),
                               ),

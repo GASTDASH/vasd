@@ -74,7 +74,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             tag: "avatar",
                             child: Stack(
                               children: [
-                                const AvatarContainer(),
+                                AvatarContainer(
+                                  photoUrl: context
+                                      .read<AuthBloc>()
+                                      .authRepo
+                                      .user!
+                                      .photoUrl,
+                                ),
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: Container(
