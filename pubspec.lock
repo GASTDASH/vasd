@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: bloc
-      sha256: "106842ad6569f0b60297619e9e0b1885c2fb9bf84812935490e6c5275777804e"
+      sha256: "52c10575f4445c61dd9e0cafcc6356fdd827c4c64dd7945ef3c4105f6b6ac189"
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.4"
+    version: "9.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -258,10 +258,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_bloc
-      sha256: b594505eac31a0518bdcb4b5b79573b8d9117b193cc80cc12e17d639b10aa27a
+      sha256: "153856bdaac302bbdc58a1d1403d50c40557254aa05eaeed40515d88a25a526b"
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.6"
+    version: "9.0.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -865,18 +865,18 @@ packages:
     dependency: transitive
     description:
       name: talker
-      sha256: dff22de27ac0dbe1bb2052fc258ccceee0a2703e6cfe03839ccd337aaf5d291b
+      sha256: "9fb27d8f6eba24687a738359d72addbcdd1a8b27a4e820dffe98a5202c7b1526"
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.0"
+    version: "4.6.7"
   talker_bloc_logger:
     dependency: "direct main"
     description:
       name: talker_bloc_logger
-      sha256: "37ef05ea99e5751c4ac7f041418d7c94307d5b49c7b0e429f7b53ca9494fa068"
+      sha256: b9315a9da0237c23cc740ea4ae37b14a0c1625e495cfa83bce1ecc7e596cbb9e
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.0"
+    version: "4.6.7"
   talker_flutter:
     dependency: "direct main"
     description:
@@ -889,10 +889,10 @@ packages:
     dependency: transitive
     description:
       name: talker_logger
-      sha256: f6af15f038576fb727668131c2a829f986bab0bad379e48805a8f251e3687002
+      sha256: "96f2a2739c74973f777d61c21b55691cc452a3e9f9302a06373abc5fb4221360"
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.0"
+    version: "4.6.7"
   term_glyph:
     dependency: transitive
     description:
