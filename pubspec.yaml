@@ -51,6 +51,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   universe: ^2.0.1
+  yandex_geocoder: ^2.3.1
 
 dev_dependencies:
   flutter_test:

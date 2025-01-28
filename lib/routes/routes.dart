@@ -10,6 +10,7 @@ import 'package:vasd/features/profile/profile.dart';
 import 'package:vasd/features/register/register.dart';
 import 'package:vasd/features/router/router.dart';
 import 'package:vasd/features/send_package/send_package.dart';
+import 'package:vasd/features/set_current_location/view/set_current_location_screen.dart';
 import 'package:vasd/features/settings/settings.dart';
 import 'package:vasd/features/splash/splash.dart';
 
@@ -25,6 +26,7 @@ final routes = {
   "/calculate_delivery_cost": (context) => const CalculateDeliveryCostScreen(),
   "/send_package": (context) => const SendPackageScreen(),
   "/profile": (context) => const ProfileScreen(),
+  "/set_current_location": (context) => const SetCurrentLocationScreen(),
   //
   "/login": (context) => const LoginScreen(),
   "/register": (context) => const RegisterScreen(),

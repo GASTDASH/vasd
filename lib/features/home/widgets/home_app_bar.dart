@@ -23,7 +23,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/set_current_location');
+                },
                 child: Ink(
                   height: 50,
                   width: 50,
