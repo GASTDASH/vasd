@@ -37,20 +37,25 @@ class ButtonBase extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               prefixIcon ?? const SizedBox.shrink(),
-              prefixIcon != null
+              prefixIcon != null && text.isNotEmpty
                   ? const SizedBox(
                       width: 8,
                     )
                   : const SizedBox.shrink(),
-              Text(
-                text,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                    color: outlined
-                        ? Colors.black
-                        : onTap == null
-                            ? theme.hintColor
-                            : Colors.white),
-              ),
+              text.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        text,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                            color: outlined
+                                ? Colors.black
+                                : onTap == null
+                                    ? theme.hintColor
+                                    : Colors.white),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ),
