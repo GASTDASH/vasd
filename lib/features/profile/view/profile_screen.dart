@@ -27,7 +27,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         } else if (state is AuthAuthorizedState) {
           setState(() {});
-          print("=====================================");
         }
       },
       listenWhen: (previous, current) {
