@@ -112,7 +112,9 @@ class _RouterScreenState extends State<RouterScreen> {
           child: FloatingActionButton(
             backgroundColor: theme.primaryColor,
             elevation: 0,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, "/calculate_delivery_cost");
+            },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100),
               side: const BorderSide(
