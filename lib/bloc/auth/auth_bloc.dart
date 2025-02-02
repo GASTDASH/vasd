@@ -28,9 +28,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
     on<AuthLoginSavedEvent>((event, emit) async {
-      await authRepo.getUser();
+      try {
+        await authRepo.getUser();
 
-      emit(AuthAuthorizedState());
+        emit(AuthAuthorizedState());
+      } catch (e) {
+        emit(AuthUnauthorizedState(error: e));
+      }
     });
     on<AuthSignUpEvent>((event, emit) async {
       emit(AuthLoadingState());

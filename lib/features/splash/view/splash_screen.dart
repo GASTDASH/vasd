@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:vasd/bloc/auth/auth_bloc.dart';
+import 'package:vasd/ui/ui.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -45,6 +46,16 @@ class _SplashScreenState extends State<SplashScreen> {
       listener: (context, state) {
         if (state is AuthAuthorizedState) {
           Navigator.of(context).pushReplacementNamed("/home");
+        } else if (state is AuthUnauthorizedState && state.error != null) {
+          showDialog(
+            context: context,
+            builder: (context) => BaseDialog(
+              icon: const Icon(Icons.error),
+              color: Colors.red,
+              title: "Произошла ошибка",
+              text: state.error.toString(),
+            ),
+          );
         }
       },
       child: Scaffold(
