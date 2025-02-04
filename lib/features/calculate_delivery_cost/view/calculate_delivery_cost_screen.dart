@@ -8,6 +8,7 @@ import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/ui/ui.dart';
 
+// TODO: Возможно переименовать в CalculateScreen или SendPackageScreen
 class CalculateDeliveryCostScreen extends StatefulWidget {
   const CalculateDeliveryCostScreen({super.key});
 
