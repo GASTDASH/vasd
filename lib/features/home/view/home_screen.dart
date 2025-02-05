@@ -113,8 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ServiceButton(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, "/calculate_delivery_cost");
+                        Navigator.pushNamed(context, "/calculate");
                       },
                       icon: SvgPicture.asset(
                         "assets/icons/delivery_truck.svg",
