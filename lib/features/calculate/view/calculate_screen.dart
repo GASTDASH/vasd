@@ -29,7 +29,16 @@ class _CalculateScreenState extends State<CalculateScreen> {
     return BlocListener<CalculateBloc, CalculateState>(
       bloc: _bloc,
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is CalculateCalculating) {
+          showDialog(
+              context: context, builder: (context) => const LoadingDialog());
+        }
+      },
+      listenWhen: (previous, current) {
+        if (previous is CalculateCalculating) {
+          Navigator.of(context).pop();
+        }
+        return true;
       },
       child: BlocBuilder<CalculateBloc, CalculateState>(
         bloc: _bloc,
@@ -121,6 +130,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stepper(
+                      connectorThickness: 2,
                       currentStep: state.currentStep,
                       physics: const NeverScrollableScrollPhysics(),
                       controlsBuilder: (context, details) => const Row(),
@@ -265,11 +275,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                           //         packageSize:
                                           //             selectedPackageSize!));
 
-                                          // TODO
-                                          // _cubit.changeStep(
-                                          //   nextStep: 1,
-                                          //   previousStep: state.step,
-                                          // );
+                                          // TODO: Возможно переделать в отдельный Event (связанный с расчётом)
                                           _bloc.add(CalculateContinue());
                                         }
                                       : null,
