@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vasd/features/calculate/bloc/calculate_bloc.dart';
-import 'package:vasd/features/calculate/widgets/widgets.dart';
+import 'package:vasd/features/calculate/calculate.dart';
 import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
@@ -351,42 +351,14 @@ class _CalculateScreenState extends State<CalculateScreen> {
                             "Что ещё понадобится?",
                             style: theme.textTheme.titleLarge,
                           ),
-                          content: Column(
+                          content: const Column(
+                            spacing: 14,
                             children: [
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        // setState(() => state.step = 3);
-                                      },
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              blurRadius: 5,
-                                              color: Colors.black12,
-                                            )
-                                          ],
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: Column(
-                                            children: [
-                                              Text("data"),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                              SizedBox(height: 12),
+                              AdditionalFuncCard(),
+                              AdditionalFuncCard(),
+                              AdditionalFuncCard(),
+                              AdditionalFuncCard(),
                             ],
                           ),
                         ),
