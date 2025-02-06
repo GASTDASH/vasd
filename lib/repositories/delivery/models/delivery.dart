@@ -34,4 +34,15 @@ class Delivery {
       deliveryVariant: deliveryVariant ?? this.deliveryVariant,
     );
   }
+
+  Delivery removeDeliveryVariant() {
+    return Delivery(
+      cityFrom: cityFrom,
+      cityTo: cityTo,
+      packageSize: packageSize,
+      cost: cost,
+      distance: distance,
+      deliveryVariant: null,
+    );
+  }
 }

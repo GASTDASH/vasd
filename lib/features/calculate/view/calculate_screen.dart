@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:vasd/features/calculate/bloc/calculate_bloc.dart';
 import 'package:vasd/features/calculate/widgets/widgets.dart';
 import 'package:vasd/repositories/address_completer/address_completer.dart';
+import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/ui/ui.dart';
@@ -17,6 +18,37 @@ class CalculateScreen extends StatefulWidget {
 
 class _CalculateScreenState extends State<CalculateScreen> {
   final _bloc = CalculateBloc();
+
+  double calculateCost({
+    PackageSize? packageSize,
+    required double distance,
+    DeliveryVariant? variant,
+  }) {
+    const double packageVolumeRate = 0.05;
+    double packageVolume = 0;
+
+    if (packageSize != null) {
+      final sizes = packageSize.size
+          .split(' ')
+          .first
+          .split('x')
+          .map((e) => double.parse(e))
+          .toList();
+
+      packageVolume = 1;
+      for (var size in sizes) {
+        packageVolume *= size;
+      }
+    }
+
+    double cost = (((distance * (variant?.distanceRate ?? 0)) +
+                    (packageVolume * packageVolumeRate)) *
+                100)
+            .roundToDouble() /
+        100;
+
+    return cost;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +142,16 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        state.delivery.cost != 0
-                                            ? "${state.delivery.cost}₽"
-                                            : "",
+                                        // state.delivery.cost != 0
+                                        //     ? "${state.delivery.cost}₽"
+                                        //     : "",
+                                        "${calculateCost(
+                                          distance: state.delivery.distance,
+                                          variant:
+                                              state.delivery.deliveryVariant,
+                                          packageSize:
+                                              state.delivery.packageSize,
+                                        ).toString()}₽",
                                         style: theme.textTheme.headlineLarge,
                                       ),
                                     ],
@@ -262,19 +301,6 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                           state.delivery.cityTo.isNotEmpty &&
                                           state.delivery.packageSize != null
                                       ? () async {
-                                          // distance = 1733;
-                                          // deliveryVariantList = await GetIt.I<
-                                          //         DeliveryVariantLocalRepo>()
-                                          //     .getDeliveryVariantList();
-
-                                          // setState(() => state.step = 1);
-
-                                          // _calculateDeliveryCostBloc.add(
-                                          //     CalculateDeliveryCostGetDistanceEvent(
-                                          //         addresses: addresses,
-                                          //         packageSize:
-                                          //             selectedPackageSize!));
-
                                           // TODO: Возможно переделать в отдельный Event (связанный с расчётом)
                                           _bloc.add(CalculateContinue());
                                         }
@@ -289,51 +315,30 @@ class _CalculateScreenState extends State<CalculateScreen> {
                             "Выбор услуги",
                             style: theme.textTheme.titleLarge,
                           ),
-                          content: const Column(
+                          content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: 12),
+                              const SizedBox(height: 12),
                               Column(
                                 spacing: 12,
                                 children: [
-                                  // TODO
-                                  // for (var variant in state.deliveryVariantList)
-                                  //   typeCard(
-                                  //     minCost: state.delivery.distance *
-                                  //         variant.distanceRate,
-                                  //     minDays: variant.minDays,
-                                  //     maxDays: variant.maxDays,
-                                  //     description: variant.description,
-                                  //     onTap: () => setState(() {
-                                  //       // calculateCost(); // TODO: Должно быть перенесено в Кубит
-
-                                  //       // state.step = 2;
-                                  //     }),
-                                  //   ),
-
-                                  // typeCard(
-                                  //   minCost: 400,
-                                  //   minDays: 3,
-                                  //   maxDays: 5,
-                                  //   description: "Только из пункта в пункт СДЭК",
-                                  //   onTap: () => setState(() {
-                                  //     calculateCost();
-
-                                  //     state.step = 2;
-                                  //   }),
-                                  // ),
-                                  // const SizedBox(width: 12, height: 12),
-                                  // typeCard(
-                                  //   minCost: 680,
-                                  //   minDays: 2,
-                                  //   maxDays: 3,
-                                  //   description: "Можно вызвать курьера",
-                                  //   onTap: () => setState(() {
-                                  //     calculateCost();
-
-                                  //     state.step = 2;
-                                  //   }),
-                                  // ),
+                                  for (var variant in state.deliveryVariantList)
+                                    typeCard(
+                                      minCost: calculateCost(
+                                        distance: state.delivery.distance,
+                                        packageSize: state.delivery.packageSize,
+                                        variant: variant,
+                                      ),
+                                      minDays: variant.minDays,
+                                      maxDays: variant.maxDays,
+                                      description: variant.description,
+                                      onTap: () {
+                                        // TODO
+                                        _bloc.add(CalculateSetDeliveryVariant(
+                                          deliveryVariant: variant,
+                                        ));
+                                      },
+                                    ),
                                 ],
                               )
                             ],

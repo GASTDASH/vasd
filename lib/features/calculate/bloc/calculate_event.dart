@@ -29,3 +29,11 @@ class CalculateSetPackageSize extends CalculateEvent {
 
   final PackageSize packageSize;
 }
+
+class CalculateSetDeliveryVariant extends CalculateEvent {
+  CalculateSetDeliveryVariant({
+    required this.deliveryVariant,
+  });
+
+  final DeliveryVariant deliveryVariant;
+}

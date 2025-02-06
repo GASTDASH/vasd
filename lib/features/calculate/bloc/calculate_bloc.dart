@@ -36,7 +36,10 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
           delivery: delivery,
         ));
 
+        // TODO: Реализовать рассчёт расстояния
         delivery = delivery.copyWith(distance: 1733);
+
+        delivery = delivery.removeDeliveryVariant();
 
         deliveryVariantList =
             await GetIt.I<DeliveryVariantLocalRepo>().getDeliveryVariantList();
@@ -52,6 +55,15 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
       emit(CalculateLoaded(
         currentStep: event.tappedStep,
         delivery: state.delivery,
+        deliveryVariantList: state.deliveryVariantList,
+      ));
+    });
+    on<CalculateSetDeliveryVariant>((event, emit) {
+      emit(CalculateLoaded(
+        currentStep: state.currentStep + 1,
+        delivery:
+            state.delivery.copyWith(deliveryVariant: event.deliveryVariant),
+        deliveryVariantList: state.deliveryVariantList,
       ));
     });
   }
