@@ -8,6 +8,7 @@ import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/auth/auth.dart';
+import 'package:vasd/repositories/delivery_variant/delivery_variant_local_repo.dart';
 import 'package:vasd/vasd_app.dart';
 
 // Supabase Database Password = 5re6evIdBibM3HJq
@@ -32,6 +33,7 @@ Future<void> main() async {
       AuthSupabaseRepo(Supabase.instance.client));
   GetIt.I.registerSingleton<AddressCompleterInterface>(
       AddressCompleterDadataRepo());
+  GetIt.I.registerSingleton(const DeliveryVariantLocalRepo());
 
   Bloc.observer = TalkerBlocObserver(
       talker: talker,

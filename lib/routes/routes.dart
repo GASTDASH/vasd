@@ -1,3 +1,4 @@
+import 'package:vasd/features/calculate/view/calculate_screen.dart';
 import 'package:vasd/features/calculate_delivery_cost/calculate_delivery_cost.dart';
 import 'package:vasd/features/forgot_password/forgot_password.dart';
 import 'package:vasd/features/home/home.dart';
@@ -24,6 +25,7 @@ final routes = {
   "/home/settings": (context) => const SettingsScreen(),
   //
   "/calculate_delivery_cost": (context) => const CalculateDeliveryCostScreen(),
+  "/calculate": (context) => const CalculateScreen(),
   "/send_package": (context) => const SendPackageScreen(),
   "/profile": (context) => const ProfileScreen(),
   "/set_current_location": (context) => const SetCurrentLocationScreen(),

@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
                   const TextFieldCustom(hintText: "Имя пользователя"),
                   const SizedBox(height: 12),
-                  const TextFieldCustom(hintText: "Эл. почта"),
+                  const TextFieldCustom(hintText: "Эл. почта"), // TODO: Удалить
                   const SizedBox(height: 12),
                   const TextFieldCustom(hintText: "Телефон"),
                   const SizedBox(height: 12),

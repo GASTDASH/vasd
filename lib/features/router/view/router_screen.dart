@@ -113,7 +113,7 @@ class _RouterScreenState extends State<RouterScreen> {
             backgroundColor: theme.primaryColor,
             elevation: 0,
             onPressed: () {
-              Navigator.pushNamed(context, "/calculate_delivery_cost");
+              Navigator.pushNamed(context, "/calculate");
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100),
