@@ -37,3 +37,11 @@ class CalculateSetDeliveryVariant extends CalculateEvent {
 
   final DeliveryVariant deliveryVariant;
 }
+
+class CalculateSetPaymentMethod extends CalculateEvent {
+  CalculateSetPaymentMethod({
+    required this.paymentMethod,
+  });
+
+  final PaymentMethod paymentMethod;
+}

@@ -5,11 +5,13 @@ sealed class CalculateState {
     required this.currentStep,
     required this.delivery,
     this.deliveryVariantList = const [],
+    this.paymentMethod,
   });
 
   final int currentStep;
   final Delivery delivery;
   final List<DeliveryVariant> deliveryVariantList;
+  final PaymentMethod? paymentMethod;
 }
 
 class CalculateLoaded extends CalculateState {
@@ -17,6 +19,7 @@ class CalculateLoaded extends CalculateState {
     required super.currentStep,
     required super.delivery,
     super.deliveryVariantList,
+    super.paymentMethod,
   });
 }
 
@@ -25,6 +28,7 @@ class CalculateSelectingPackageSize extends CalculateState {
     required super.currentStep,
     required super.delivery,
     super.deliveryVariantList,
+    super.paymentMethod,
   });
 }
 
@@ -33,5 +37,6 @@ class CalculateCalculating extends CalculateState {
     required super.currentStep,
     required super.delivery,
     super.deliveryVariantList,
+    super.paymentMethod,
   });
 }

@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vasd/repositories/payment_method/models/payment_method.dart';
 
 class PaymentMethodCard extends StatelessWidget {
   const PaymentMethodCard({
     super.key,
-    required this.name,
-    this.description,
-    this.image,
-    required this.selected,
+    required this.paymentMethod,
+    this.selected = false,
+    required this.onTap,
   });
 
-  final String name;
-  final String? description;
-  final String? image;
+  final PaymentMethod paymentMethod;
   final bool selected;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
@@ -37,8 +36,8 @@ class PaymentMethodCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     color: theme.hintColor.withValues(alpha: 0.1),
                   ),
-                  child: image != null
-                      ? SvgPicture.asset(image!)
+                  child: paymentMethod.image != null
+                      ? SvgPicture.asset(paymentMethod.image!)
                       : const Placeholder(),
                 ),
                 Column(
@@ -46,12 +45,12 @@ class PaymentMethodCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      paymentMethod.text,
                       style: theme.textTheme.titleMedium,
                     ),
-                    description != null
+                    paymentMethod.description != null
                         ? Text(
-                            description!,
+                            paymentMethod.description!,
                             style: TextStyle(
                               color: theme.hintColor,
                             ),
@@ -62,9 +61,11 @@ class PaymentMethodCard extends StatelessWidget {
               ],
             ),
             Radio(
-              value: selected,
-              groupValue: null,
-              onChanged: (value) {},
+              value: paymentMethod,
+              groupValue: selected ? paymentMethod : null,
+              onChanged: (_) {
+                onTap();
+              },
             )
           ],
         ),

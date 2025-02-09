@@ -8,6 +8,7 @@ import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
+import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
 import 'package:vasd/ui/ui.dart';
 
 class CalculateScreen extends StatefulWidget {
@@ -451,35 +452,50 @@ class _CalculateScreenState extends State<CalculateScreen> {
                               "Отправка",
                               style: theme.textTheme.titleLarge,
                             ),
-                            content: Column(
-                              spacing: 12,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Выбор способа оплаты",
-                                  style: theme.textTheme.titleLarge,
-                                ),
-                                const PaymentMethodCard(
-                                  name: "Банковской картой",
-                                  description: "Нет сохранённых карт",
-                                  image: "assets/icons/card.svg",
-                                  selected: true,
-                                ),
-                                const Divider(height: 0),
-                                const PaymentMethodCard(
-                                  name: "Наличными",
-                                  description: "В пункте при отправке",
-                                  image: "assets/icons/cash.svg",
-                                  selected: false,
-                                ),
-                                ButtonBase(
-                                  text: "Оплатить",
-                                  onTap: () {},
-                                ),
-                                // TODO: Создать класс PaymentMethod, чтобы потом можно было использовать в БЛоКе
-                              ],
-                            ),
+                            content: Builder(builder: (context) {
+                              final paymentMethodList =
+                                  GetIt.I<PaymentMethodLocalRepo>()
+                                      .getPaymentMethods();
+
+                              return Column(
+                                spacing: 12,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Выбор способа оплаты",
+                                    style: theme.textTheme.titleLarge,
+                                  ),
+                                  ...paymentMethodList
+                                      .map((e) => PaymentMethodCard(
+                                            paymentMethod: e,
+                                            selected: state.paymentMethod == e,
+                                            onTap: () {
+                                              _bloc.add(
+                                                CalculateSetPaymentMethod(
+                                                  paymentMethod: e,
+                                                ),
+                                              );
+                                            },
+                                          ))
+                                      .toList()
+                                      .expand((element) =>
+                                          [element, const Divider(height: 0)])
+                                      .toList()
+                                    ..removeLast(),
+                                  ButtonBase(
+                                    text: "Оплатить",
+                                    onTap: state.paymentMethod != null
+                                        ? () {
+                                            // TODO: Пипец
+                                            Navigator.of(context)
+                                                .pushNamed("/payment");
+                                          }
+                                        : null,
+                                  ),
+                                ],
+                              );
+                            }),
                           ),
                         ],
                       ),

@@ -4,6 +4,7 @@ import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/repositories/delivery_variant/delivery_variant_local_repo.dart';
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
+import 'package:vasd/repositories/payment_method/models/payment_method.dart';
 
 part 'calculate_event.dart';
 part 'calculate_state.dart';
@@ -49,6 +50,7 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
         currentStep: state.currentStep + 1,
         delivery: delivery,
         deliveryVariantList: deliveryVariantList,
+        paymentMethod: state.paymentMethod,
       ));
     });
     on<CalculateStepTapped>((event, emit) {
@@ -56,6 +58,7 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
         currentStep: event.tappedStep,
         delivery: state.delivery,
         deliveryVariantList: state.deliveryVariantList,
+        paymentMethod: state.paymentMethod,
       ));
     });
     on<CalculateSetDeliveryVariant>((event, emit) {
@@ -64,6 +67,14 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
         delivery:
             state.delivery.copyWith(deliveryVariant: event.deliveryVariant),
         deliveryVariantList: state.deliveryVariantList,
+        paymentMethod: state.paymentMethod,
+      ));
+    });
+    on<CalculateSetPaymentMethod>((event, emit) {
+      emit(CalculateLoaded(
+        currentStep: state.currentStep,
+        delivery: state.delivery,
+        paymentMethod: event.paymentMethod,
       ));
     });
   }

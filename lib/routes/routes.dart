@@ -7,11 +7,12 @@ import 'package:vasd/features/new_password/new_password.dart';
 import 'package:vasd/features/notifications/notifications.dart';
 import 'package:vasd/features/otp_verification/otp_verification.dart';
 import 'package:vasd/features/packages/packages.dart';
+import 'package:vasd/features/payment/payment.dart';
 import 'package:vasd/features/profile/profile.dart';
 import 'package:vasd/features/register/register.dart';
 import 'package:vasd/features/router/router.dart';
 import 'package:vasd/features/send_package/send_package.dart';
-import 'package:vasd/features/set_current_location/view/set_current_location_screen.dart';
+import 'package:vasd/features/set_current_location/set_current_location.dart';
 import 'package:vasd/features/settings/settings.dart';
 import 'package:vasd/features/splash/splash.dart';
 
@@ -29,6 +30,7 @@ final routes = {
   "/send_package": (context) => const SendPackageScreen(),
   "/profile": (context) => const ProfileScreen(),
   "/set_current_location": (context) => const SetCurrentLocationScreen(),
+  "/payment": (context) => const PaymentScreen(),
   //
   "/login": (context) => const LoginScreen(),
   "/register": (context) => const RegisterScreen(),
