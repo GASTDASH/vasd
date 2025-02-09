@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
-class AdditionalFuncCard extends StatelessWidget {
+class AdditionalFuncCard extends StatefulWidget {
   const AdditionalFuncCard({
     super.key,
   });
+
+  @override
+  State<AdditionalFuncCard> createState() => _AdditionalFuncCardState();
+}
+
+class _AdditionalFuncCardState extends State<AdditionalFuncCard> {
+  bool selected = false;
+
+  // TODO: Добавить отдельный класс AdditionalFunc
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +24,10 @@ class AdditionalFuncCard extends StatelessWidget {
           child: InkWell(
             onTap: () {
               // TODO: Выбрать функцию
+              setState(() {
+                selected = !selected;
+              });
+              // TODO: Добавить функцию в список (через блок)
             },
             borderRadius: BorderRadius.circular(8),
             child: Ink(
@@ -25,7 +38,7 @@ class AdditionalFuncCard extends StatelessWidget {
                     color: Colors.black12,
                   )
                 ],
-                color: Colors.white,
+                color: selected ? theme.primaryColor : Colors.white,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Padding(
@@ -34,9 +47,25 @@ class AdditionalFuncCard extends StatelessWidget {
                   spacing: 6,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Дополнительная функция",
-                        style: theme.textTheme.titleMedium),
-                    const Text("Описание описание описание описание описание")
+                    Text(
+                      "Дополнительная функция",
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: selected ? Colors.white : null),
+                    ),
+                    Text(
+                      "Описание описание описание описание описание",
+                      style: TextStyle(color: selected ? Colors.white : null),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "100₽",
+                          style: theme.textTheme.titleLarge
+                              ?.copyWith(color: selected ? Colors.white : null),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

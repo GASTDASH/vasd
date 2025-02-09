@@ -18,13 +18,14 @@ class Delivery {
   final double distance;
   final DeliveryVariant? deliveryVariant;
 
-  Delivery copyWith(
-      {String? cityFrom,
-      String? cityTo,
-      PackageSize? packageSize,
-      double? cost,
-      double? distance,
-      DeliveryVariant? deliveryVariant}) {
+  Delivery copyWith({
+    String? cityFrom,
+    String? cityTo,
+    PackageSize? packageSize,
+    double? cost,
+    double? distance,
+    DeliveryVariant? deliveryVariant,
+  }) {
     return Delivery(
       cityFrom: cityFrom ?? this.cityFrom,
       cityTo: cityTo ?? this.cityTo,

@@ -7,6 +7,7 @@ class DeliveryVariantLocalRepo {
     DeliveryVariant(
       name: "Стандарт",
       distanceRate: 0.23,
+      packageVolumeRate: 0.01,
       minDays: 3,
       maxDays: 5,
       description: "Проверка",
@@ -14,6 +15,7 @@ class DeliveryVariantLocalRepo {
     DeliveryVariant(
       name: "Экспресс",
       distanceRate: 0.39,
+      packageVolumeRate: 0.01,
       minDays: 2,
       maxDays: 3,
       description: "Проверка",

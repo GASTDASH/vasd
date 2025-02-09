@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 
 class PackageSizeItem extends StatelessWidget {
@@ -23,14 +24,27 @@ class PackageSizeItem extends StatelessWidget {
         child: Ink(
           height: 80,
           decoration: BoxDecoration(
-            color: theme.hintColor.withOpacity(0.1),
+            color: theme.hintColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: [
-                const SizedBox(height: 60, width: 60, child: Placeholder()),
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  height: 60,
+                  width: 60,
+                  child: packageSize.image == null
+                      ? const Placeholder()
+                      : packageSize.image!.contains("svg")
+                          ? SvgPicture.asset(
+                              "assets/images/${packageSize.image!}")
+                          : packageSize.image!.contains("png")
+                              ? Image.asset(
+                                  "assets/images/${packageSize.image!}")
+                              : const Placeholder(),
+                ),
                 const SizedBox(width: 12),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,

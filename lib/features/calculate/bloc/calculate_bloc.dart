@@ -28,7 +28,7 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
     });
     on<CalculateContinue>((event, emit) async {
       Delivery delivery = state.delivery;
-      List<DeliveryVariant> deliveryVariantList = [];
+      List<DeliveryVariant> deliveryVariantList = state.deliveryVariantList;
 
       if (state.currentStep == 0) {
         emit(CalculateCalculating(
