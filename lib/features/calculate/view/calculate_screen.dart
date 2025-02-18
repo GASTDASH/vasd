@@ -5,11 +5,11 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/features/calculate/bloc/calculate_bloc.dart';
 import 'package:vasd/features/calculate/calculate.dart';
 import 'package:vasd/repositories/address_completer/address_completer.dart';
-import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
 import 'package:vasd/ui/ui.dart';
+import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
 
 class CalculateScreen extends StatefulWidget {
   const CalculateScreen({super.key});
@@ -21,40 +21,40 @@ class CalculateScreen extends StatefulWidget {
 class _CalculateScreenState extends State<CalculateScreen> {
   final _bloc = CalculateBloc();
 
-  final senderFIO = TextEditingController();
-  final senderPhone = TextEditingController();
-  final receiverFIO = TextEditingController();
-  final receiverPhone = TextEditingController();
+  final senderFIOController = TextEditingController();
+  final senderPhoneController = TextEditingController();
+  final receiverFIOController = TextEditingController();
+  final receiverPhoneController = TextEditingController();
 
-  double calculateCost({
-    PackageSize? packageSize,
-    required double distance,
-    DeliveryVariant? variant,
-  }) {
-    double packageVolume = 0;
+  // double calculateCost({
+  //   PackageSize? packageSize,
+  //   required double distance,
+  //   DeliveryVariant? variant,
+  // }) {
+  //   double packageVolume = 0;
 
-    if (packageSize != null) {
-      final sizes = packageSize.size
-          .split(' ')
-          .first
-          .split('x')
-          .map((e) => double.parse(e))
-          .toList();
+  //   if (packageSize != null) {
+  //     final sizes = packageSize.size
+  //         .split(' ')
+  //         .first
+  //         .split('x')
+  //         .map((e) => double.parse(e))
+  //         .toList();
 
-      packageVolume = 1;
-      for (var size in sizes) {
-        packageVolume *= size;
-      }
-    }
+  //     packageVolume = 1;
+  //     for (var size in sizes) {
+  //       packageVolume *= size;
+  //     }
+  //   }
 
-    double cost = (((distance * (variant?.distanceRate ?? 0)) +
-                    (packageVolume * (variant?.packageVolumeRate ?? 0))) *
-                100)
-            .roundToDouble() /
-        100;
+  //   double cost = (((distance * (variant?.distanceRate ?? 0)) +
+  //                   (packageVolume * (variant?.packageVolumeRate ?? 0))) *
+  //               100)
+  //           .roundToDouble() /
+  //       100;
 
-    return cost;
-  }
+  //   return cost;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                 ),
                 bottomNavigationBar: state.currentStep >= 1
                     ? Container(
-                        height: 200,
+                        height: 250,
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius:
@@ -138,36 +138,88 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                     ),
                                     const SizedBox(height: 4),
                                     Row(
-                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Icon(Icons.shopping_bag_outlined,
                                             color: theme.hintColor),
-                                        Text(
-                                          state.delivery.packageSize != null
-                                              ? state.delivery.packageSize!.size
-                                              : "",
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  color: theme.hintColor),
+                                        Expanded(
+                                          child: Text(
+                                            state.delivery.packageSize != null
+                                                ? "${state.delivery.packageSize!.size} (${state.delivery.packageSize!.title})"
+                                                : "",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                                    color: theme.hintColor),
+                                          ),
                                         ),
                                       ],
                                     ),
                                     const Expanded(child: SizedBox.expand()),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          // state.delivery.cost != 0
-                                          //     ? "${state.delivery.cost}₽"
-                                          //     : "",
-                                          "${calculateCost(
-                                            distance: state.delivery.distance,
-                                            variant:
-                                                state.delivery.deliveryVariant,
-                                            packageSize:
-                                                state.delivery.packageSize,
-                                          ).toString()}₽",
-                                          style: theme.textTheme.headlineLarge,
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            state.delivery.senderFIO != null
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        "Отправитель:",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Text(
+                                                          "${state.delivery.senderFIO}"),
+                                                    ],
+                                                  )
+                                                : const SizedBox.shrink(),
+                                            state.delivery.receiverFIO != null
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        "Получатель:",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Text(
+                                                          "${state.delivery.receiverFIO}"),
+                                                    ],
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(state.delivery.deliveryVariant
+                                                    ?.name ??
+                                                ""),
+                                            Text(
+                                              "${state.delivery.cost}₽",
+                                              style:
+                                                  theme.textTheme.headlineLarge,
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -190,8 +242,6 @@ class _CalculateScreenState extends State<CalculateScreen> {
                         controlsBuilder: (context, details) => const Row(),
                         onStepTapped: (tappedStep) {
                           if (state.currentStep > tappedStep) {
-                            // state.step = value;
-
                             _bloc.add(
                                 CalculateStepTapped(tappedStep: tappedStep));
                           }
@@ -341,7 +391,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                         in state.deliveryVariantList)
                                       DeliveryVariantCard(
                                         name: variant.name,
-                                        minCost: calculateCost(
+                                        minCost: state.delivery.calculateCost(
                                           distance: state.delivery.distance,
                                           packageSize:
                                               state.delivery.packageSize,
@@ -402,17 +452,27 @@ class _CalculateScreenState extends State<CalculateScreen> {
                               spacing: 12,
                               children: [
                                 const SizedBox(height: 12),
-                                const TextFieldCustom(
+                                TextFieldCustom(
                                   hintText: "ФИО полностью",
+                                  controller: senderFIOController,
+                                  onChanged: (_) => setState(() {}),
                                 ),
-                                const TextFieldCustom(
-                                  hintText: "Номер телефона",
+                                IntlPhoneFieldCustom(
+                                  controller: senderPhoneController,
+                                  onChanged: (_) => setState(() {}),
                                 ),
                                 ButtonBase(
                                   text: "Продолжить",
-                                  onTap: () {
-                                    _bloc.add(CalculateContinue());
-                                  },
+                                  onTap: senderFIOController.text.isNotEmpty &&
+                                          senderPhoneController.text.length ==
+                                              10
+                                      ? () {
+                                          _bloc.add(CalculateSetSenderInfo(
+                                              fio: senderFIOController.text,
+                                              phone:
+                                                  senderPhoneController.text));
+                                        }
+                                      : null,
                                 ),
                               ],
                             ),
@@ -429,17 +489,28 @@ class _CalculateScreenState extends State<CalculateScreen> {
                               spacing: 12,
                               children: [
                                 const SizedBox(height: 12),
-                                const TextFieldCustom(
+                                TextFieldCustom(
                                   hintText: "ФИО полностью",
+                                  controller: receiverFIOController,
+                                  onChanged: (_) => setState(() {}),
                                 ),
-                                const TextFieldCustom(
-                                  hintText: "Номер телефона",
+                                IntlPhoneFieldCustom(
+                                  controller: receiverPhoneController,
+                                  onChanged: (_) => setState(() {}),
                                 ),
                                 ButtonBase(
                                   text: "Продолжить",
-                                  onTap: () {
-                                    _bloc.add(CalculateContinue());
-                                  },
+                                  onTap: receiverFIOController
+                                              .text.isNotEmpty &&
+                                          receiverPhoneController.text.length ==
+                                              10
+                                      ? () {
+                                          _bloc.add(CalculateSetReceiverInfo(
+                                              fio: receiverFIOController.text,
+                                              phone: receiverPhoneController
+                                                  .text));
+                                        }
+                                      : null,
                                 ),
                               ],
                             ),
@@ -488,8 +559,10 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                     onTap: state.paymentMethod != null
                                         ? () {
                                             // TODO: Пипец
-                                            Navigator.of(context)
-                                                .pushNamed("/payment");
+                                            Navigator.of(context).pushNamed(
+                                              "/payment",
+                                              arguments: state.delivery,
+                                            );
                                           }
                                         : null,
                                   ),

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class DeliveryVariant extends Equatable {
   const DeliveryVariant({
+    required this.id,
     required this.name,
     required this.distanceRate,
     required this.packageVolumeRate,
@@ -10,6 +11,7 @@ class DeliveryVariant extends Equatable {
     this.description,
   });
 
+  final int id;
   final String name;
   final double distanceRate;
   final double packageVolumeRate;

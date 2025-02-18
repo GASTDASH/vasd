@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final supabase.Session? session =
         GetIt.I<supabase.SupabaseClient>().auth.currentSession;
 
-    await Future.delayed(const Duration(seconds: 5));
+    // await Future.delayed(const Duration(seconds: 5));
 
     // if (false) { // Остановка для удобной вёрстки
     if (mounted) {

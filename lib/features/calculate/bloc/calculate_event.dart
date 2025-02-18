@@ -45,3 +45,27 @@ class CalculateSetPaymentMethod extends CalculateEvent {
 
   final PaymentMethod paymentMethod;
 }
+
+class CalculateSetInfo extends CalculateEvent {
+  CalculateSetInfo({
+    required this.fio,
+    required this.phone,
+  });
+
+  final String fio;
+  final String phone;
+}
+
+class CalculateSetSenderInfo extends CalculateSetInfo {
+  CalculateSetSenderInfo({
+    required super.fio,
+    required super.phone,
+  });
+}
+
+class CalculateSetReceiverInfo extends CalculateSetInfo {
+  CalculateSetReceiverInfo({
+    required super.fio,
+    required super.phone,
+  });
+}

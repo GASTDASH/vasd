@@ -5,6 +5,7 @@ class DeliveryVariantLocalRepo {
 
   static const List<DeliveryVariant> _deliveryVariantList = [
     DeliveryVariant(
+      id: 1,
       name: "Стандарт",
       distanceRate: 0.23,
       packageVolumeRate: 0.01,
@@ -13,6 +14,7 @@ class DeliveryVariantLocalRepo {
       description: "Проверка",
     ),
     DeliveryVariant(
+      id: 2,
       name: "Экспресс",
       distanceRate: 0.39,
       packageVolumeRate: 0.01,
