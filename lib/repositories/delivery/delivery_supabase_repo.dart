@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -15,11 +13,10 @@ class DeliverySupabaseRepo {
   Future<void> createDelivery({
     required final Delivery delivery,
   }) async {
-    final deliveryId = _generateId();
-    GetIt.I<Talker>().debug(deliveryId);
+    GetIt.I<Talker>().debug(delivery.deliveryId);
 
     await _supabaseClient.from("delivery").insert({
-      'delivery_id': deliveryId,
+      'delivery_id': delivery.deliveryId,
       "user_id": _supabaseClient.auth.currentSession!.user.id,
       "city_from": delivery.cityFrom,
       "city_to": delivery.cityTo,
@@ -37,22 +34,18 @@ class DeliverySupabaseRepo {
     return;
   }
 
-  String _generateId() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    final Random rnd = Random();
+  Future<Delivery?> findDelivery({required String deliveryId}) async {
+    final res = await _supabaseClient
+        .from("delivery")
+        .select("*")
+        .eq("delivery_id", deliveryId);
 
-    String id = "";
-
-    // String.fromCharCodes(Iterable.generate(4, (index) => ,));
-    id = String.fromCharCodes(
-      Iterable.generate(
-        4,
-        (i) => chars.codeUnitAt(rnd.nextInt(chars.length)),
-      ),
-    );
-
-    id = id.replaceRange(2, 2, (rnd.nextInt(9999999) + 1111111).toString());
-
-    return id;
+    if (res.isNotEmpty) {
+      GetIt.I<Talker>().debug("Посылка найдена");
+      return Delivery.fromJson(json: res.first);
+    } else {
+      GetIt.I<Talker>().debug("Посылка НЕ найдена");
+      return null;
+    }
   }
 }

@@ -6,6 +6,7 @@ import 'package:vasd/features/login/login.dart';
 import 'package:vasd/features/new_password/new_password.dart';
 import 'package:vasd/features/notifications/notifications.dart';
 import 'package:vasd/features/otp_verification/otp_verification.dart';
+import 'package:vasd/features/package_info/view/package_info_screen.dart';
 import 'package:vasd/features/packages/packages.dart';
 import 'package:vasd/features/payment/payment.dart';
 import 'package:vasd/features/profile/profile.dart';
@@ -31,6 +32,7 @@ final routes = {
   "/profile": (context) => const ProfileScreen(),
   "/set_current_location": (context) => const SetCurrentLocationScreen(),
   "/payment": (context) => const PaymentScreen(),
+  "/package_info": (context) => const PackageInfoScreen(),
   //
   "/login": (context) => const LoginScreen(),
   "/register": (context) => const RegisterScreen(),

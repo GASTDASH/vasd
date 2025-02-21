@@ -16,9 +16,26 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
       emit(DeliveryCreating());
 
       await Future.delayed(const Duration(seconds: 1));
-      await _deliveryRepo.createDelivery(delivery: event.delivery);
+      try {
+        await _deliveryRepo.createDelivery(delivery: event.delivery);
 
-      emit(DeliverySuccess());
+        emit(DeliverySuccess());
+      } catch (e) {
+        emit(DeliveryError());
+      }
+    });
+    on<DeliveryFind>((event, emit) async {
+      emit(DeliveryFinding());
+
+      await Future.delayed(const Duration(seconds: 1));
+      final delivery =
+          await _deliveryRepo.findDelivery(deliveryId: event.deliveryId);
+
+      if (delivery == null) {
+        emit(DeliveryLoaded());
+      } else {
+        emit(DeliveryFound(delivery: delivery));
+      }
     });
   }
 }

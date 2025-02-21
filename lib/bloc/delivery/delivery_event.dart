@@ -14,3 +14,11 @@ class DeliveryCreate extends DeliveryEvent {
 
   final Delivery delivery;
 }
+
+class DeliveryFind extends DeliveryEvent {
+  const DeliveryFind({
+    required this.deliveryId,
+  });
+
+  final String deliveryId;
+}

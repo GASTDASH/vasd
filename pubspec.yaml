@@ -54,6 +54,10 @@ dependencies:
   yandex_geocoder: ^2.3.1
   equatable: ^2.0.7
   intl_phone_field: ^3.2.0
+  barcode: ^2.2.9
+  barcode_widget: ^2.0.4
+  shimmer: ^3.0.0
+  simple_barcode_scanner: ^0.3.0
 
 dev_dependencies:
   flutter_test:

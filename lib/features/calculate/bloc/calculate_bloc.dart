@@ -11,7 +11,7 @@ part 'calculate_state.dart';
 
 class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
   CalculateBloc()
-      : super(const CalculateLoaded(currentStep: 0, delivery: Delivery())) {
+      : super(CalculateLoaded(currentStep: 0, delivery: Delivery())) {
     //
     // Шаг 1
     //

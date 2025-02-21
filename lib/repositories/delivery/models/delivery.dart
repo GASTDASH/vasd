@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 
 class Delivery {
-  const Delivery({
+  Delivery({
+    this.deliveryId,
     this.cityFrom = "",
     this.cityTo = "",
     this.packageSize,
@@ -13,8 +16,11 @@ class Delivery {
     this.senderPhone,
     this.receiverFIO,
     this.receiverPhone,
-  });
+  }) {
+    deliveryId ??= _generateId();
+  }
 
+  String? deliveryId;
   final String cityFrom;
   final String cityTo;
   final PackageSize? packageSize;
@@ -25,6 +31,23 @@ class Delivery {
   final String? senderPhone;
   final String? receiverFIO;
   final String? receiverPhone;
+
+  factory Delivery.fromJson({
+    required Map<String, dynamic> json,
+  }) =>
+      Delivery(
+        deliveryId: json["delivery_id"],
+        cityFrom: json["city_from"],
+        cityTo: json["city_to"],
+        // packageSize: json[] // TODO
+        cost: json["cost"],
+        distance: 11, // TODO
+        // deliveryVariant: // TODO
+        senderFIO: json["sender_FIO"],
+        senderPhone: json["sender_phone"].toString(),
+        receiverFIO: json["receiver_FIO"],
+        receiverPhone: json["receiver_phone"].toString(),
+      );
 
   Delivery copyWith({
     String? cityFrom,
@@ -100,5 +123,24 @@ class Delivery {
     double cost = ((distanceCost + packageCost) * 100).roundToDouble() / 100;
 
     return cost;
+  }
+
+  String _generateId() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final Random rnd = Random();
+
+    String id = "";
+
+    // String.fromCharCodes(Iterable.generate(4, (index) => ,));
+    id = String.fromCharCodes(
+      Iterable.generate(
+        4,
+        (i) => chars.codeUnitAt(rnd.nextInt(chars.length)),
+      ),
+    );
+
+    id = id.replaceRange(2, 2, (rnd.nextInt(9999999) + 1111111).toString());
+
+    return id;
   }
 }

@@ -47,7 +47,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.pushNamedAndRemoveUntil(
-                      context, "/home/home", (route) => false);
+                      context, "/home", (route) => false);
                 },
               ),
             );

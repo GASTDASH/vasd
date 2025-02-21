@@ -12,7 +12,9 @@ class RecentPackageWidget extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, "/package_info");
+      },
       child: Ink(
         height: 90,
         decoration: BoxDecoration(
@@ -34,7 +36,7 @@ class RecentPackageWidget extends StatelessWidget {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.08),
+                  color: Colors.grey.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Padding(

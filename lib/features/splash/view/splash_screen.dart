@@ -54,6 +54,13 @@ class _SplashScreenState extends State<SplashScreen> {
               color: Colors.red,
               title: "Произошла ошибка",
               text: state.error.toString(),
+              child: ButtonBase(
+                text: "Повторить попытку",
+                onTap: () {
+                  Navigator.of(context).pop();
+                  checkSavedLogin();
+                },
+              ),
             ),
           );
         }

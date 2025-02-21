@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vasd/features/home/home.dart';
+import 'package:vasd/ui/widgets/shimmer_custom.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget recentPackagesArea(ThemeData theme) {
+    const bool isLoading = true;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -68,11 +71,17 @@ class _HomeScreenState extends State<HomeScreen> {
             const Padding(
               padding: EdgeInsets.all(8),
               child: Column(
-                children: [
-                  RecentPackageWidget(),
-                  SizedBox(height: 24),
-                  RecentPackageWidget(),
-                ],
+                children: isLoading
+                    ? [
+                        ShimmerCustom(height: 90),
+                        SizedBox(height: 24),
+                        ShimmerCustom(height: 90),
+                      ]
+                    : [
+                        RecentPackageWidget(),
+                        SizedBox(height: 24),
+                        RecentPackageWidget(),
+                      ],
               ),
             ),
           ],
