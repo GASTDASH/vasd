@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: ButtonBase(
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, "/home", (route) => true);
+                    context, "/home", (route) => false);
               },
               text: "Сохранить",
             ),

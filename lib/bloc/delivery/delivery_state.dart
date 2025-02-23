@@ -7,20 +7,34 @@ sealed class DeliveryState extends Equatable {
   List<Object> get props => [];
 }
 
-final class DeliveryLoaded extends DeliveryState {}
+final class DeliveryLoaded extends DeliveryState {
+  const DeliveryLoaded({
+    this.deliveries = const [],
+  });
+
+  final List<Delivery> deliveries;
+}
 
 final class DeliveryCreating extends DeliveryState {}
 
 final class DeliveryFinding extends DeliveryState {}
 
-final class DeliverySuccess extends DeliveryLoaded {}
+final class DeliverySuccess extends DeliveryState {}
 
-final class DeliveryError extends DeliveryLoaded {}
+final class DeliveryError extends DeliveryState {
+  const DeliveryError({
+    required this.error,
+  });
 
-final class DeliveryFound extends DeliveryLoaded {
-  DeliveryFound({
+  final Object? error;
+}
+
+final class DeliveryFound extends DeliveryState {
+  const DeliveryFound({
     required this.delivery,
   });
 
   final Delivery delivery;
 }
+
+final class DeliveryLoading extends DeliveryState {}

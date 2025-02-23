@@ -7,7 +7,7 @@ sealed class DeliveryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DeliveryCreate extends DeliveryEvent {
+final class DeliveryCreate extends DeliveryEvent {
   const DeliveryCreate({
     required this.delivery,
   });
@@ -15,10 +15,12 @@ class DeliveryCreate extends DeliveryEvent {
   final Delivery delivery;
 }
 
-class DeliveryFind extends DeliveryEvent {
+final class DeliveryFind extends DeliveryEvent {
   const DeliveryFind({
     required this.deliveryId,
   });
 
   final String deliveryId;
 }
+
+final class DeliveryLoad extends DeliveryEvent {}

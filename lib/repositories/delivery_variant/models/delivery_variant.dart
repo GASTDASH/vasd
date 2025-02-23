@@ -21,4 +21,17 @@ class DeliveryVariant extends Equatable {
 
   @override
   List<Object?> get props => [name, distanceRate, minDays, maxDays];
+
+  factory DeliveryVariant.fromJson({
+    required Map<String, dynamic> json,
+  }) =>
+      DeliveryVariant(
+        id: json["delivery_variant_id"],
+        name: json["name"],
+        distanceRate: json["distance_rate"],
+        packageVolumeRate: json["package_volume_rate"],
+        minDays: json["min_days"],
+        maxDays: json["max_days"],
+        description: json["description"],
+      );
 }

@@ -35,17 +35,29 @@ class DeliverySupabaseRepo {
   }
 
   Future<Delivery?> findDelivery({required String deliveryId}) async {
-    final res = await _supabaseClient
-        .from("delivery")
-        .select("*")
-        .eq("delivery_id", deliveryId);
+    final res =
+        await _supabaseClient.from("delivery").select("*, delivery_variant(*)");
 
     if (res.isNotEmpty) {
       GetIt.I<Talker>().debug("Посылка найдена");
+      GetIt.I<Talker>().debug(res.first);
       return Delivery.fromJson(json: res.first);
     } else {
       GetIt.I<Talker>().debug("Посылка НЕ найдена");
       return null;
     }
+  }
+
+  Future<List<Delivery>> getDeliveriesByUser({required String userId}) async {
+    final res = await _supabaseClient
+        .from("delivery")
+        .select("*, delivery_variant(*)")
+        .eq("user_id", userId);
+
+    return res
+        .map(
+          (row) => Delivery.fromJson(json: row),
+        )
+        .toList();
   }
 }

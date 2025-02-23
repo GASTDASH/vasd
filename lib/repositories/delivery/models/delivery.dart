@@ -42,7 +42,8 @@ class Delivery {
         // packageSize: json[] // TODO
         cost: json["cost"],
         distance: 11, // TODO
-        // deliveryVariant: // TODO
+        deliveryVariant:
+            DeliveryVariant.fromJson(json: json["delivery_variant"]),
         senderFIO: json["sender_FIO"],
         senderPhone: json["sender_phone"].toString(),
         receiverFIO: json["receiver_FIO"],

@@ -41,7 +41,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           buttonText: "Вернуться домой",
                           onTap: () {
                             Navigator.pushNamedAndRemoveUntil(
-                                context, "/home", (route) => true);
+                                context, "/home", (route) => false);
                           },
                         ),
                       );

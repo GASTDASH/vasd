@@ -19,8 +19,10 @@ class VASDApp extends StatelessWidget {
           create: (context) => AuthBloc(authRepo: GetIt.I<AuthInterface>()),
         ),
         BlocProvider(
-          create: (context) =>
-              DeliveryBloc(deliveryRepo: GetIt.I<DeliverySupabaseRepo>()),
+          create: (context) => DeliveryBloc(
+            authRepo: GetIt.I<AuthInterface>(),
+            deliveryRepo: GetIt.I<DeliverySupabaseRepo>(),
+          ),
         ),
       ],
       child: MaterialApp(
