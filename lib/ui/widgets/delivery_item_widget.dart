@@ -1,6 +1,7 @@
 import 'package:another_stepper/another_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
+import 'package:vasd/ui/widgets/delivery_item_step_icon.dart';
 
 class DeliveryItemWidget extends StatelessWidget {
   const DeliveryItemWidget({
@@ -13,6 +14,12 @@ class DeliveryItemWidget extends StatelessWidget {
   final Delivery? delivery;
   final bool isShowShadow;
   final void Function()? onTap;
+
+  int getCurrentStep() {
+    // TODO: По Tracking'у (возможно через case) узнать текущий шаг
+
+    return 2;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +64,35 @@ class DeliveryItemWidget extends StatelessWidget {
             AnotherStepper(
               scrollPhysics: const NeverScrollableScrollPhysics(),
               stepperDirection: Axis.horizontal,
+              activeBarColor: theme.primaryColor,
+              activeIndex: getCurrentStep(),
+              iconHeight: 32,
+              iconWidth: 32,
               stepperList: [
-                StepperData(),
-                StepperData(),
-                StepperData(),
-                StepperData(),
+                StepperData(
+                  iconWidget: DeliveryItemStepIcon(
+                    enabled: getCurrentStep() >= 0,
+                    iconAsset: "assets/icons/box.svg",
+                  ),
+                ),
+                StepperData(
+                  iconWidget: DeliveryItemStepIcon(
+                    enabled: getCurrentStep() >= 1,
+                    iconAsset: "assets/icons/delivery_truck.svg",
+                  ),
+                ),
+                StepperData(
+                  iconWidget: DeliveryItemStepIcon(
+                    enabled: getCurrentStep() >= 2,
+                    iconAsset: "assets/icons/map_marker.svg",
+                  ),
+                ),
+                StepperData(
+                  iconWidget: DeliveryItemStepIcon(
+                    enabled: getCurrentStep() >= 3,
+                    iconAsset: "assets/icons/check_circle.svg",
+                  ),
+                ),
               ],
             ),
             Row(
