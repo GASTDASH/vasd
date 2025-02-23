@@ -16,9 +16,24 @@ class DeliveryItemWidget extends StatelessWidget {
   final void Function()? onTap;
 
   int getCurrentStep() {
-    // TODO: По Tracking'у (возможно через case) узнать текущий шаг
-
-    return 2;
+    final trackingList = delivery?.trackingList;
+    if (trackingList != null && trackingList.isNotEmpty) {
+      switch (trackingList.last.status.statusCode) {
+        case 1:
+          return 0;
+        case 2:
+          return 0;
+        case 3:
+          return 1;
+        case 4:
+          return 2;
+        case 5:
+          return 3;
+        default:
+          return 0;
+      }
+    }
+    return 0;
   }
 
   @override
@@ -153,7 +168,10 @@ class DeliveryItemWidget extends StatelessWidget {
                   style: theme.textTheme.bodyLarge,
                 ),
                 Text(
-                  "{status}", // TODO: Tracking INNER JOIN что-то там такая фигня я хз
+                  delivery?.trackingList != null &&
+                          delivery!.trackingList!.isNotEmpty
+                      ? delivery!.trackingList!.last.status.name
+                      : "Неизвестно",
                   style: theme.textTheme.titleMedium,
                 ),
               ],

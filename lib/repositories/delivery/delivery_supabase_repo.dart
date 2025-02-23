@@ -10,11 +10,7 @@ class DeliverySupabaseRepo {
 
   final SupabaseClient _supabaseClient;
 
-  Future<void> createDelivery({
-    required final Delivery delivery,
-  }) async {
-    GetIt.I<Talker>().debug(delivery.deliveryId);
-
+  Future<void> createDelivery({required final Delivery delivery}) async {
     await _supabaseClient.from("delivery").insert({
       'delivery_id': delivery.deliveryId,
       "user_id": _supabaseClient.auth.currentSession!.user.id,
@@ -35,12 +31,12 @@ class DeliverySupabaseRepo {
   }
 
   Future<Delivery?> findDelivery({required String deliveryId}) async {
-    final res =
-        await _supabaseClient.from("delivery").select("*, delivery_variant(*)");
+    final res = await _supabaseClient
+        .from("delivery")
+        .select("*, delivery_variant(*), tracking!inner(*, status(*))");
 
     if (res.isNotEmpty) {
-      GetIt.I<Talker>().debug("Посылка найдена");
-      GetIt.I<Talker>().debug(res.first);
+      GetIt.I<Talker>().debug("Посылка найдена\n${res.first}");
       return Delivery.fromJson(json: res.first);
     } else {
       GetIt.I<Talker>().debug("Посылка НЕ найдена");
@@ -51,7 +47,7 @@ class DeliverySupabaseRepo {
   Future<List<Delivery>> getDeliveriesByUser({required String userId}) async {
     final res = await _supabaseClient
         .from("delivery")
-        .select("*, delivery_variant(*)")
+        .select("*, delivery_variant(*), tracking!left(*, status(*))")
         .eq("user_id", userId);
 
     return res

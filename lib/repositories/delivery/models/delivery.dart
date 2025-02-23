@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
+import 'package:vasd/repositories/tracking/tracking.dart';
 
 class Delivery {
   Delivery({
@@ -16,6 +17,7 @@ class Delivery {
     this.senderPhone,
     this.receiverFIO,
     this.receiverPhone,
+    this.trackingList,
   }) {
     deliveryId ??= _generateId();
   }
@@ -31,11 +33,9 @@ class Delivery {
   final String? senderPhone;
   final String? receiverFIO;
   final String? receiverPhone;
+  final List<Tracking>? trackingList;
 
-  factory Delivery.fromJson({
-    required Map<String, dynamic> json,
-  }) =>
-      Delivery(
+  factory Delivery.fromJson({required Map<String, dynamic> json}) => Delivery(
         deliveryId: json["delivery_id"],
         cityFrom: json["city_from"],
         cityTo: json["city_to"],
@@ -48,6 +48,11 @@ class Delivery {
         senderPhone: json["sender_phone"].toString(),
         receiverFIO: json["receiver_FIO"],
         receiverPhone: json["receiver_phone"].toString(),
+        trackingList: (json["tracking"] as List<dynamic>?)
+            ?.map(
+              (row) => Tracking.fromJson(json: row),
+            )
+            .toList(),
       );
 
   Delivery copyWith({

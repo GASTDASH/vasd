@@ -85,7 +85,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                   ),
                 );
               },
-            )
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
       ),
