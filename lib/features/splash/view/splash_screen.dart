@@ -50,7 +50,10 @@ class _SplashScreenState extends State<SplashScreen> {
           showDialog(
             context: context,
             builder: (context) => BaseDialog(
-              icon: const Icon(Icons.error),
+              icon: const Icon(
+                Icons.error,
+                color: Colors.white,
+              ),
               color: Colors.red,
               title: "Произошла ошибка",
               text: state.error.toString(),
