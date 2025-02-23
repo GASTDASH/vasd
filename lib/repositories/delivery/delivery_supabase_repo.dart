@@ -33,7 +33,8 @@ class DeliverySupabaseRepo {
   Future<Delivery?> findDelivery({required String deliveryId}) async {
     final res = await _supabaseClient
         .from("delivery")
-        .select("*, delivery_variant(*), tracking!inner(*, status(*))");
+        .select("*, delivery_variant(*), tracking!inner(*, status(*))")
+        .eq("delivery_id", deliveryId);
 
     if (res.isNotEmpty) {
       GetIt.I<Talker>().debug("Посылка найдена\n${res.first}");
