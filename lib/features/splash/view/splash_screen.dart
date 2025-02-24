@@ -17,8 +17,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    checkSavedLogin();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkSavedLogin());
   }
 
   void checkSavedLogin() async {
