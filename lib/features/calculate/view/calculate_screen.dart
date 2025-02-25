@@ -538,13 +538,14 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                     style: theme.textTheme.titleLarge,
                                   ),
                                   ...paymentMethodList
-                                      .map((e) => PaymentMethodCard(
-                                            paymentMethod: e,
-                                            selected: state.paymentMethod == e,
+                                      .map((method) => PaymentMethodCard(
+                                            paymentMethod: method,
+                                            selected:
+                                                state.paymentMethod == method,
                                             onTap: () {
                                               _bloc.add(
                                                 CalculateSetPaymentMethod(
-                                                  paymentMethod: e,
+                                                  paymentMethod: method,
                                                 ),
                                               );
                                             },
