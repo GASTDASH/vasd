@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/repositories/auth/models/user.dart';
 
 import './auth_interface.dart';
@@ -93,5 +95,28 @@ class AuthSupabaseRepo implements AuthInterface {
     }
 
     return null;
+  }
+
+  @override
+  Future<void> signInWithOtp({
+    required String email,
+  }) async {
+    await supabaseClient.auth.signInWithOtp(
+      email: email,
+      shouldCreateUser: false,
+    );
+  }
+
+  @override
+  Future<void> verifyOtp({
+    required String otp,
+    required String email,
+  }) async {
+    GetIt.I<Talker>().debug("otp = $otp\nemail = $email");
+    await supabaseClient.auth.verifyOTP(
+      type: supabase.OtpType.email,
+      token: otp,
+      email: email,
+    );
   }
 }

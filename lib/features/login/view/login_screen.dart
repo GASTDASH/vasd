@@ -136,7 +136,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Expanded(
                       child: ButtonBase(
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => BaseDialog(
+                                icon: const Icon(
+                                  Icons.info_outline,
+                                  color: Colors.white,
+                                ),
+                                color: theme.primaryColor,
+                                title: "Временно недоступно",
+                                text:
+                                    "Данная функция всё ещё находится в разработке. В скором времени мы её реализуем."),
+                          );
+                        },
                         text: "Google",
                         outlined: true,
                         prefixIcon: SvgPicture.asset(
@@ -149,11 +162,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: ButtonBase(
-                        onTap: () {},
-                        text: "Facebook",
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => BaseDialog(
+                                icon: const Icon(
+                                  Icons.info_outline,
+                                  color: Colors.white,
+                                ),
+                                color: theme.primaryColor,
+                                title: "Временно недоступно",
+                                text:
+                                    "Данная функция всё ещё находится в разработке. В скором времени мы её реализуем."),
+                          );
+                        },
+                        text: "ВКонтакте",
                         outlined: true,
                         prefixIcon: SvgPicture.asset(
-                          "assets/icons/facebook.svg",
+                          "assets/icons/vk.svg",
+                          height: 24,
                           colorFilter: const ColorFilter.mode(
                               Colors.black, BlendMode.srcIn),
                         ),

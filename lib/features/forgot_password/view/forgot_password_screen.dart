@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/features/forgot_password/forgot_password.dart';
+import 'package:vasd/repositories/auth/auth.dart';
 import 'package:vasd/ui/ui.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -11,6 +14,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   int selectedMethodIndex = 0;
+  final emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -29,9 +34,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(18),
           child: ButtonBase(
-            onTap: () {
-              Navigator.pushNamed(context, "/otp_verification");
-            },
+            onTap: emailController.text.isEmpty
+                ? null
+                : () async {
+                    try {
+                      await GetIt.I<AuthInterface>()
+                          .signInWithOtp(email: emailController.text);
+
+                      Navigator.pushNamed(
+                        context,
+                        "/otp_verification",
+                        arguments: emailController.text,
+                      );
+                    } catch (e) {
+                      GetIt.I<Talker>().error(e.toString());
+                    }
+                  },
             text: "Продолжить",
           ),
         ),
@@ -67,6 +85,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 title: "Код через эл. почту",
                 subtitle: "Введите адрес эл. почты",
                 icon: Icons.mail_outline,
+              ),
+              const SizedBox(height: 24),
+              TextFieldCustom(
+                hintText: "Эл. почта",
+                controller: emailController,
+                onChanged: (_) => setState(() {}),
               ),
             ],
           ),

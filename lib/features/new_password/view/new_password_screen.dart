@@ -33,8 +33,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     passwordConfirmController.text.isNotEmpty)
                 ? () async {
                     if (checkPassword()) {
+                      // TODO: AuthInterface.resetPassword()
+
                       await showDialog(
                         context: context,
+                        barrierDismissible: false,
                         builder: (context) => SuccessDialog(
                           title: "Пароль успешно обновлён",
                           text: "Ваш пароль был успешно обновлён",

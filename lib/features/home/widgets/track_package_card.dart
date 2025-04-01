@@ -125,11 +125,12 @@ class _TrackPackageCardState extends State<TrackPackageCard> {
                         onTap: codeTyped
                             ? () {
                                 deliveryBloc.add(
-                                  DeliveryFind(deliveryId: codeController.text),
+                                  DeliveryFind(
+                                      deliveryId:
+                                          codeController.text.toUpperCase()),
                                 );
                               }
                             : () async {
-                                // TODO: Камера (QR или Штрих код)
                                 final String? res =
                                     await SimpleBarcodeScanner.scanBarcode(
                                   context,

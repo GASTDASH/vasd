@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pinput/pinput.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:vasd/repositories/auth/auth.dart';
 import 'package:vasd/ui/ui.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({super.key});
+  const OtpVerificationScreen({
+    super.key,
+  });
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -15,6 +20,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final email = ModalRoute.of(context)!.settings.arguments;
+    assert(email != null && email is String,
+        'You must provide <String email> arg');
+    email as String;
 
     return SafeArea(
       child: Scaffold(
@@ -29,9 +38,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(18),
           child: ButtonBase(
-            onTap: (codeController.text.length == 4)
-                ? () {
-                    Navigator.pushNamed(context, "/new_password");
+            onTap: (codeController.text.length == 6)
+                ? () async {
+                    try {
+                      await GetIt.I<AuthInterface>().verifyOtp(
+                        otp: codeController.text,
+                        email: email,
+                      );
+
+                      Navigator.pushNamed(context, "/new_password");
+                    } catch (e) {
+                      GetIt.I<Talker>().error(e.toString());
+                    }
                   }
                 : null,
             text: "Проверить",
@@ -52,12 +70,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   height: 100,
                   child: Pinput(
                     controller: codeController,
+                    length: 6,
                     onChanged: (_) {
                       setState(() {});
                     },
                     defaultPinTheme: PinTheme(
                       width: 86,
-                      height: 90,
+                      height: 60,
                       textStyle: const TextStyle(
                           fontSize: 32,
                           color: Color.fromRGBO(30, 60, 87, 1),

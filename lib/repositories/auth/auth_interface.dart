@@ -22,4 +22,13 @@ abstract class AuthInterface {
   Future<User?> getUser();
 
   Future<dynamic> uploadPhoto(Uint8List imageBytes);
+
+  Future<void> signInWithOtp({
+    required String email,
+  });
+
+  Future<void> verifyOtp({
+    required String otp,
+    required String email,
+  });
 }
