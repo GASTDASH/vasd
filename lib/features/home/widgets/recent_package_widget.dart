@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vasd/repositories/delivery/models/delivery.dart';
 
 class RecentPackageWidget extends StatelessWidget {
   const RecentPackageWidget({
     super.key,
+    required this.delivery,
   });
+
+  final Delivery delivery;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +17,7 @@ class RecentPackageWidget extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () {
-        Navigator.pushNamed(context, "/package_info");
+        Navigator.pushNamed(context, "/package_info", arguments: delivery);
       },
       child: Ink(
         height: 90,
@@ -49,10 +53,10 @@ class RecentPackageWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Dell Backpack",
+                  Text("{delivery.name}",
                       style: theme.textTheme.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w800)),
-                  const Text("ID: TY9860036NM"),
+                  Text("ID: ${delivery.deliveryId}"),
                 ],
               ),
               const Expanded(child: SizedBox.expand()),
@@ -60,10 +64,14 @@ class RecentPackageWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text("30000 ₽",
+                  Text("${delivery.cost} ₽",
                       style: theme.textTheme.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w800)),
-                  Text("В ожидании",
+                  Text(
+                      (delivery.trackingList != null &&
+                              delivery.trackingList!.isNotEmpty)
+                          ? delivery.trackingList!.last.status.name
+                          : "Неизвестно",
                       style: TextStyle(color: theme.primaryColor)),
                 ],
               ),

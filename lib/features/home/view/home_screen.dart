@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/features/home/home.dart';
+import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/ui/widgets/shimmer_custom.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,6 +15,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final trackContainerKey = GlobalKey();
+  late final DeliveryBloc _deliveryBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _deliveryBloc = context.read<DeliveryBloc>()..add(DeliveryLoad());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +31,60 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: const HomeAppBar(),
-        body: CustomScrollView(
-          slivers: [
-            // Отследить посылку
-            SliverToBoxAdapter(
-                child: TrackPackageCard(trackContainerKey: trackContainerKey)),
-            //
-            // Последняя доставка
-            const SliverToBoxAdapter(child: LastDeliveryCard()),
-            //
-            // Услуги
-            servicesArea(theme, context),
-            //
-            // Последние посылки
-            recentPackagesArea(theme),
-            //
-            //
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            _deliveryBloc.add(DeliveryLoad());
+          },
+          child: CustomScrollView(
+            slivers: [
+              // Отследить посылку
+              SliverToBoxAdapter(
+                  child:
+                      TrackPackageCard(trackContainerKey: trackContainerKey)),
+              //
+              // Последняя доставка
+              SliverToBoxAdapter(
+                child: BlocBuilder<DeliveryBloc, DeliveryState>(
+                  bloc: _deliveryBloc,
+                  builder: (context, state) {
+                    return LastDeliveryCard(
+                      delivery: (state is DeliveryLoaded &&
+                              state.deliveries.isNotEmpty)
+                          ? state.deliveries.first
+                          : null,
+                    );
+                  },
+                ),
+              ),
+              //
+              // Услуги
+              servicesArea(theme, context),
+              //
+              // Последние посылки
+              BlocBuilder<DeliveryBloc, DeliveryState>(
+                bloc: _deliveryBloc,
+                builder: (context, state) {
+                  return recentPackagesArea(
+                      theme,
+                      (state is DeliveryLoaded && state.deliveries.isNotEmpty)
+                          ? [
+                              state.deliveries[state.deliveries.length - 1],
+                              state.deliveries[state.deliveries.length - 2],
+                            ]
+                          : null);
+                },
+              ),
+              //
+              //
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget recentPackagesArea(ThemeData theme) {
-    const bool isLoading = true;
-
+  Widget recentPackagesArea(ThemeData theme, List<Delivery>? deliveries) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -68,19 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(8),
+            Padding(
+              padding: const EdgeInsets.all(8),
               child: Column(
-                children: isLoading
+                children: (deliveries == null || deliveries.isEmpty)
                     ? [
-                        ShimmerCustom(height: 90),
-                        SizedBox(height: 24),
-                        ShimmerCustom(height: 90),
+                        const ShimmerCustom(height: 90),
+                        const SizedBox(height: 24),
+                        const ShimmerCustom(height: 90),
                       ]
                     : [
-                        RecentPackageWidget(),
-                        SizedBox(height: 24),
-                        RecentPackageWidget(),
+                        RecentPackageWidget(delivery: deliveries[0]),
+                        const SizedBox(height: 24),
+                        RecentPackageWidget(delivery: deliveries[1]),
                       ],
               ),
             ),
