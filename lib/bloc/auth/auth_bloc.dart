@@ -77,5 +77,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthAuthorizedState(error: e));
       }
     });
+    on<AuthSignInWithOtp>((event, emit) async {
+      try {
+        emit(AuthLoadingState());
+
+        await authRepo.signInWithOtp(email: event.email);
+
+        emit(AuthOtpVerificationState());
+      } catch (e) {
+        emit(AuthUnauthorizedState(error: e));
+      }
+    });
+    on<AuthVerifyOtp>((event, emit) async {
+      try {
+        emit(AuthLoadingState());
+
+        await authRepo.verifyOtp(
+          otp: event.otp,
+          email: event.email,
+        );
+
+        await authRepo.getUser();
+
+        emit(AuthAuthorizedState());
+      } catch (e) {
+        emit(AuthOtpVerificationState(error: e));
+      }
+    });
   }
 }

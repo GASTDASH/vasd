@@ -29,3 +29,9 @@ class AuthAuthorizedState extends AuthState {
     super.error,
   });
 }
+
+class AuthOtpVerificationState extends AuthUnauthorizedState {
+  AuthOtpVerificationState({
+    super.error,
+  });
+}

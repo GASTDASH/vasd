@@ -37,3 +37,21 @@ class AuthUploadPhotoEvent extends AuthEvent {
 
   final Uint8List imageBytes;
 }
+
+class AuthSignInWithOtp extends AuthEvent {
+  AuthSignInWithOtp({
+    required this.email,
+  });
+
+  final String email;
+}
+
+class AuthVerifyOtp extends AuthEvent {
+  AuthVerifyOtp({
+    required this.otp,
+    required this.email,
+  });
+
+  final String otp;
+  final String email;
+}
