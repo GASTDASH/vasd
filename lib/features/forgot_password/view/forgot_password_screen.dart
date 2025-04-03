@@ -12,7 +12,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  int selectedMethodIndex = 0;
   final emailController = TextEditingController();
 
   @override
@@ -79,22 +78,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     style: TextStyle(color: theme.hintColor)),
                 const SizedBox(height: 24),
                 SendOTPMethodButton(
-                  selected: selectedMethodIndex == 0,
+                  selected: true,
                   onTap: () {
                     setState(() {
-                      selectedMethodIndex = 0;
-                    });
-                  },
-                  title: "Код через СМС",
-                  subtitle: "Введите номер телефона",
-                  icon: Icons.message_outlined,
-                ),
-                const SizedBox(height: 12),
-                SendOTPMethodButton(
-                  selected: selectedMethodIndex == 1,
-                  onTap: () {
-                    setState(() {
-                      selectedMethodIndex = 1;
+                      // selectedMethodIndex = 1;
                     });
                   },
                   title: "Код через эл. почту",
