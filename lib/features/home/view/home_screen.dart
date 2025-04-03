@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return LastDeliveryCard(
                       delivery: (state is DeliveryLoaded &&
                               state.deliveries.isNotEmpty)
-                          ? state.deliveries.first
+                          ? state.deliveries.last
                           : null,
                     );
                   },

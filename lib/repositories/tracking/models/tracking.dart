@@ -6,16 +6,16 @@ class Tracking {
     required this.deliveryId,
     required this.status,
     required this.updateTime,
-    required this.lat,
-    required this.lng,
+    this.lat,
+    this.lng,
   });
 
   final int trackingId;
   final String deliveryId;
   final Status status;
   final DateTime updateTime;
-  final double lat;
-  final double lng;
+  final double? lat;
+  final double? lng;
 
   factory Tracking.fromJson({required Map<String, dynamic> json}) {
     return Tracking(

@@ -51,6 +51,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 },
               ),
             );
+          } else if (current is DeliveryError) {
+            showDialog(
+              context: context,
+              builder: (context) => ErrorDialog(
+                title: "Ошибка",
+                text: "${current.error}",
+              ),
+            );
           }
         }
         return true;

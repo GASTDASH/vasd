@@ -45,18 +45,19 @@ class _PackagesScreenState extends State<PackagesScreen> {
                 bloc: _deliveryBloc,
                 builder: (context, state) {
                   if (state is DeliveryLoaded) {
+                    final deliveries = state.deliveries.reversed.toList();
                     return SliverList.builder(
-                      itemCount: state.deliveries.length,
+                      itemCount: deliveries.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 16),
                           child: DeliveryItemWidget(
                             isShowShadow: true,
-                            delivery: state.deliveries[index],
+                            delivery: deliveries[index],
                             onTap: () {
                               Navigator.of(context).pushNamed("/package_info",
-                                  arguments: state.deliveries[index]);
+                                  arguments: deliveries[index]);
                             },
                           ),
                         );

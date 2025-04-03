@@ -27,6 +27,12 @@ class DeliverySupabaseRepo {
       "receiver_phone": delivery.receiverPhone,
     });
 
+    await _supabaseClient.from("tracking").insert({
+      "delivery_id": delivery.deliveryId,
+      "status_code": 1,
+      "update_time": DateTime.now().toIso8601String(),
+    });
+
     return;
   }
 
