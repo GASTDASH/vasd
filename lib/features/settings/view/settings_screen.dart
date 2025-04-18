@@ -115,6 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.pushNamed(context, "/profile");
                             },
                           ),
+                          // TODO: Удалить "Мой адрес"
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset(
@@ -125,6 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             text: "Мой адрес",
                             onTap: () {},
                           ),
+                          // TODO: Удалить "Мои заказы"
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset(

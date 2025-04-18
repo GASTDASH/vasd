@@ -119,4 +119,20 @@ class AuthSupabaseRepo implements AuthInterface {
       email: email,
     );
   }
+
+  @override
+  Future<void> changeUserInfo({
+    required String username,
+    required String phone,
+  }) async {
+    // TODO
+    await supabaseClient.auth.updateUser(
+      supabase.UserAttributes(
+        data: {
+          "name": username,
+          "phone": phone,
+        },
+      ),
+    );
+  }
 }

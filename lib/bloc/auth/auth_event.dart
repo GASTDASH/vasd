@@ -55,3 +55,13 @@ class AuthVerifyOtp extends AuthEvent {
   final String otp;
   final String email;
 }
+
+class AuthChangeUserInfo extends AuthEvent {
+  AuthChangeUserInfo({
+    required this.username,
+    required this.phone,
+  });
+
+  final String username;
+  final String phone;
+}

@@ -104,5 +104,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthOtpVerificationState(error: e));
       }
     });
+    on<AuthChangeUserInfo>((event, emit) async {
+      try {
+        emit(AuthChangingUserInfoState());
+
+        await authRepo.changeUserInfo(
+          username: event.username,
+          phone: event.phone,
+        );
+
+        await authRepo.getUser();
+
+        emit(AuthChangedUserInfoState());
+      } catch (e) {
+        emit(AuthAuthorizedState(error: e));
+      }
+    });
   }
 }

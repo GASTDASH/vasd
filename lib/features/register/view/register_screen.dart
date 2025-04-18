@@ -94,6 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       setState(() {});
                     },
                   ),
+                  // TODO: Заменить на IntlPhone
                   const SizedBox(height: 16),
                   TextFieldCustom(
                     hintText: "Номер телефона",

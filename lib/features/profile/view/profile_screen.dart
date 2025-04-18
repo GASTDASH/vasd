@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
 import 'package:vasd/ui/widgets/avatar_container.dart';
+import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,6 +14,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final usernameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final cityController = TextEditingController();
+  final emailController = TextEditingController();
+  late final AuthBloc authBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    authBloc = context.read<AuthBloc>();
+    usernameController.text = authBloc.authRepo.user?.name ?? "";
+    phoneController.text = authBloc.authRepo.user?.phone ?? "";
+    emailController.text = authBloc.authRepo.user?.email ?? "";
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -25,6 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context: context,
             builder: (context) => const LoadingDialog(),
           );
+        } else if (state is AuthChangedUserInfoState) {
+          Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
         } else if (state is AuthAuthorizedState) {
           setState(() {});
         }
@@ -55,8 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(18),
             child: ButtonBase(
               onTap: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, "/home", (route) => false);
+                authBloc.add(AuthChangeUserInfo(
+                    username: usernameController.text,
+                    phone: phoneController.text));
               },
               text: "Сохранить",
             ),
@@ -90,11 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Stack(
                             children: [
                               AvatarContainer(
-                                photoUrl: context
-                                    .read<AuthBloc>()
-                                    .authRepo
-                                    .user!
-                                    .photoUrl,
+                                photoUrl: authBloc.authRepo.user!.photoUrl,
                               ),
                               Align(
                                 alignment: Alignment.bottomRight,
@@ -120,15 +136,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const TextFieldCustom(hintText: "Имя пользователя"),
+                  TextFieldCustom(
+                    hintText: "Имя пользователя",
+                    label: "Имя пользователя",
+                    controller: usernameController,
+                  ),
                   const SizedBox(height: 12),
-                  const TextFieldCustom(hintText: "Эл. почта"), // TODO: Удалить
+                  IntlPhoneFieldCustom(
+                    controller: phoneController,
+                  ),
                   const SizedBox(height: 12),
-                  const TextFieldCustom(hintText: "Телефон"),
-                  const SizedBox(height: 12),
-                  const TextFieldCustom(hintText: "Город"),
-                  const SizedBox(height: 12),
-                  const TextFieldCustom(hintText: "Адрес"),
+                  TextFieldCustom(
+                    hintText: "Email",
+                    label: "Эл. почта",
+                    enabled: false,
+                    controller: emailController,
+                  ),
                 ],
               ),
             ),

@@ -31,4 +31,9 @@ abstract class AuthInterface {
     required String otp,
     required String email,
   });
+
+  Future<void> changeUserInfo({
+    required String username,
+    required String phone,
+  });
 }

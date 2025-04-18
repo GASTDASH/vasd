@@ -47,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (state is AuthAuthorizedState) {
           Navigator.of(context).pushReplacementNamed("/home");
         } else if (state is AuthUnauthorizedState && state.error != null) {
+          // TODO: Сделать автоматический повтор 3 раза
           showDialog(
             context: context,
             builder: (context) => BaseDialog(

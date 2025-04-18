@@ -35,3 +35,13 @@ class AuthOtpVerificationState extends AuthUnauthorizedState {
     super.error,
   });
 }
+
+class AuthChangingUserInfoState extends AuthLoadingState {
+  AuthChangingUserInfoState();
+}
+
+class AuthChangedUserInfoState extends AuthAuthorizedState {
+  AuthChangedUserInfoState({
+    super.error,
+  });
+}
