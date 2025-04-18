@@ -115,28 +115,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.pushNamed(context, "/profile");
                             },
                           ),
-                          // TODO: Удалить "Мой адрес"
-                          const Divider(thickness: 0.2, height: 0),
-                          SettingsButton(
-                            icon: SvgPicture.asset(
-                              "assets/icons/map_marker.svg",
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn),
-                            ),
-                            text: "Мой адрес",
-                            onTap: () {},
-                          ),
-                          // TODO: Удалить "Мои заказы"
-                          const Divider(thickness: 0.2, height: 0),
-                          SettingsButton(
-                            icon: SvgPicture.asset(
-                              "assets/icons/box.svg",
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn),
-                            ),
-                            text: "Мои заказы",
-                            onTap: () {},
-                          ),
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset(

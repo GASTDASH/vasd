@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
-import 'package:vasd/repositories/auth/auth_interface.dart';
 import 'package:vasd/ui/ui.dart';
+import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -96,8 +95,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   // TODO: Заменить на IntlPhone
                   const SizedBox(height: 16),
-                  TextFieldCustom(
-                    hintText: "Номер телефона",
+
+                  IntlPhoneFieldCustom(
                     controller: phoneController,
                     onChanged: (_) {
                       setState(() {});
@@ -134,40 +133,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 phone: phoneController.text,
                               ),
                             );
-
-                            // try {
-                            //   final userId = await register(
-                            //     name: usernameController.text,
-                            //     email: emailController.text,
-                            //     phone: phoneController.text,
-                            //     password: passwordController.text,
-                            //   );
-
-                            //   GetIt.I<Talker>().debug("User ID: $userId");
-
-                            //   await showDialog(
-                            //     context: context,
-                            //     builder: (context) => SuccessDialog(
-                            //       title: "Успешно",
-                            //       text: "Пользователь успешно зарегистрирован",
-                            //       buttonText: "Отлично",
-                            //       onTap: () {
-                            //         Navigator.pop(context);
-                            //         Navigator.pushNamed(context, "/login");
-                            //       },
-                            //     ),
-                            //   );
-                            // } on Supabase.AuthException catch (e) {
-                            //   await showDialog(
-                            //     context: context,
-                            //     builder: (context) => ErrorDialog(
-                            //       title: "Ошибка",
-                            //       text: e.message,
-                            //     ),
-                            //   );
-                            // } catch (e) {
-                            //   GetIt.I<Talker>().error(e.toString());
-                            // }
                           }
                         : null,
                   ),
@@ -205,32 +170,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool checkPassword() =>
       passwordController.text == passwordConfirmController.text;
-
-  Future<String?> register({
-    required String name,
-    required String email,
-    required String phone,
-    required String password,
-  }) async {
-    if (!checkPassword()) {
-      await showDialog(
-        context: context,
-        builder: (context) => const ErrorDialog(
-          title: "Пароли не совпадают",
-          text: "Проверьте правильность введённых данных",
-        ),
-      );
-    } else {
-      // TODO Заменить на обращение к блоку
-      final res = await GetIt.I<AuthInterface>().signUpWithEmailPassword(
-        name: name,
-        email: email,
-        phone: phone,
-        password: password,
-      );
-
-      return res;
-    }
-    return null;
-  }
 }

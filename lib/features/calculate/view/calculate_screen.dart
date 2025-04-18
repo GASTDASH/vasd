@@ -433,7 +433,6 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                 ButtonBase(
                                   text: "Продолжить",
                                   onTap: () {
-                                    // TODO
                                     _bloc.add(CalculateContinue());
                                   },
                                 ),

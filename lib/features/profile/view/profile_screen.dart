@@ -95,7 +95,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onTap: () async {
                           final bloc = context.read<AuthBloc>();
 
-                          // TODO: Edit photo
                           final picker = ImagePicker();
                           final XFile? image = await picker.pickImage(
                               source: ImageSource.gallery);
