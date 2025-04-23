@@ -4,12 +4,13 @@ import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/features/calculate/bloc/calculate_bloc.dart';
 import 'package:vasd/features/calculate/calculate.dart';
-import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
+import 'package:vasd/repositories/point/point.dart';
 import 'package:vasd/ui/ui.dart';
 import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
+import 'package:vasd/ui/widgets/text_field_button.dart';
 
 class CalculateScreen extends StatefulWidget {
   const CalculateScreen({super.key});
@@ -259,47 +260,95 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 12),
-                                  Autocomplete<String>(
-                                    optionsBuilder: (textEditingValue) async {
-                                      return await GetIt.I<
-                                              AddressCompleterInterface>()
-                                          .getAddresses(textEditingValue.text);
-                                    },
-                                    onSelected: (option) => _bloc.add(
-                                        CalculateSetCity(cityFrom: option)),
-                                    fieldViewBuilder: (context,
-                                        textEditingController,
-                                        focusNode,
-                                        onFieldSubmitted) {
-                                      return TextFieldCustom(
-                                        onEditingComplete: onFieldSubmitted,
-                                        focusNode: focusNode,
-                                        label: "Откуда",
-                                        controller: textEditingController,
-                                      );
+                                  // Autocomplete<String>(
+                                  //   optionsBuilder: (textEditingValue) async {
+                                  //     return await GetIt.I<
+                                  //             AddressCompleterInterface>()
+                                  //         .getAddresses(textEditingValue.text);
+                                  //   },
+                                  //   onSelected: (option) => _bloc.add(
+                                  //       CalculateSetCity(cityFrom: option)),
+                                  //   fieldViewBuilder: (context,
+                                  //       textEditingController,
+                                  //       focusNode,
+                                  //       onFieldSubmitted) {
+                                  //     return TextFieldCustom(
+                                  //       onEditingComplete: onFieldSubmitted,
+                                  //       focusNode: focusNode,
+                                  //       label: "Откуда",
+                                  //       controller: textEditingController,
+                                  //       onChanged: (text) {
+                                  //         if (text != state.delivery.cityFrom &&
+                                  //             state.delivery.cityFrom != "") {
+                                  //           _bloc.add(
+                                  //               CalculateSetCity(cityFrom: ""));
+                                  //         }
+                                  //       },
+                                  //     );
+                                  //   },
+                                  // ),
+                                  // const SizedBox(height: 12),
+                                  TextFieldButton(
+                                    text: state.delivery.pointFrom == null
+                                        ? "Откуда"
+                                        : state.delivery.pointFrom!.address,
+                                    onTap: () async {
+                                      Navigator.of(context)
+                                          .pushNamed("/select_point")
+                                          .then((point) {
+                                        point as Point;
+                                        _bloc.add(CalculateSetPoint(
+                                            pointFrom: point));
+                                      });
                                     },
                                   ),
+                                  Text(
+                                      "Город: ${state.delivery.cityFrom == "" ? "..." : state.delivery.cityFrom}"),
                                   const SizedBox(height: 12),
-                                  Autocomplete<String>(
-                                    optionsBuilder: (textEditingValue) async {
-                                      return await GetIt.I<
-                                              AddressCompleterInterface>()
-                                          .getAddresses(textEditingValue.text);
-                                    },
-                                    onSelected: (option) => _bloc
-                                        .add(CalculateSetCity(cityTo: option)),
-                                    fieldViewBuilder: (context,
-                                        textEditingController,
-                                        focusNode,
-                                        onFieldSubmitted) {
-                                      return TextFieldCustom(
-                                        onEditingComplete: onFieldSubmitted,
-                                        focusNode: focusNode,
-                                        label: "Куда",
-                                        controller: textEditingController,
-                                      );
+                                  // Autocomplete<String>(
+                                  //   optionsBuilder: (textEditingValue) async {
+                                  //     return await GetIt.I<
+                                  //             AddressCompleterInterface>()
+                                  //         .getAddresses(textEditingValue.text);
+                                  //   },
+                                  //   onSelected: (option) => _bloc
+                                  //       .add(CalculateSetCity(cityTo: option)),
+                                  //   fieldViewBuilder: (context,
+                                  //       textEditingController,
+                                  //       focusNode,
+                                  //       onFieldSubmitted) {
+                                  //     return TextFieldCustom(
+                                  //       onEditingComplete: onFieldSubmitted,
+                                  //       focusNode: focusNode,
+                                  //       label: "Куда",
+                                  //       controller: textEditingController,
+                                  //       onChanged: (text) {
+                                  //         if (text != state.delivery.cityTo &&
+                                  //             state.delivery.cityTo != "") {
+                                  //           _bloc.add(
+                                  //               CalculateSetCity(cityTo: ""));
+                                  //         }
+                                  //       },
+                                  //     );
+                                  //   },
+                                  // ),
+                                  // const SizedBox(height: 12),
+                                  TextFieldButton(
+                                    text: state.delivery.pointTo == null
+                                        ? "Куда"
+                                        : state.delivery.pointTo!.address,
+                                    onTap: () async {
+                                      Navigator.of(context)
+                                          .pushNamed("/select_point")
+                                          .then((point) {
+                                        point as Point;
+                                        _bloc.add(
+                                            CalculateSetPoint(pointTo: point));
+                                      });
                                     },
                                   ),
+                                  Text(
+                                      "Город: ${state.delivery.cityTo == "" ? "..." : state.delivery.cityTo}"),
                                   const SizedBox(height: 32),
                                   Text(
                                     "Вес и размер посылки",
@@ -307,8 +356,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                         ?.copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(height: 12),
-                                  InkWell(
-                                    borderRadius: BorderRadius.circular(4),
+                                  TextFieldButton(
                                     onTap: () async {
                                       // TODO: Возможно всё это в Кубит
                                       // TODO: Возможно можно вместо состояния Loading сделать Transition, а здесь вызывать состояние SelectingPackageSize
@@ -331,38 +379,17 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                             packageSize: packageSize));
                                       }
                                     },
-                                    child: Ink(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 1, color: Colors.black54),
-                                          borderRadius:
-                                              BorderRadius.circular(4)),
-                                      height: 62,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 20),
-                                          child: Text(
-                                            state.delivery.packageSize != null
-                                                ? state
-                                                    .delivery.packageSize!.title
-                                                : "Размер посылки",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    text: state.delivery.packageSize != null
+                                        ? state.delivery.packageSize!.title
+                                        : "Размер посылки",
                                   ),
                                   const SizedBox(height: 32),
                                   ButtonBase(
                                     text: "Рассчитать",
                                     onTap: state.delivery.cityFrom.isNotEmpty &&
                                             state.delivery.cityTo.isNotEmpty &&
+                                            state.delivery.pointFrom != null &&
+                                            state.delivery.pointTo != null &&
                                             state.delivery.packageSize != null
                                         ? () async {
                                             // TODO: Возможно переделать в отдельный Event (связанный с расчётом)

@@ -5,6 +5,7 @@ import 'package:vasd/repositories/delivery_variant/delivery_variant_local_repo.d
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/payment_method/models/payment_method.dart';
+import 'package:vasd/repositories/point/point.dart';
 
 part 'calculate_event.dart';
 part 'calculate_state.dart';
@@ -21,6 +22,27 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
         delivery: state.delivery.copyWith(
           cityFrom: event.cityFrom,
           cityTo: event.cityTo,
+        ),
+      ));
+    });
+    on<CalculateSetPoint>((event, emit) async {
+      String? cityFrom;
+      String? cityTo;
+
+      if (event.pointFrom != null) {
+        cityFrom = event.pointFrom!.address.split(",")[0];
+      }
+      if (event.pointTo != null) {
+        cityTo = event.pointTo!.address.split(",")[0];
+      }
+
+      emit(CalculateLoaded(
+        currentStep: 0,
+        delivery: state.delivery.copyWith(
+          cityFrom: cityFrom,
+          cityTo: cityTo,
+          pointFrom: event.pointFrom,
+          pointTo: event.pointTo,
         ),
       ));
     });

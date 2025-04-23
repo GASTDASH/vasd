@@ -2,6 +2,7 @@ part of 'calculate_bloc.dart';
 
 sealed class CalculateEvent {}
 
+@Deprecated("To remove")
 class CalculateSetCity extends CalculateEvent {
   CalculateSetCity({
     this.cityFrom,
@@ -10,6 +11,16 @@ class CalculateSetCity extends CalculateEvent {
 
   final String? cityFrom;
   final String? cityTo;
+}
+
+class CalculateSetPoint extends CalculateEvent {
+  CalculateSetPoint({
+    this.pointFrom,
+    this.pointTo,
+  });
+
+  final Point? pointFrom;
+  final Point? pointTo;
 }
 
 class CalculateStepTapped extends CalculateEvent {

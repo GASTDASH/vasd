@@ -11,6 +11,7 @@ import 'package:vasd/repositories/auth/auth.dart';
 import 'package:vasd/repositories/delivery/delivery_supabase_repo.dart';
 import 'package:vasd/repositories/delivery_variant/delivery_variant_local_repo.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
+import 'package:vasd/repositories/point/point.dart';
 import 'package:vasd/vasd_app.dart';
 
 // Supabase Database Password = 5re6evIdBibM3HJq
@@ -39,6 +40,8 @@ Future<void> main() async {
   GetIt.I.registerSingleton(const PaymentMethodLocalRepo());
   GetIt.I.registerSingleton(
       DeliverySupabaseRepo(supabaseClient: Supabase.instance.client));
+  GetIt.I.registerSingleton(
+      PointSupabaseRepo(supabaseClient: Supabase.instance.client));
 
   Bloc.observer = TalkerBlocObserver(
       talker: talker,

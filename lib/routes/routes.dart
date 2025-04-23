@@ -12,6 +12,7 @@ import 'package:vasd/features/payment/payment.dart';
 import 'package:vasd/features/profile/profile.dart';
 import 'package:vasd/features/register/register.dart';
 import 'package:vasd/features/router/router.dart';
+import 'package:vasd/features/select_point/select_point.dart';
 import 'package:vasd/features/send_package/send_package.dart';
 import 'package:vasd/features/set_current_location/set_current_location.dart';
 import 'package:vasd/features/settings/settings.dart';
@@ -39,4 +40,5 @@ final routes = {
   "/forgot_password": (context) => const ForgotPasswordScreen(),
   "/otp_verification": (context) => const OtpVerificationScreen(),
   "/new_password": (context) => const NewPasswordScreen(),
+  "/select_point": (context) => const SelectPointScreen(),
 };

@@ -1,7 +1,8 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
+import 'package:vasd/repositories/point/point.dart';
 import 'package:vasd/repositories/tracking/tracking.dart';
 
 class Delivery {
@@ -9,6 +10,8 @@ class Delivery {
     this.deliveryId,
     this.cityFrom = "",
     this.cityTo = "",
+    this.pointFrom,
+    this.pointTo,
     this.packageSize,
     this.cost = 0,
     this.distance = 0,
@@ -25,6 +28,8 @@ class Delivery {
   String? deliveryId;
   final String cityFrom;
   final String cityTo;
+  final Point? pointFrom;
+  final Point? pointTo;
   final PackageSize? packageSize;
   final double cost;
   final double distance;
@@ -39,6 +44,9 @@ class Delivery {
         deliveryId: json["delivery_id"],
         cityFrom: json["city_from"],
         cityTo: json["city_to"],
+        //
+        // TODO: Points
+        //
         // packageSize: json[] // TODO
         cost: json["cost"],
         distance: 11, // TODO
@@ -58,6 +66,8 @@ class Delivery {
   Delivery copyWith({
     String? cityFrom,
     String? cityTo,
+    Point? pointFrom,
+    Point? pointTo,
     PackageSize? packageSize,
     double? cost,
     double? distance,
@@ -70,6 +80,8 @@ class Delivery {
     return Delivery(
       cityFrom: cityFrom ?? this.cityFrom,
       cityTo: cityTo ?? this.cityTo,
+      pointFrom: pointFrom ?? this.pointFrom,
+      pointTo: pointTo ?? this.pointTo,
       packageSize: packageSize ?? this.packageSize,
       cost: cost ?? this.cost,
       distance: distance ?? this.distance,
@@ -133,7 +145,7 @@ class Delivery {
 
   String _generateId() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    final Random rnd = Random();
+    final math.Random rnd = math.Random();
 
     String id = "";
 
