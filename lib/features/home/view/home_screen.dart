@@ -28,56 +28,70 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: const HomeAppBar(),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            _deliveryBloc.add(DeliveryLoad());
-          },
-          child: CustomScrollView(
-            slivers: [
-              // Отследить посылку
-              SliverToBoxAdapter(
-                  child:
-                      TrackPackageCard(trackContainerKey: trackContainerKey)),
-              //
-              // Последняя доставка
-              SliverToBoxAdapter(
-                child: BlocBuilder<DeliveryBloc, DeliveryState>(
+    return BlocListener<DeliveryBloc, DeliveryState>(
+      listener: (context, state) {
+        if (state is DeliveryError) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.error.toString(),
+              ),
+            ),
+          );
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: const HomeAppBar(),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              _deliveryBloc.add(DeliveryLoad());
+            },
+            child: CustomScrollView(
+              slivers: [
+                // Отследить посылку
+                SliverToBoxAdapter(
+                    child:
+                        TrackPackageCard(trackContainerKey: trackContainerKey)),
+                //
+                // Последняя доставка
+                SliverToBoxAdapter(
+                  child: BlocBuilder<DeliveryBloc, DeliveryState>(
+                    bloc: _deliveryBloc,
+                    builder: (context, state) {
+                      return LastDeliveryCard(
+                        delivery: (state is DeliveryLoaded &&
+                                state.deliveries.isNotEmpty)
+                            ? state.deliveries.last
+                            : null,
+                      );
+                    },
+                  ),
+                ),
+                //
+                // Услуги
+                servicesArea(theme, context),
+                //
+                // Последние посылки
+                BlocBuilder<DeliveryBloc, DeliveryState>(
                   bloc: _deliveryBloc,
                   builder: (context, state) {
-                    return LastDeliveryCard(
-                      delivery: (state is DeliveryLoaded &&
-                              state.deliveries.isNotEmpty)
-                          ? state.deliveries.last
-                          : null,
-                    );
+                    return recentPackagesArea(
+                        theme,
+                        (state is DeliveryLoaded && state.deliveries.isNotEmpty)
+                            ? [
+                                state.deliveries[state.deliveries.length - 1],
+                                state.deliveries[state.deliveries.length - 2],
+                              ]
+                            : null);
                   },
                 ),
-              ),
-              //
-              // Услуги
-              servicesArea(theme, context),
-              //
-              // Последние посылки
-              BlocBuilder<DeliveryBloc, DeliveryState>(
-                bloc: _deliveryBloc,
-                builder: (context, state) {
-                  return recentPackagesArea(
-                      theme,
-                      (state is DeliveryLoaded && state.deliveries.isNotEmpty)
-                          ? [
-                              state.deliveries[state.deliveries.length - 1],
-                              state.deliveries[state.deliveries.length - 2],
-                            ]
-                          : null);
-                },
-              ),
-              //
-              //
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
-            ],
+                //
+                //
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              ],
+            ),
           ),
         ),
       ),
