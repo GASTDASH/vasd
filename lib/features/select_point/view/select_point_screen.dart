@@ -26,7 +26,7 @@ class _SelectPointScreenState extends State<SelectPointScreen> {
             return U.GoogleMap(
               controller: mapController,
               center: lastCoordinates,
-              zoom: 14,
+              zoom: 10,
               markers: U.MarkerLayer(
                 snapshot.data!
                     .map(

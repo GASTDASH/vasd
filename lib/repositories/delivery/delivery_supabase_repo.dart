@@ -16,8 +16,11 @@ class DeliverySupabaseRepo {
       "user_id": _supabaseClient.auth.currentSession!.user.id,
       "city_from": delivery.cityFrom,
       "city_to": delivery.cityTo,
+      "point_from_id": delivery.pointFrom?.id,
+      "point_to_id": delivery.pointTo?.id,
       "created_at": DateTime.now().toIso8601String(),
       "cost": delivery.cost,
+      "distance": delivery.distance,
       "max_weight": delivery.packageSize?.onlyWeight(),
       "package_size": delivery.packageSize?.onlySize(),
       "delivery_variant_id": delivery.deliveryVariant?.id,
@@ -39,7 +42,13 @@ class DeliverySupabaseRepo {
   Future<Delivery?> findDelivery({required String deliveryId}) async {
     final res = await _supabaseClient
         .from("delivery")
-        .select("*, delivery_variant(*), tracking!inner(*, status(*))")
+        .select(
+          "*,"
+          "delivery_variant(*),"
+          "tracking!inner(*, status(*)),"
+          "point_from:point!delivery_point_from_id_fkey(*),"
+          "point_to:point!delivery_point_to_id_fkey(*)",
+        )
         .eq("delivery_id", deliveryId);
 
     if (res.isNotEmpty) {
@@ -54,7 +63,13 @@ class DeliverySupabaseRepo {
   Future<List<Delivery>> getDeliveriesByUser({required String userId}) async {
     final res = await _supabaseClient
         .from("delivery")
-        .select("*, delivery_variant(*), tracking!left(*, status(*))")
+        .select(
+          "*,"
+          "delivery_variant(*),"
+          "tracking!inner(*, status(*)),"
+          "point_from:point!delivery_point_from_id_fkey(*),"
+          "point_to:point!delivery_point_to_id_fkey(*)",
+        )
         .eq("user_id", userId);
 
     return res

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
@@ -67,9 +69,27 @@ class CalculateBloc extends Bloc<CalculateEvent, CalculateState> {
           paymentMethod: state.paymentMethod,
         ));
 
-        // TODO: Реализовать рассчёт расстояния
-        delivery = delivery.copyWith(distance: 1733);
+        // Расчёт расстояния
+        const double earthRadius = 6371;
+        double toRadians(double degrees) {
+          return degrees * (pi / 180);
+        }
 
+        // Переводим градусы в радианы
+        final double dLat = toRadians(
+            state.delivery.pointTo!.lat - state.delivery.pointFrom!.lat);
+        final double dLon = toRadians(
+            state.delivery.pointTo!.lng - state.delivery.pointFrom!.lng);
+
+        // Формула гаверсинусов
+        double a = pow(sin(dLat / 2), 2) +
+            cos(toRadians(state.delivery.pointFrom!.lat)) *
+                cos(toRadians(state.delivery.pointTo!.lat)) *
+                pow(sin(dLon / 2), 2);
+
+        final double distance = earthRadius * (2 * atan2(sqrt(a), sqrt(1 - a)));
+
+        delivery = delivery.copyWith(distance: distance);
         delivery = delivery.removeDeliveryVariant();
 
         deliveryVariantList =

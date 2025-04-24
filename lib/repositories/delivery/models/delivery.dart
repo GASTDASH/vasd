@@ -44,12 +44,16 @@ class Delivery {
         deliveryId: json["delivery_id"],
         cityFrom: json["city_from"],
         cityTo: json["city_to"],
-        //
         // TODO: Points
-        //
+        pointFrom: json["point_from"] != null
+            ? Point.fromJson(json: json["point_from"])
+            : null,
+        pointTo: json["point_to"] != null
+            ? Point.fromJson(json: json["point_to"])
+            : null,
         // packageSize: json[] // TODO
         cost: json["cost"],
-        distance: 11, // TODO
+        distance: json["distance"] ?? 0,
         deliveryVariant:
             DeliveryVariant.fromJson(json: json["delivery_variant"]),
         senderFIO: json["sender_FIO"],
@@ -97,6 +101,8 @@ class Delivery {
     return Delivery(
       cityFrom: cityFrom,
       cityTo: cityTo,
+      pointFrom: pointFrom,
+      pointTo: pointTo,
       packageSize: packageSize,
       cost: cost,
       distance: distance,
