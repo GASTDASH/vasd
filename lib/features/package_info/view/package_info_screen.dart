@@ -16,6 +16,8 @@ class PackageInfoScreen extends StatefulWidget {
 }
 
 class _PackageInfoScreenState extends State<PackageInfoScreen> {
+  List<List<double>>? polylinesPoints;
+
   @override
   Widget build(BuildContext context) {
     final delivery = ModalRoute.of(context)!.settings.arguments;
@@ -68,6 +70,18 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                       ),
                     ),
                   ),
+                  delivery.pointFrom != null && delivery.pointTo != null
+                      ? Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: theme.hintColor, width: 1),
+                          ),
+                          child: const Center(
+                            child: Text("Карта"),
+                          ))
+                      : const SizedBox.shrink(),
                   Text(
                     "Отслеживание посылки",
                     style: theme.textTheme.titleLarge
