@@ -44,7 +44,6 @@ class Delivery {
         deliveryId: json["delivery_id"],
         cityFrom: json["city_from"],
         cityTo: json["city_to"],
-        // TODO: Points
         pointFrom: json["point_from"] != null
             ? Point.fromJson(json: json["point_from"])
             : null,
