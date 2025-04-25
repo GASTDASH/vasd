@@ -9,6 +9,7 @@ import 'package:vasd/features/otp_verification/otp_verification.dart';
 import 'package:vasd/features/package_info/view/package_info_screen.dart';
 import 'package:vasd/features/packages/packages.dart';
 import 'package:vasd/features/payment/payment.dart';
+import 'package:vasd/features/privacy/privacy.dart';
 import 'package:vasd/features/profile/profile.dart';
 import 'package:vasd/features/register/register.dart';
 import 'package:vasd/features/router/router.dart';
@@ -41,4 +42,5 @@ final routes = {
   "/otp_verification": (context) => const OtpVerificationScreen(),
   "/new_password": (context) => const NewPasswordScreen(),
   "/select_point": (context) => const SelectPointScreen(),
+  "/privacy": (context) => const PrivacyScreen(),
 };

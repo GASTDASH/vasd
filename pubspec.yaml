@@ -57,6 +57,7 @@ dependencies:
   barcode_widget: ^2.0.4
   shimmer: ^3.0.0
   simple_barcode_scanner: ^0.3.0
+  syncfusion_flutter_pdfviewer: ^29.1.39
 
 dev_dependencies:
   flutter_test:
@@ -96,6 +97,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/icon/icon.png
+    - assets/pdf/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

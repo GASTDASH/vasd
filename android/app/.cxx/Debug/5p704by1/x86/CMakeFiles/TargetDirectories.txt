@@ -1,0 +1,2 @@
+C:/codes/vasd/android/app/.cxx/Debug/5p704by1/x86/CMakeFiles/edit_cache.dir
+C:/codes/vasd/android/app/.cxx/Debug/5p704by1/x86/CMakeFiles/rebuild_cache.dir

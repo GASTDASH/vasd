@@ -131,7 +131,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 colorFilter: const ColorFilter.mode(
                                     Colors.black, BlendMode.srcIn)),
                             text: "Политика конфиденциальности",
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).pushNamed("/privacy");
+                            },
                           ),
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
