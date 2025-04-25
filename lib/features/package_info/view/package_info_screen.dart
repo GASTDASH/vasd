@@ -1,7 +1,11 @@
 import 'package:another_stepper/another_stepper.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:static_map/static_map.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/features/package_info/view/barcode_screen.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
@@ -17,6 +21,37 @@ class PackageInfoScreen extends StatefulWidget {
 
 class _PackageInfoScreenState extends State<PackageInfoScreen> {
   List<List<double>>? polylinesPoints;
+  int zoom = 6;
+
+  Future<List<StaticMapLocation>> getPath({
+    required double lat1,
+    required double lng1,
+    required double lat2,
+    required double lng2,
+  }) async {
+    final response = await GetIt.I<Dio>().get(
+      'https://api.openrouteservice.org/v2/directions/driving-car',
+      queryParameters: {
+        "api_key": "5b3ce3597851110001cf6248a4e374cc9a9c40d7bcf7bdd1245d71bf",
+        "start": "$lng1,$lat1",
+        "end": "$lng2,$lat2",
+      },
+    );
+
+    List<dynamic> coordinates =
+        response.data["features"][0]["geometry"]["coordinates"];
+
+    var pathPoints =
+        coordinates.map((c) => StaticMapLatLng(c[1], c[0])).toList();
+
+    while (pathPoints.length > 2000) {
+      for (var i = 0; i < pathPoints.length; i++) {
+        if (i.isEven) pathPoints.removeAt(i);
+      }
+    }
+
+    return pathPoints;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,15 +107,126 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                   ),
                   delivery.pointFrom != null && delivery.pointTo != null
                       ? Container(
+                          width: 400,
+                          height: 200,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             border:
                                 Border.all(color: theme.hintColor, width: 1),
                           ),
-                          child: const Center(
-                            child: Text("Карта"),
-                          ))
+                          child: Stack(
+                            children: [
+                              FutureBuilder(
+                                  future: getPath(
+                                      lat1: delivery.pointFrom!.lat,
+                                      lng1: delivery.pointFrom!.lng,
+                                      lat2: delivery.pointTo!.lat,
+                                      lng2: delivery.pointTo!.lng),
+                                  builder: (context, snapshot) {
+                                    return StaticMapBuilder(
+                                        options: StaticMapOptions(
+                                          width: 400,
+                                          height: 200,
+                                          scale: 1,
+                                          zoom: zoom,
+                                          center: StaticMapLatLng(
+                                            (delivery.pointFrom!.lat +
+                                                    delivery.pointTo!.lat) /
+                                                2,
+                                            (delivery.pointFrom!.lng +
+                                                    delivery.pointTo!.lng) /
+                                                2,
+                                          ),
+                                          overlays: [
+                                            StaticMapMarker(
+                                                point: StaticMapLatLng(
+                                                    delivery.pointFrom!.lat,
+                                                    delivery.pointFrom!.lng),
+                                                label: "От",
+                                                color: theme.primaryColor),
+                                            StaticMapMarker(
+                                              point: StaticMapLatLng(
+                                                  delivery.pointTo!.lat,
+                                                  delivery.pointTo!.lng),
+                                              label: "Куда",
+                                              color: theme.primaryColor,
+                                            ),
+                                            StaticMapPath.points(
+                                              points:
+                                                  snapshot.connectionState ==
+                                                              ConnectionState
+                                                                  .done &&
+                                                          snapshot.data != null
+                                                      ? snapshot.data!
+                                                      : [
+                                                          StaticMapLatLng(
+                                                            delivery
+                                                                .pointFrom!.lat,
+                                                            delivery
+                                                                .pointFrom!.lng,
+                                                          ),
+                                                          StaticMapLatLng(
+                                                            delivery
+                                                                .pointTo!.lat,
+                                                            delivery
+                                                                .pointTo!.lng,
+                                                          ),
+                                                        ],
+                                              size: 1,
+                                            ),
+                                          ],
+                                        ),
+                                        builder: (context, url) {
+                                          return Image.network(
+                                            url,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Center(
+                                                  child: Text(
+                                                      "Что-то пошло не так!"));
+                                            },
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return const Center(
+                                                  child: LoadingIndicator(
+                                                      indicatorType:
+                                                          Indicator.ballPulse));
+                                            },
+                                          );
+                                        });
+                                  }),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton.filled(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (zoom != 1) zoom--;
+                                          });
+                                        },
+                                        icon: const Icon(Icons.zoom_out)),
+                                    IconButton.filled(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (zoom != 8) zoom++;
+                                          });
+                                        },
+                                        icon: const Icon(Icons.zoom_in)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : const SizedBox.shrink(),
                   Text(
                     "Отслеживание посылки",

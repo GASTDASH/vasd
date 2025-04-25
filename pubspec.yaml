@@ -58,6 +58,7 @@ dependencies:
   shimmer: ^3.0.0
   simple_barcode_scanner: ^0.3.0
   syncfusion_flutter_pdfviewer: ^29.1.39
+  static_map: ^0.3.1
 
 dev_dependencies:
   flutter_test:

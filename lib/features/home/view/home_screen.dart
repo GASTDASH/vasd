@@ -150,22 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Услуги",
-                  style: theme.textTheme.titleLarge
-                      ?.copyWith(fontWeight: FontWeight.w800),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text("Все",
-                      style: theme.textTheme.bodyLarge
-                          ?.copyWith(color: theme.primaryColor)),
-                ),
-              ],
+            Text(
+              "Услуги",
+              style: theme.textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w800),
             ),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.all(8),
               child: SizedBox(
