@@ -13,6 +13,7 @@ import 'package:vasd/features/privacy/privacy.dart';
 import 'package:vasd/features/profile/profile.dart';
 import 'package:vasd/features/register/register.dart';
 import 'package:vasd/features/router/router.dart';
+import 'package:vasd/features/rules/view/rules_screen.dart';
 import 'package:vasd/features/select_point/select_point.dart';
 import 'package:vasd/features/send_package/send_package.dart';
 import 'package:vasd/features/set_current_location/set_current_location.dart';
@@ -43,4 +44,5 @@ final routes = {
   "/new_password": (context) => const NewPasswordScreen(),
   "/select_point": (context) => const SelectPointScreen(),
   "/privacy": (context) => const PrivacyScreen(),
+  "/rules": (context) => const RulesScreen(),
 };

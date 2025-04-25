@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-class PrivacyScreen extends StatelessWidget {
-  const PrivacyScreen({super.key});
+class RulesScreen extends StatelessWidget {
+  const RulesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SfPdfViewer.asset("assets/pdf/privacy_cdek-vks.pdf"),
+        body: SfPdfViewer.asset("assets/pdf/rules_cdek-vks.pdf"),
       ),
     );
   }

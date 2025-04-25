@@ -141,7 +141,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 colorFilter: const ColorFilter.mode(
                                     Colors.black, BlendMode.srcIn)),
                             text: "Условия использования",
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).pushNamed("/rules");
+                            },
                           ),
                           const SizedBox(height: 24),
                           ButtonBase(
