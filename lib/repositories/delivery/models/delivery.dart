@@ -21,6 +21,7 @@ class Delivery {
     this.receiverFIO,
     this.receiverPhone,
     this.trackingList,
+    this.createdAt,
   }) {
     deliveryId ??= _generateId();
   }
@@ -39,32 +40,32 @@ class Delivery {
   final String? receiverFIO;
   final String? receiverPhone;
   final List<Tracking>? trackingList;
+  final DateTime? createdAt;
 
   factory Delivery.fromJson({required Map<String, dynamic> json}) => Delivery(
-        deliveryId: json["delivery_id"],
-        cityFrom: json["city_from"],
-        cityTo: json["city_to"],
-        pointFrom: json["point_from"] != null
-            ? Point.fromJson(json: json["point_from"])
-            : null,
-        pointTo: json["point_to"] != null
-            ? Point.fromJson(json: json["point_to"])
-            : null,
-        // packageSize: json[] // TODO
-        cost: json["cost"],
-        distance: json["distance"] ?? 0,
-        deliveryVariant:
-            DeliveryVariant.fromJson(json: json["delivery_variant"]),
-        senderFIO: json["sender_FIO"],
-        senderPhone: json["sender_phone"].toString(),
-        receiverFIO: json["receiver_FIO"],
-        receiverPhone: json["receiver_phone"].toString(),
-        trackingList: (json["tracking"] as List<dynamic>?)
-            ?.map(
-              (row) => Tracking.fromJson(json: row),
-            )
-            .toList(),
-      );
+      deliveryId: json["delivery_id"],
+      cityFrom: json["city_from"],
+      cityTo: json["city_to"],
+      pointFrom: json["point_from"] != null
+          ? Point.fromJson(json: json["point_from"])
+          : null,
+      pointTo: json["point_to"] != null
+          ? Point.fromJson(json: json["point_to"])
+          : null,
+      // packageSize: json[] // TODO
+      cost: json["cost"],
+      distance: json["distance"] ?? 0,
+      deliveryVariant: DeliveryVariant.fromJson(json: json["delivery_variant"]),
+      senderFIO: json["sender_FIO"],
+      senderPhone: json["sender_phone"].toString(),
+      receiverFIO: json["receiver_FIO"],
+      receiverPhone: json["receiver_phone"].toString(),
+      trackingList: (json["tracking"] as List<dynamic>?)
+          ?.map(
+            (row) => Tracking.fromJson(json: row),
+          )
+          .toList(),
+      createdAt: DateTime.parse(json["created_at"]));
 
   Delivery copyWith({
     String? cityFrom,

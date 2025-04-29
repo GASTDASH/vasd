@@ -36,4 +36,6 @@ abstract class AuthInterface {
     required String username,
     required String phone,
   });
+
+  Future<bool> hasPermission(String userId);
 }

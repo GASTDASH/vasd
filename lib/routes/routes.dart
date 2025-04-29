@@ -7,7 +7,9 @@ import 'package:vasd/features/new_password/new_password.dart';
 import 'package:vasd/features/notifications/notifications.dart';
 import 'package:vasd/features/otp_verification/otp_verification.dart';
 import 'package:vasd/features/package_info/view/package_info_screen.dart';
+import 'package:vasd/features/package_info_editor/view/package_info_editor_screen.dart';
 import 'package:vasd/features/packages/packages.dart';
+import 'package:vasd/features/packages_editor/packages_editor.dart';
 import 'package:vasd/features/payment/payment.dart';
 import 'package:vasd/features/privacy/privacy.dart';
 import 'package:vasd/features/profile/profile.dart';
@@ -45,4 +47,7 @@ final routes = {
   "/select_point": (context) => const SelectPointScreen(),
   "/privacy": (context) => const PrivacyScreen(),
   "/rules": (context) => const RulesScreen(),
+  //
+  "/packages_editor": (context) => const PackagesEditorScreen(),
+  "/package_info_editor": (context) => const PackageInfoEditorScreen(),
 };

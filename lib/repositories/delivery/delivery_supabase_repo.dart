@@ -78,4 +78,16 @@ class DeliverySupabaseRepo {
         )
         .toList();
   }
+
+  Future<List<Delivery>> getDeliveriesAll() async {
+    final res = await _supabaseClient.from("delivery").select(
+          "*,"
+          "delivery_variant(*),"
+          "tracking!inner(*, status(*)),"
+          "point_from:point!delivery_point_from_id_fkey(*),"
+          "point_to:point!delivery_point_to_id_fkey(*)",
+        );
+
+    return res.map((row) => Delivery.fromJson(json: row)).toList();
+  }
 }

@@ -24,3 +24,13 @@ final class DeliveryFind extends DeliveryEvent {
 }
 
 final class DeliveryLoad extends DeliveryEvent {}
+
+final class DeliveryLoadAll extends DeliveryEvent {}
+
+final class DeliveryAddTracking extends DeliveryEvent {
+  const DeliveryAddTracking({
+    required this.tracking,
+  });
+
+  final Tracking tracking;
+}

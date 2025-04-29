@@ -5,6 +5,7 @@ class User {
     this.name,
     this.phone,
     this.photoUrl,
+    this.editor = false,
   });
 
   final String id;
@@ -12,4 +13,5 @@ class User {
   final String? name;
   final String? phone;
   final String? photoUrl;
+  final bool editor;
 }

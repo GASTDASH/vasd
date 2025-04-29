@@ -45,6 +45,24 @@ class _PackagesScreenState extends State<PackagesScreen> {
                 bloc: _deliveryBloc,
                 builder: (context, state) {
                   if (state is DeliveryLoaded) {
+                    if (state.deliveries.isEmpty) {
+                      return const SliverToBoxAdapter(
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 24),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "У вас ещё не было заказов",
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                                Icon(Icons.no_sim_outlined),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                     final deliveries = state.deliveries.reversed.toList();
                     return SliverList.builder(
                       itemCount: deliveries.length,

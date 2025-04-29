@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/features/home/home.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
+import 'package:vasd/ui/widgets/button_base.dart';
 import 'package:vasd/ui/widgets/shimmer_custom.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,6 +52,25 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: CustomScrollView(
               slivers: [
+                context.read<AuthBloc>().authRepo.user?.editor ?? false
+                    ? SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: ButtonBase(
+                            prefixIcon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            text: "Перейти в режим редактирования",
+                            color: Colors.blue.shade400,
+                            onTap: () {
+                              Navigator.pushNamed(context, "/packages_editor");
+                            },
+                          ),
+                        ),
+                      )
+                    : const SliverToBoxAdapter(child: SizedBox.shrink()),
+                //
                 // Отследить посылку
                 SliverToBoxAdapter(
                     child:
@@ -60,8 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: BlocBuilder<DeliveryBloc, DeliveryState>(
                     bloc: _deliveryBloc,
                     builder: (context, state) {
+                      if (state is DeliveryLoaded && state.deliveries.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
                       return LastDeliveryCard(
-                        delivery: (state is DeliveryLoaded &&
+                        delivery: (state is! DeliveryLoading &&
                                 state.deliveries.isNotEmpty)
                             ? state.deliveries.last
                             : null,
@@ -77,6 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 BlocBuilder<DeliveryBloc, DeliveryState>(
                   bloc: _deliveryBloc,
                   builder: (context, state) {
+                    if (state is DeliveryLoaded && state.deliveries.isEmpty) {
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());
+                    }
                     return recentPackagesArea(
                         theme,
                         (state is DeliveryLoaded && state.deliveries.isNotEmpty)

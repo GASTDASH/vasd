@@ -53,7 +53,8 @@ class RecentPackageWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("{delivery.name}",
+                  Text(
+                      "Заказ от ${delivery.createdAt?.toIso8601String().split('T')[0].split('-').reversed.join('.')}",
                       style: theme.textTheme.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w800)),
                   Text("ID: ${delivery.deliveryId}"),

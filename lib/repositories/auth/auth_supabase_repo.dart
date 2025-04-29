@@ -91,10 +91,20 @@ class AuthSupabaseRepo implements AuthInterface {
         photoUrl: supabaseClient.storage
             .from("avatars")
             .getPublicUrl("/${user.id}/avatar"),
+        editor: await hasPermission(user.id),
       );
     }
 
     return null;
+  }
+
+  @override
+  Future<bool> hasPermission(String userId) async {
+    final res = await supabaseClient
+        .from("permission")
+        .select("editor")
+        .eq("user_id", userId);
+    return res.isNotEmpty ? res.first["editor"] : false;
   }
 
   @override
