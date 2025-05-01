@@ -27,7 +27,7 @@ class VASDApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'VASD',
+        title: 'СДЭК-ВКС',
         theme: lightTheme,
         routes: routes,
         initialRoute: "/splash",
