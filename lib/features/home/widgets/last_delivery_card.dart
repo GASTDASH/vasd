@@ -43,52 +43,40 @@ class LastDeliveryCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8).copyWith(top: 14),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
+                                const SizedBox(width: 4),
+                                Ink(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6),
+                                      child: SvgPicture.asset(
+                                        "assets/icons/cube.svg",
+                                      ),
+                                    )),
+                                const SizedBox(width: 12),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(width: 4),
-                                    Ink(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(6),
-                                          child: SvgPicture.asset(
-                                            "assets/icons/cube.svg",
-                                          ),
-                                        )),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: 15,
-                                          width: 140,
-                                          decoration: const BoxDecoration(
-                                              color: Colors.white),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Container(
-                                          height: 15,
-                                          width: 200,
-                                          decoration: const BoxDecoration(
-                                              color: Colors.white),
-                                        ),
-                                      ],
+                                    Container(
+                                      height: 15,
+                                      width: 140,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Container(
+                                      height: 15,
+                                      width: 200,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white),
                                     ),
                                   ],
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.more_vert),
                                 ),
                               ],
                             ),
@@ -129,47 +117,35 @@ class LastDeliveryCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8).copyWith(top: 14),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 4),
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(6),
-                                          child: SvgPicture.asset(
-                                            "assets/icons/cube.svg",
-                                          ),
-                                        )),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Заказ от ${delivery?.createdAt?.toIso8601String().split('T')[0].split('-').reversed.join('.')}",
-                                          style: theme.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.w800),
-                                        ),
-                                        Text(
-                                            "Номер заказа: ${delivery?.deliveryId}"),
-                                      ],
+                                const SizedBox(width: 4),
+                                Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6),
+                                      child: SvgPicture.asset(
+                                        "assets/icons/cube.svg",
+                                      ),
+                                    )),
+                                const SizedBox(width: 12),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Заказ от ${delivery?.createdAt?.toIso8601String().split('T')[0].split('-').reversed.join('.')}",
+                                      style: theme.textTheme.titleMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w800),
+                                    ),
+                                    Text(
+                                        "Номер заказа: ${delivery?.deliveryId}"),
                                   ],
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.more_vert),
                                 ),
                               ],
                             ),
