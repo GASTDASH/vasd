@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:static_map/static_map.dart';
@@ -19,15 +20,18 @@ import 'package:vasd/repositories/status/models/models.dart';
 import 'package:vasd/repositories/tracking/tracking.dart';
 import 'package:vasd/vasd_app.dart';
 
-// Supabase Database Password = 5re6evIdBibM3HJq
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  try {
+    await dotenv.load(fileName: ".env"); // Load environment variables
+  } catch (e) {
+    throw Exception('Error loading .env file: $e'); // Print error if any
+  }
+
   await Supabase.initialize(
-      url: "https://qprxzwerdumhcourygam.supabase.co",
-      anonKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwcnh6d2VyZHVtaGNvdXJ5Z2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4Nzc4OTksImV4cCI6MjA0NjQ1Mzg5OX0.2hmdN4gUgyX9JOKuOiL6Cf0LNdOHAn2OfKRhmtrJC10");
+      url: dotenv.env['SUPABASE_URL'].toString(),
+      anonKey: dotenv.env['SUPABASE_ANON_KEY'].toString());
 
   await Hive.initFlutter();
   Hive.registerAdapter(DeliveryAdapter());
@@ -38,7 +42,7 @@ Future<void> main() async {
   Hive.registerAdapter(TrackingAdapter());
   await Hive.openBox<Delivery>('delivery');
 
-  StaticMap.initialize(apiKey: 'pk_6992c2a5e5dd459ebf4b4851105c3a8c');
+  StaticMap.initialize(apiKey: dotenv.env['STATIC_MAP_API_KEY'].toString());
 
   final dio = Dio();
   final talker = Talker();

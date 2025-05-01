@@ -59,6 +59,7 @@ dependencies:
   simple_barcode_scanner: ^0.3.0
   syncfusion_flutter_pdfviewer: ^29.1.39
   static_map: ^0.3.1
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +100,7 @@ flutter:
     - assets/images/
     - assets/icon/icon.png
     - assets/pdf/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
