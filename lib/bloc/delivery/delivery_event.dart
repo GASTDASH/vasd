@@ -34,3 +34,19 @@ final class DeliveryAddTracking extends DeliveryEvent {
 
   final Tracking tracking;
 }
+
+final class DeliverySave extends DeliveryEvent {
+  const DeliverySave({
+    required this.delivery,
+  });
+
+  final Delivery delivery;
+}
+
+final class DeliveryRemove extends DeliveryEvent {
+  const DeliveryRemove({
+    required this.deliveryId,
+  });
+
+  final String deliveryId;
+}

@@ -58,3 +58,15 @@ final class DeliveryLoading extends DeliveryState {
     super.deliveries,
   });
 }
+
+final class DeliverySaving extends DeliveryState {
+  const DeliverySaving({
+    super.deliveries,
+  });
+}
+
+final class DeliveryRemoving extends DeliveryState {
+  const DeliveryRemoving({
+    super.deliveries,
+  });
+}

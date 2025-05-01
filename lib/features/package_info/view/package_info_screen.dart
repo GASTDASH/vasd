@@ -10,7 +10,7 @@ import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/features/package_info/view/barcode_screen.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/repositories/tracking/tracking.dart';
-import 'package:vasd/ui/widgets/delivery_item_widget.dart';
+import 'package:vasd/ui/ui.dart';
 
 class PackageInfoScreen extends StatefulWidget {
   const PackageInfoScreen({super.key});
@@ -64,7 +64,19 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
 
     return BlocListener<DeliveryBloc, DeliveryState>(
       listener: (context, state) {
-        // TODO
+        if (state is DeliverySaving) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => const LoadingDialog(),
+          );
+        }
+      },
+      listenWhen: (previous, current) {
+        if (previous is DeliverySaving) {
+          Navigator.of(context).pop();
+        }
+        return true;
       },
       child: SafeArea(
         child: Scaffold(
@@ -75,6 +87,95 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                   ?.copyWith(fontWeight: FontWeight.w700),
             ),
             centerTitle: true,
+            actions: [
+              IconButton(
+                  onPressed: !delivery.isSaved
+                      ? () async {
+                          await showDialog(
+                            context: context,
+                            builder: (context) => BaseDialog(
+                              icon: const Icon(
+                                Icons.save_outlined,
+                                color: Colors.white,
+                              ),
+                              color: theme.primaryColor,
+                              title: "Сохранить этот заказ?",
+                              text:
+                                  "После сохранения заказа Вы сможете просмотреть его ещё раз в списке заказов",
+                              child: Row(
+                                spacing: 12,
+                                children: [
+                                  Expanded(
+                                    child: ButtonBase(
+                                      text: "Да",
+                                      onTap: () {
+                                        context.read<DeliveryBloc>().add(
+                                            DeliverySave(delivery: delivery));
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ButtonBase(
+                                      text: "Нет",
+                                      outlined: true,
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      color: theme.primaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      : () async {
+                          await showDialog(
+                            context: context,
+                            builder: (context) => BaseDialog(
+                              icon: const Icon(
+                                Icons.delete_forever,
+                                color: Colors.white,
+                              ),
+                              color: theme.primaryColor,
+                              title: "Удалить заказ?",
+                              text:
+                                  "Вы удалите этот заказ из сохранённых, но он продолжит существовать в облаке",
+                              child: Row(
+                                spacing: 12,
+                                children: [
+                                  Expanded(
+                                    child: ButtonBase(
+                                      text: "Да",
+                                      onTap: () {
+                                        context.read<DeliveryBloc>().add(
+                                            DeliveryRemove(
+                                                deliveryId:
+                                                    delivery.deliveryId!));
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ButtonBase(
+                                      text: "Нет",
+                                      outlined: true,
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      color: theme.primaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                  icon: !delivery.isSaved
+                      ? const Icon(Icons.save_outlined)
+                      : const Icon(Icons.delete_outline)),
+            ],
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -124,6 +225,12 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                       lat2: delivery.pointTo!.lat,
                                       lng2: delivery.pointTo!.lng),
                                   builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                          child: LoadingIndicator(
+                                              indicatorType:
+                                                  Indicator.ballPulse));
+                                    }
                                     return StaticMapBuilder(
                                         options: StaticMapOptions(
                                           width: 400,
@@ -194,10 +301,18 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                               if (loadingProgress == null) {
                                                 return child;
                                               }
-                                              return const Center(
-                                                  child: LoadingIndicator(
-                                                      indicatorType:
-                                                          Indicator.ballPulse));
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ));
                                             },
                                           );
                                         });

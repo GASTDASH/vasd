@@ -1,3 +1,8 @@
+import 'package:hive/hive.dart';
+
+part 'point.g.dart';
+
+@HiveType(typeId: 1)
 class Point {
   const Point({
     required this.id,
@@ -6,9 +11,20 @@ class Point {
     required this.lng,
   });
 
+  /// ID пункта
+  @HiveField(0)
   final int id;
+
+  /// Адрес пункта
+  @HiveField(1)
   final String address;
+
+  /// Широта пункта
+  @HiveField(2)
   final double lat;
+
+  /// Долгота пункта
+  @HiveField(3)
   final double lng;
 
   factory Point.fromJson({required Map<String, dynamic> json}) {

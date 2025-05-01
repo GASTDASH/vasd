@@ -9,10 +9,14 @@ import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/auth/auth.dart';
-import 'package:vasd/repositories/delivery/delivery_supabase_repo.dart';
+import 'package:vasd/repositories/delivery/delivery.dart';
 import 'package:vasd/repositories/delivery_variant/delivery_variant_local_repo.dart';
+import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
+import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
 import 'package:vasd/repositories/point/point.dart';
+import 'package:vasd/repositories/status/models/models.dart';
+import 'package:vasd/repositories/tracking/tracking.dart';
 import 'package:vasd/vasd_app.dart';
 
 // Supabase Database Password = 5re6evIdBibM3HJq
@@ -26,6 +30,13 @@ Future<void> main() async {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwcnh6d2VyZHVtaGNvdXJ5Z2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4Nzc4OTksImV4cCI6MjA0NjQ1Mzg5OX0.2hmdN4gUgyX9JOKuOiL6Cf0LNdOHAn2OfKRhmtrJC10");
 
   await Hive.initFlutter();
+  Hive.registerAdapter(DeliveryAdapter());
+  Hive.registerAdapter(DeliveryVariantAdapter());
+  Hive.registerAdapter(PackageSizeAdapter());
+  Hive.registerAdapter(PointAdapter());
+  Hive.registerAdapter(StatusAdapter());
+  Hive.registerAdapter(TrackingAdapter());
+  await Hive.openBox<Delivery>('delivery');
 
   StaticMap.initialize(apiKey: 'pk_6992c2a5e5dd459ebf4b4851105c3a8c');
 
@@ -41,8 +52,9 @@ Future<void> main() async {
       AddressCompleterDadataRepo());
   GetIt.I.registerSingleton(const DeliveryVariantLocalRepo());
   GetIt.I.registerSingleton(const PaymentMethodLocalRepo());
-  GetIt.I.registerSingleton(
+  GetIt.I.registerSingleton<DeliverySupabaseRepo>(
       DeliverySupabaseRepo(supabaseClient: Supabase.instance.client));
+  GetIt.I.registerSingleton<DeliveryLocalRepo>(DeliveryLocalRepo());
   GetIt.I.registerSingleton(
       PointSupabaseRepo(supabaseClient: Supabase.instance.client));
 

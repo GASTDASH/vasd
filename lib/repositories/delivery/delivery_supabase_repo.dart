@@ -1,15 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:vasd/repositories/delivery/models/delivery.dart';
+import 'package:vasd/repositories/delivery/delivery.dart';
 
-class DeliverySupabaseRepo {
+class DeliverySupabaseRepo implements DeliveryInterface {
   const DeliverySupabaseRepo({
     required SupabaseClient supabaseClient,
   }) : _supabaseClient = supabaseClient;
 
   final SupabaseClient _supabaseClient;
 
+  @override
   Future<void> createDelivery({required final Delivery delivery}) async {
     await _supabaseClient.from("delivery").insert({
       'delivery_id': delivery.deliveryId,
@@ -39,6 +40,7 @@ class DeliverySupabaseRepo {
     return;
   }
 
+  @override
   Future<Delivery?> findDelivery({required String deliveryId}) async {
     final res = await _supabaseClient
         .from("delivery")
@@ -60,6 +62,7 @@ class DeliverySupabaseRepo {
     }
   }
 
+  @override
   Future<List<Delivery>> getDeliveriesByUser({required String userId}) async {
     final res = await _supabaseClient
         .from("delivery")
@@ -79,6 +82,7 @@ class DeliverySupabaseRepo {
         .toList();
   }
 
+  @override
   Future<List<Delivery>> getDeliveriesAll() async {
     final res = await _supabaseClient.from("delivery").select(
           "*,"

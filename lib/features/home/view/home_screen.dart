@@ -109,7 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         (state is DeliveryLoaded && state.deliveries.isNotEmpty)
                             ? [
                                 state.deliveries[state.deliveries.length - 1],
-                                state.deliveries[state.deliveries.length - 2],
+                                if (state.deliveries.length > 1)
+                                  state.deliveries[state.deliveries.length - 2],
                               ]
                             : null);
                   },
@@ -159,8 +160,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ]
                     : [
                         RecentPackageWidget(delivery: deliveries[0]),
-                        const SizedBox(height: 24),
-                        RecentPackageWidget(delivery: deliveries[1]),
+                        if (deliveries.length > 1) const SizedBox(height: 24),
+                        if (deliveries.length > 1)
+                          RecentPackageWidget(delivery: deliveries[1]),
                       ],
               ),
             ),

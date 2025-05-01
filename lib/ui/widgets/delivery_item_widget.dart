@@ -139,21 +139,33 @@ class DeliveryItemWidget extends StatelessWidget {
               ],
             ),
             Row(
-              spacing: 6,
-              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.local_shipping_outlined, color: theme.hintColor),
-                Expanded(
-                  child: Text(
-                    delivery?.deliveryVariant != null
-                        ? "${delivery?.deliveryVariant!.name} (${delivery?.deliveryVariant!.minDays}-${delivery?.deliveryVariant!.maxDays} дней)"
-                        : "1",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium
-                        ?.copyWith(color: theme.hintColor),
-                  ),
+                Row(
+                  spacing: 6,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(Icons.local_shipping_outlined, color: theme.hintColor),
+                    Text(
+                      delivery?.deliveryVariant != null
+                          ? "${delivery?.deliveryVariant!.name} (${delivery?.deliveryVariant!.minDays}-${delivery?.deliveryVariant!.maxDays} дней)"
+                          : "1",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: theme.hintColor),
+                    ),
+                  ],
                 ),
+                delivery?.isSaved ?? false
+                    ? const Row(
+                        spacing: 6,
+                        children: [
+                          Text("Сохранено"),
+                          Icon(Icons.save_outlined),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
             Divider(
