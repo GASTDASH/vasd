@@ -157,7 +157,17 @@ class LastDeliveryCard extends StatelessWidget {
                               iconHeight: 48,
                               iconWidth: 48,
                               barThickness: 4,
-                              activeIndex: 0,
+                              activeIndex: (delivery != null &&
+                                      delivery!.trackingList != null &&
+                                      delivery!.trackingList!.isNotEmpty &&
+                                      (delivery!.trackingList!.last.status
+                                                  .statusCode ==
+                                              4 ||
+                                          delivery!.trackingList!.last.status
+                                                  .statusCode ==
+                                              5))
+                                  ? 1
+                                  : 0,
                               activeBarColor: theme.primaryColor,
                               verticalGap: 32,
                               stepperDirection: Axis.vertical,
@@ -182,7 +192,18 @@ class LastDeliveryCard extends StatelessWidget {
                                 ),
                                 StepperData(
                                   iconWidget: CircleAvatar(
-                                    backgroundColor: theme.hintColor,
+                                    backgroundColor: (delivery != null &&
+                                            delivery!.trackingList != null &&
+                                            delivery!
+                                                .trackingList!.isNotEmpty &&
+                                            (delivery!.trackingList!.last.status
+                                                        .statusCode ==
+                                                    4 ||
+                                                delivery!.trackingList!.last
+                                                        .status.statusCode ==
+                                                    5))
+                                        ? theme.primaryColor
+                                        : theme.hintColor,
                                     child: const Icon(Icons.inbox,
                                         color: Colors.white),
                                   ),

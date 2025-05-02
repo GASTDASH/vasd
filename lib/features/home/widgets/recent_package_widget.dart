@@ -61,20 +61,30 @@ class RecentPackageWidget extends StatelessWidget {
                 ],
               ),
               const Expanded(child: SizedBox.expand()),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("${delivery.cost} ₽",
+              SizedBox(
+                width: 110,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${delivery.cost} ₽",
                       style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w800)),
-                  Text(
+                          ?.copyWith(fontWeight: FontWeight.w800),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
                       (delivery.trackingList != null &&
                               delivery.trackingList!.isNotEmpty)
                           ? delivery.trackingList!.last.status.name
                           : "Неизвестно",
-                      style: TextStyle(color: theme.primaryColor)),
-                ],
+                      style: TextStyle(color: theme.primaryColor),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
