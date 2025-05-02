@@ -22,6 +22,18 @@ class PackageInfoScreen extends StatefulWidget {
 class _PackageInfoScreenState extends State<PackageInfoScreen> {
   List<List<double>>? polylinesPoints;
   int zoom = 6;
+  Delivery? delivery;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (delivery == null) {
+      var args = ModalRoute.of(context)!.settings.arguments;
+      assert(args != null && args is Delivery, 'You must provide Delivery arg');
+      delivery = args as Delivery;
+    }
+  }
 
   Future<List<StaticMapLocation>> getPath({
     required double lat1,
@@ -55,11 +67,6 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final delivery = ModalRoute.of(context)!.settings.arguments;
-    assert(delivery != null && delivery is Delivery,
-        'You must provide Delivery arg');
-    delivery as Delivery;
-
     final theme = Theme.of(context);
 
     return BlocListener<DeliveryBloc, DeliveryState>(
@@ -89,7 +96,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
             centerTitle: true,
             actions: [
               IconButton(
-                  onPressed: !delivery.isSaved
+                  onPressed: !delivery!.isSaved
                       ? () async {
                           await showDialog(
                             context: context,
@@ -110,7 +117,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                       text: "Да",
                                       onTap: () {
                                         context.read<DeliveryBloc>().add(
-                                            DeliverySave(delivery: delivery));
+                                            DeliverySave(delivery: delivery!));
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -152,7 +159,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                         context.read<DeliveryBloc>().add(
                                             DeliveryRemove(
                                                 deliveryId:
-                                                    delivery.deliveryId!));
+                                                    delivery!.deliveryId!));
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -172,7 +179,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                             ),
                           );
                         },
-                  icon: !delivery.isSaved
+                  icon: !delivery!.isSaved
                       ? const Icon(Icons.save_outlined)
                       : const Icon(Icons.delete_outline)),
             ],
@@ -188,8 +195,8 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              BarcodeScreen(deliveryId: delivery.deliveryId!)));
+                          builder: (context) => BarcodeScreen(
+                              deliveryId: delivery!.deliveryId!)));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -200,13 +207,13 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                       child: Center(
                         child: BarcodeWidget(
                           height: 70,
-                          data: delivery.deliveryId!,
+                          data: delivery!.deliveryId!,
                           barcode: Barcode.pdf417(),
                         ),
                       ),
                     ),
                   ),
-                  delivery.pointFrom != null && delivery.pointTo != null
+                  delivery!.pointFrom != null && delivery!.pointTo != null
                       ? Container(
                           width: 400,
                           height: 200,
@@ -220,10 +227,10 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                             children: [
                               FutureBuilder(
                                   future: getPath(
-                                      lat1: delivery.pointFrom!.lat,
-                                      lng1: delivery.pointFrom!.lng,
-                                      lat2: delivery.pointTo!.lat,
-                                      lng2: delivery.pointTo!.lng),
+                                      lat1: delivery!.pointFrom!.lat,
+                                      lng1: delivery!.pointFrom!.lng,
+                                      lat2: delivery!.pointTo!.lat,
+                                      lng2: delivery!.pointTo!.lng),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return const Center(
@@ -238,24 +245,24 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                           scale: 1,
                                           zoom: zoom,
                                           center: StaticMapLatLng(
-                                            (delivery.pointFrom!.lat +
-                                                    delivery.pointTo!.lat) /
+                                            (delivery!.pointFrom!.lat +
+                                                    delivery!.pointTo!.lat) /
                                                 2,
-                                            (delivery.pointFrom!.lng +
-                                                    delivery.pointTo!.lng) /
+                                            (delivery!.pointFrom!.lng +
+                                                    delivery!.pointTo!.lng) /
                                                 2,
                                           ),
                                           overlays: [
                                             StaticMapMarker(
                                                 point: StaticMapLatLng(
-                                                    delivery.pointFrom!.lat,
-                                                    delivery.pointFrom!.lng),
+                                                    delivery!.pointFrom!.lat,
+                                                    delivery!.pointFrom!.lng),
                                                 label: "От",
                                                 color: theme.primaryColor),
                                             StaticMapMarker(
                                               point: StaticMapLatLng(
-                                                  delivery.pointTo!.lat,
-                                                  delivery.pointTo!.lng),
+                                                  delivery!.pointTo!.lat,
+                                                  delivery!.pointTo!.lng),
                                               label: "Куда",
                                               color: theme.primaryColor,
                                             ),
@@ -268,15 +275,15 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                                       ? snapshot.data!
                                                       : [
                                                           StaticMapLatLng(
-                                                            delivery
+                                                            delivery!
                                                                 .pointFrom!.lat,
-                                                            delivery
+                                                            delivery!
                                                                 .pointFrom!.lng,
                                                           ),
                                                           StaticMapLatLng(
-                                                            delivery
+                                                            delivery!
                                                                 .pointTo!.lat,
-                                                            delivery
+                                                            delivery!
                                                                 .pointTo!.lng,
                                                           ),
                                                         ],
@@ -352,12 +359,12 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                     scrollPhysics: const NeverScrollableScrollPhysics(),
                     stepperDirection: Axis.vertical,
                     activeBarColor: theme.primaryColor,
-                    activeIndex: delivery.trackingList?.length ?? 0,
+                    activeIndex: delivery!.trackingList?.length ?? 0,
                     iconHeight: 32,
                     iconWidth: 32,
                     verticalGap: 20,
                     stepperList: [
-                      for (Tracking tracking in delivery.trackingList ?? [])
+                      for (Tracking tracking in delivery!.trackingList ?? [])
                         StepperData(
                           iconWidget: CircleAvatar(
                             backgroundColor:
