@@ -168,6 +168,16 @@ class DeliveryItemWidget extends StatelessWidget {
                     : const SizedBox.shrink(),
               ],
             ),
+            Row(
+              spacing: 6,
+              children: [
+                const Icon(Icons.access_time),
+                Text(
+                  "Создан ${delivery?.createdAt?.toIso8601String().split('T')[0].split('-').reversed.join('.')}",
+                  style: theme.textTheme.titleMedium,
+                ),
+              ],
+            ),
             Divider(
               color: theme.hintColor,
               height: 1,
