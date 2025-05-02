@@ -41,4 +41,10 @@ class DeliveryLocalRepo implements DeliveryInterface {
 
     deliveryBox.delete(deliveryId);
   }
+
+  @override
+  Future<void> addTracking(
+      {required int statusCode, required String deliveryId}) {
+    throw UnimplementedError();
+  }
 }

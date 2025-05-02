@@ -29,10 +29,12 @@ final class DeliveryLoadAll extends DeliveryEvent {}
 
 final class DeliveryAddTracking extends DeliveryEvent {
   const DeliveryAddTracking({
-    required this.tracking,
+    required this.statusCode,
+    required this.deliveryId,
   });
 
-  final Tracking tracking;
+  final int statusCode;
+  final String deliveryId;
 }
 
 final class DeliverySave extends DeliveryEvent {

@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vasd/repositories/auth/auth_interface.dart';
 import 'package:vasd/repositories/delivery/delivery.dart';
-import 'package:vasd/repositories/tracking/tracking.dart';
 
 part 'delivery_event.dart';
 part 'delivery_state.dart';
@@ -101,6 +100,13 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
         if (!(_authRepo.user!.editor)) {
           throw Exception("User is not Editor");
         }
+
+        await _deliverySupabaseRepo.addTracking(
+          statusCode: event.statusCode,
+          deliveryId: event.deliveryId,
+        );
+
+        add(DeliveryLoadAll());
 
         emit(DeliveryLoaded(deliveries: state.deliveries));
       } catch (e) {

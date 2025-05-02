@@ -94,4 +94,16 @@ class DeliverySupabaseRepo implements DeliveryInterface {
 
     return res.map((row) => Delivery.fromJson(json: row)).toList();
   }
+
+  @override
+  Future<void> addTracking({
+    required int statusCode,
+    required String deliveryId,
+  }) async {
+    await _supabaseClient.from("tracking").insert({
+      "delivery_id": deliveryId,
+      "status_code": statusCode,
+      "update_time": DateTime.now().toIso8601String(),
+    });
+  }
 }
