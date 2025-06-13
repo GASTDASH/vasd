@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
-import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -38,8 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context: context,
             builder: (context) => SuccessDialog(
               title: "Регистрация",
-              text:
-                  "На ваш эл. адрес было отправлено письмо с ссылкой для подтверждения аккаунта",
+              text: "На ваш эл. адрес было отправлено письмо с ссылкой для подтверждения аккаунта",
               buttonText: "Хорошо",
               onTap: () {
                 Navigator.of(context).pop();
@@ -72,11 +70,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 32),
                   SvgPicture.asset("assets/images/CDEK_logo.svg"),
                   const SizedBox(height: 60),
-                  Text("Создайте свой новый аккаунт!",
-                      style: theme.textTheme.headlineMedium),
+                  Text("Создайте свой новый аккаунт!", style: theme.textTheme.headlineMedium),
                   const SizedBox(height: 12),
-                  Text("Введите ваши данные ниже",
-                      style: TextStyle(color: theme.hintColor)),
+                  Text("Введите ваши данные ниже", style: TextStyle(color: theme.hintColor)),
                   const SizedBox(height: 24),
                   TextFieldCustom(
                     hintText: "Имя пользователя",
@@ -168,6 +164,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
       passwordController.text.isNotEmpty &&
       passwordConfirmController.text.isNotEmpty;
 
-  bool checkPassword() =>
-      passwordController.text == passwordConfirmController.text;
+  bool checkPassword() => passwordController.text == passwordConfirmController.text;
 }

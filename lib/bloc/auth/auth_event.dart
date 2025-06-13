@@ -65,3 +65,11 @@ class AuthChangeUserInfo extends AuthEvent {
   final String username;
   final String phone;
 }
+
+class AuthUpdatePassword extends AuthEvent {
+  AuthUpdatePassword({
+    required this.newPassword,
+  });
+
+  final String newPassword;
+}

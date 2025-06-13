@@ -29,7 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         //     builder: (context) => const LoadingDialog(),
         //   );
         // } else
-        if (state is AuthOtpVerificationState) {
+        if (state is AuthOtpVerificationState && state.error == null && ModalRoute.of(context)!.isCurrent) {
           Navigator.pushNamed(
             context,
             "/otp_verification",
@@ -40,12 +40,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         //   GetIt.I<Talker>().error(state.error.toString());
         // }
       },
-      listenWhen: (previous, current) {
-        if (previous is AuthLoadingState) {
-          Navigator.of(context).pop();
-        }
-        return true;
-      },
+      // listenWhen: (previous, current) {
+      //   if (previous is AuthLoadingState) {
+      //     Navigator.of(context).pop();
+      //   }
+      //   return true;
+      // },
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -62,8 +62,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: ButtonBase(
               onTap: emailController.text.isEmpty
                   ? null
-                  : () => authBloc
-                      .add(AuthSignInWithOtp(email: emailController.text)),
+                  : () {
+                      authBloc.add(AuthSignInWithOtp(email: emailController.text));
+                    },
               text: "Продолжить",
             ),
           ),
@@ -74,8 +75,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               children: [
                 Text("Забыли пароль", style: theme.textTheme.headlineMedium),
                 const SizedBox(height: 12),
-                Text("Выберите, каким способом вы хотите восстановить пароль",
-                    style: TextStyle(color: theme.hintColor)),
+                Text("Выберите, каким способом вы хотите восстановить пароль", style: TextStyle(color: theme.hintColor)),
                 const SizedBox(height: 24),
                 SendOTPMethodButton(
                   selected: true,

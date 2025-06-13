@@ -9,8 +9,6 @@ import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
 import 'package:vasd/repositories/point/point.dart';
 import 'package:vasd/ui/ui.dart';
-import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
-import 'package:vasd/ui/widgets/text_field_button.dart';
 
 class CalculateScreen extends StatefulWidget {
   const CalculateScreen({super.key});
@@ -76,8 +74,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
         bloc: _bloc,
         listener: (context, state) {
           if (state is CalculateCalculating) {
-            showDialog(
-                context: context, builder: (context) => const LoadingDialog());
+            showDialog(context: context, builder: (context) => const LoadingDialog());
           }
         },
         listenWhen: (previous, current) {
@@ -101,8 +98,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                   title: Text(
                     "Рассчитать доставку",
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   centerTitle: true,
                 ),
@@ -111,11 +107,8 @@ class _CalculateScreenState extends State<CalculateScreen> {
                         height: 250,
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(32)),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black38, blurRadius: 10)
-                          ],
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                          boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 10)],
                         ),
                         child: Row(
                           children: [
@@ -127,9 +120,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                   children: [
                                     Text(
                                       "Ваш расчёт",
-                                      style: theme.textTheme.titleLarge
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.w500),
+                                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
                                     ),
                                     const SizedBox(height: 12),
                                     Text(
@@ -141,8 +132,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Icon(Icons.shopping_bag_outlined,
-                                            color: theme.hintColor),
+                                        Icon(Icons.shopping_bag_outlined, color: theme.hintColor),
                                         Expanded(
                                           child: Text(
                                             state.delivery.packageSize != null
@@ -150,75 +140,53 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                                 : "",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: theme.textTheme.titleMedium
-                                                ?.copyWith(
-                                                    color: theme.hintColor),
+                                            style: theme.textTheme.titleMedium?.copyWith(color: theme.hintColor),
                                           ),
                                         ),
                                       ],
                                     ),
                                     const Expanded(child: SizedBox.expand()),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             state.delivery.senderFIO != null
                                                 ? Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       const Text(
                                                         "Отправитель:",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                        style: TextStyle(fontWeight: FontWeight.bold),
                                                       ),
-                                                      Text(
-                                                          "${state.delivery.senderFIO}"),
+                                                      Text("${state.delivery.senderFIO}"),
                                                     ],
                                                   )
                                                 : const SizedBox.shrink(),
                                             state.delivery.receiverFIO != null
                                                 ? Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       const Text(
                                                         "Получатель:",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                        style: TextStyle(fontWeight: FontWeight.bold),
                                                       ),
-                                                      Text(
-                                                          "${state.delivery.receiverFIO}"),
+                                                      Text("${state.delivery.receiverFIO}"),
                                                     ],
                                                   )
                                                 : const SizedBox.shrink(),
                                           ],
                                         ),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
-                                            Text(state.delivery.deliveryVariant
-                                                    ?.name ??
-                                                ""),
+                                            Text(state.delivery.deliveryVariant?.name ?? ""),
                                             Text(
                                               "${state.delivery.cost}₽",
-                                              style:
-                                                  theme.textTheme.headlineLarge,
+                                              style: theme.textTheme.headlineLarge,
                                             ),
                                           ],
                                         ),
@@ -243,15 +211,13 @@ class _CalculateScreenState extends State<CalculateScreen> {
                         controlsBuilder: (context, details) => const Row(),
                         onStepTapped: (tappedStep) {
                           if (state.currentStep > tappedStep) {
-                            _bloc.add(
-                                CalculateStepTapped(tappedStep: tappedStep));
+                            _bloc.add(CalculateStepTapped(tappedStep: tappedStep));
                           }
                         },
                         steps: [
                           Step(
                               isActive: state.currentStep >= 0,
-                              stepStyle:
-                                  state.currentStep >= 0 ? stepStyle : null,
+                              stepStyle: state.currentStep >= 0 ? stepStyle : null,
                               title: Text(
                                 "Основные параметры",
                                 style: theme.textTheme.titleLarge,
@@ -289,21 +255,15 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                   // ),
                                   // const SizedBox(height: 12),
                                   TextFieldButton(
-                                    text: state.delivery.pointFrom == null
-                                        ? "Откуда"
-                                        : state.delivery.pointFrom!.address,
+                                    text: state.delivery.pointFrom == null ? "Откуда" : state.delivery.pointFrom!.address,
                                     onTap: () async {
-                                      Navigator.of(context)
-                                          .pushNamed("/select_point")
-                                          .then((point) {
+                                      Navigator.of(context).pushNamed("/select_point").then((point) {
                                         point as Point;
-                                        _bloc.add(CalculateSetPoint(
-                                            pointFrom: point));
+                                        _bloc.add(CalculateSetPoint(pointFrom: point));
                                       });
                                     },
                                   ),
-                                  Text(
-                                      "Город: ${state.delivery.cityFrom == "" ? "..." : state.delivery.cityFrom}"),
+                                  Text("Город: ${state.delivery.cityFrom == "" ? "..." : state.delivery.cityFrom}"),
                                   const SizedBox(height: 12),
                                   // Autocomplete<String>(
                                   //   optionsBuilder: (textEditingValue) async {
@@ -334,26 +294,19 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                   // ),
                                   // const SizedBox(height: 12),
                                   TextFieldButton(
-                                    text: state.delivery.pointTo == null
-                                        ? "Куда"
-                                        : state.delivery.pointTo!.address,
+                                    text: state.delivery.pointTo == null ? "Куда" : state.delivery.pointTo!.address,
                                     onTap: () async {
-                                      Navigator.of(context)
-                                          .pushNamed("/select_point")
-                                          .then((point) {
+                                      Navigator.of(context).pushNamed("/select_point").then((point) {
                                         point as Point;
-                                        _bloc.add(
-                                            CalculateSetPoint(pointTo: point));
+                                        _bloc.add(CalculateSetPoint(pointTo: point));
                                       });
                                     },
                                   ),
-                                  Text(
-                                      "Город: ${state.delivery.cityTo == "" ? "..." : state.delivery.cityTo}"),
+                                  Text("Город: ${state.delivery.cityTo == "" ? "..." : state.delivery.cityTo}"),
                                   const SizedBox(height: 32),
                                   Text(
                                     "Вес и размер посылки",
-                                    style: theme.textTheme.titleLarge
-                                        ?.copyWith(fontWeight: FontWeight.w700),
+                                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(height: 12),
                                   TextFieldButton(
@@ -361,12 +314,9 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                       // TODO: Возможно всё это в Кубит
                                       // TODO: Возможно можно вместо состояния Loading сделать Transition, а здесь вызывать состояние SelectingPackageSize
 
-                                      final packageSizes =
-                                          await PackageSizeLocalRepo()
-                                              .getItems();
+                                      final packageSizes = await PackageSizeLocalRepo().getItems();
 
-                                      final PackageSize? packageSize =
-                                          await showDialog(
+                                      final PackageSize? packageSize = await showDialog(
                                         // ignore: use_build_context_synchronously
                                         context: context,
                                         builder: (context) => PackageSizeDialog(
@@ -375,13 +325,10 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                       );
 
                                       if (packageSize != null) {
-                                        _bloc.add(CalculateSetPackageSize(
-                                            packageSize: packageSize));
+                                        _bloc.add(CalculateSetPackageSize(packageSize: packageSize));
                                       }
                                     },
-                                    text: state.delivery.packageSize != null
-                                        ? state.delivery.packageSize!.title
-                                        : "Размер посылки",
+                                    text: state.delivery.packageSize != null ? state.delivery.packageSize!.title : "Размер посылки",
                                   ),
                                   const SizedBox(height: 32),
                                   ButtonBase(
@@ -401,8 +348,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                               )),
                           Step(
                             isActive: state.currentStep >= 1,
-                            stepStyle:
-                                state.currentStep >= 1 ? stepStyle : null,
+                            stepStyle: state.currentStep >= 1 ? stepStyle : null,
                             title: Text(
                               "Выбор услуги",
                               style: theme.textTheme.titleLarge,
@@ -414,14 +360,12 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                 Column(
                                   spacing: 12,
                                   children: [
-                                    for (var variant
-                                        in state.deliveryVariantList)
+                                    for (var variant in state.deliveryVariantList)
                                       DeliveryVariantCard(
                                         name: variant.name,
                                         minCost: state.delivery.calculateCost(
                                           distance: state.delivery.distance,
-                                          packageSize:
-                                              state.delivery.packageSize,
+                                          packageSize: state.delivery.packageSize,
                                           variant: variant,
                                         ),
                                         minDays: variant.minDays,
@@ -432,9 +376,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                             deliveryVariant: variant,
                                           ));
                                         },
-                                        selected:
-                                            state.delivery.deliveryVariant ==
-                                                variant,
+                                        selected: state.delivery.deliveryVariant == variant,
                                       ),
                                   ],
                                 )
@@ -443,8 +385,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                           ),
                           Step(
                             isActive: state.currentStep >= 2,
-                            stepStyle:
-                                state.currentStep >= 2 ? stepStyle : null,
+                            stepStyle: state.currentStep >= 2 ? stepStyle : null,
                             title: Text(
                               "Что ещё понадобится?",
                               style: theme.textTheme.titleLarge,
@@ -468,8 +409,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                           ),
                           Step(
                             isActive: state.currentStep >= 3,
-                            stepStyle:
-                                state.currentStep >= 3 ? stepStyle : null,
+                            stepStyle: state.currentStep >= 3 ? stepStyle : null,
                             title: Text(
                               "Данные отправителя",
                               style: theme.textTheme.titleLarge,
@@ -489,14 +429,10 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                 ),
                                 ButtonBase(
                                   text: "Продолжить",
-                                  onTap: senderFIOController.text.isNotEmpty &&
-                                          senderPhoneController.text.length ==
-                                              10
+                                  onTap: senderFIOController.text.isNotEmpty && senderPhoneController.text.length == 10
                                       ? () {
-                                          _bloc.add(CalculateSetSenderInfo(
-                                              fio: senderFIOController.text,
-                                              phone:
-                                                  senderPhoneController.text));
+                                          _bloc.add(
+                                              CalculateSetSenderInfo(fio: senderFIOController.text, phone: senderPhoneController.text));
                                         }
                                       : null,
                                 ),
@@ -505,8 +441,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                           ),
                           Step(
                             isActive: state.currentStep >= 4,
-                            stepStyle:
-                                state.currentStep >= 4 ? stepStyle : null,
+                            stepStyle: state.currentStep >= 4 ? stepStyle : null,
                             title: Text(
                               "Данные получателя",
                               style: theme.textTheme.titleLarge,
@@ -526,15 +461,10 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                 ),
                                 ButtonBase(
                                   text: "Продолжить",
-                                  onTap: receiverFIOController
-                                              .text.isNotEmpty &&
-                                          receiverPhoneController.text.length ==
-                                              10
+                                  onTap: receiverFIOController.text.isNotEmpty && receiverPhoneController.text.length == 10
                                       ? () {
                                           _bloc.add(CalculateSetReceiverInfo(
-                                              fio: receiverFIOController.text,
-                                              phone: receiverPhoneController
-                                                  .text));
+                                              fio: receiverFIOController.text, phone: receiverPhoneController.text));
                                         }
                                       : null,
                                 ),
@@ -543,16 +473,13 @@ class _CalculateScreenState extends State<CalculateScreen> {
                           ),
                           Step(
                             isActive: state.currentStep >= 5,
-                            stepStyle:
-                                state.currentStep >= 5 ? stepStyle : null,
+                            stepStyle: state.currentStep >= 5 ? stepStyle : null,
                             title: Text(
                               "Отправка",
                               style: theme.textTheme.titleLarge,
                             ),
                             content: Builder(builder: (context) {
-                              final paymentMethodList =
-                                  GetIt.I<PaymentMethodLocalRepo>()
-                                      .getPaymentMethods();
+                              final paymentMethodList = GetIt.I<PaymentMethodLocalRepo>().getPaymentMethods();
 
                               return Column(
                                 spacing: 12,
@@ -566,8 +493,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                   ...paymentMethodList
                                       .map((method) => PaymentMethodCard(
                                             paymentMethod: method,
-                                            selected:
-                                                state.paymentMethod == method,
+                                            selected: state.paymentMethod == method,
                                             onTap: () {
                                               _bloc.add(
                                                 CalculateSetPaymentMethod(
@@ -577,8 +503,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                             },
                                           ))
                                       .toList()
-                                      .expand((element) =>
-                                          [element, const Divider(height: 0)])
+                                      .expand((element) => [element, const Divider(height: 0)])
                                       .toList()
                                     ..removeLast(),
                                   ButtonBase(

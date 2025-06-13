@@ -30,7 +30,7 @@ class AuthAuthorizedState extends AuthState {
   });
 }
 
-class AuthOtpVerificationState extends AuthUnauthorizedState {
+class AuthOtpVerificationState extends AuthState {
   AuthOtpVerificationState({
     super.error,
   });

@@ -19,8 +19,7 @@ class AuthSupabaseRepo implements AuthInterface {
     required String email,
     required String password,
   }) async {
-    final supabase.AuthResponse res =
-        await supabaseClient.auth.signInWithPassword(
+    final supabase.AuthResponse res = await supabaseClient.auth.signInWithPassword(
       email: email,
       password: password,
     );
@@ -88,9 +87,7 @@ class AuthSupabaseRepo implements AuthInterface {
         email: user.email,
         name: user.userMetadata?["name"],
         phone: user.userMetadata?["phone"],
-        photoUrl: supabaseClient.storage
-            .from("avatars")
-            .getPublicUrl("/${user.id}/avatar"),
+        photoUrl: supabaseClient.storage.from("avatars").getPublicUrl("/${user.id}/avatar"),
         editor: await hasPermission(user.id),
       );
     }
@@ -100,10 +97,7 @@ class AuthSupabaseRepo implements AuthInterface {
 
   @override
   Future<bool> hasPermission(String userId) async {
-    final res = await supabaseClient
-        .from("permission")
-        .select("editor")
-        .eq("user_id", userId);
+    final res = await supabaseClient.from("permission").select("editor").eq("user_id", userId);
     return res.isNotEmpty ? res.first["editor"] : false;
   }
 
@@ -144,5 +138,22 @@ class AuthSupabaseRepo implements AuthInterface {
         },
       ),
     );
+  }
+
+  @override
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      final response = await supabaseClient.auth.updateUser(
+        supabase.UserAttributes(password: newPassword),
+      );
+
+      GetIt.I<Talker>().debug('Password updated successfully: ${response.user?.email}');
+    } on supabase.AuthException catch (error) {
+      GetIt.I<Talker>().debug('Error updating password: ${error.message}');
+      rethrow;
+    } catch (error) {
+      GetIt.I<Talker>().debug('Unexpected error: $error');
+      rethrow;
+    }
   }
 }

@@ -120,5 +120,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthAuthorizedState(error: e));
       }
     });
+    on<AuthUpdatePassword>((event, emit) async {
+      try {
+        emit(AuthLoadingState());
+
+        await authRepo.updatePassword(event.newPassword);
+
+        await authRepo.getUser();
+
+        emit(AuthAuthorizedState());
+      } catch (e) {
+        emit(AuthAuthorizedState(error: e));
+      }
+    });
   }
 }

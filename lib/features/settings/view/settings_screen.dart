@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/features/settings/settings.dart';
 import 'package:vasd/ui/ui.dart';
-import 'package:vasd/ui/widgets/avatar_container.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -36,8 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             duration: const Duration(seconds: 2),
           ));
         } else if (state is AuthUnauthorizedState) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, "/login", (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
         }
       },
       listenWhen: (previous, current) {
@@ -54,8 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 appBar: AppBar(
                   title: Text(
                     "Профиль",
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   centerTitle: true,
                 ),
@@ -83,53 +80,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 tag: "avatar",
                                 child: Stack(
                                   children: [
-                                    AvatarContainer(
-                                        photoUrl:
-                                            authBloc.authRepo.user!.photoUrl),
+                                    AvatarContainer(photoUrl: authBloc.authRepo.user!.photoUrl),
                                   ],
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Text(
-                              context.read<AuthBloc>().authRepo.user?.name ??
-                                  "Error",
-                              style: const TextStyle(
-                                  fontSize: 21, fontWeight: FontWeight.bold)),
+                          Text(context.read<AuthBloc>().authRepo.user?.name ?? "Error",
+                              style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold)),
                           const SizedBox(height: 4),
-                          Text(
-                              context.read<AuthBloc>().authRepo.user?.email ??
-                                  "Error",
-                              style: TextStyle(
-                                  fontSize: 14, color: theme.hintColor)),
+                          Text(context.read<AuthBloc>().authRepo.user?.email ?? "Error",
+                              style: TextStyle(fontSize: 14, color: theme.hintColor)),
                           const SizedBox(height: 24),
                           SettingsButton(
                             icon: SvgPicture.asset(
                               "assets/icons/edit.svg",
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn),
+                              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
                             ),
                             text: "Редактировать профиль",
                             onTap: () {
-                              Navigator.pushNamed(context, "/profile");
+                              Navigator.of(context).pushNamed("/profile");
                             },
                           ),
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset(
                               "assets/icons/lock.svg",
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn),
+                              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
                             ),
                             text: "Сменить пароль",
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).pushNamed("/new_password");
+                            },
                           ),
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset("assets/icons/banner.svg",
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.black, BlendMode.srcIn)),
+                                colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn)),
                             text: "Политика конфиденциальности",
                             onTap: () {
                               Navigator.of(context).pushNamed("/privacy");
@@ -138,8 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           const Divider(thickness: 0.2, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset("assets/icons/terms.svg",
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.black, BlendMode.srcIn)),
+                                colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn)),
                             text: "Условия использования",
                             onTap: () {
                               Navigator.of(context).pushNamed("/rules");

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
 
 class NewPasswordScreen extends StatefulWidget {
@@ -15,90 +17,92 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final authBloc = context.read<AuthBloc>();
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.chevron_left_rounded, size: 40),
+    return BlocListener<AuthBloc, AuthState>(
+      bloc: authBloc,
+      listener: (context, state) {
+        if (state is AuthAuthorizedState && state.error == null) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => SuccessDialog(
+              title: "Пароль успешно обновлён",
+              text: "Ваш пароль был успешно обновлён",
+              buttonText: "Вернуться домой",
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
+              },
+            ),
+          );
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.chevron_left_rounded, size: 40),
+            ),
           ),
-        ),
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.all(18),
-          child: ButtonBase(
-            onTap: (passwordController.text.isNotEmpty &&
-                    passwordConfirmController.text.isNotEmpty)
-                ? () async {
-                    if (checkPassword()) {
-                      // TODO: AuthInterface.resetPassword()
-
-                      await showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => SuccessDialog(
-                          title: "Пароль успешно обновлён",
-                          text: "Ваш пароль был успешно обновлён",
-                          buttonText: "Вернуться домой",
-                          onTap: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/home", (route) => false);
-                          },
-                        ),
-                      );
-                    } else {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => const ErrorDialog(
-                          title: "Пароли не совпадают",
-                          text: "Проверьте правильность введённых данных",
-                        ),
-                      );
+          bottomNavigationBar: Container(
+            padding: const EdgeInsets.all(18),
+            child: ButtonBase(
+              onTap: (passwordController.text.isNotEmpty && passwordConfirmController.text.isNotEmpty)
+                  ? () {
+                      if (checkPassword()) {
+                        authBloc.add(AuthUpdatePassword(newPassword: passwordController.text));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (_) => const ErrorDialog(
+                            title: "Пароли не совпадают",
+                            text: "Проверьте правильность введённых данных",
+                          ),
+                        );
+                      }
                     }
-                  }
-                : null,
-            text: "Сохранить",
+                  : null,
+              text: "Сохранить",
+            ),
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Введите новый пароль",
-                  style: theme.textTheme.headlineMedium),
-              const SizedBox(height: 12),
-              Text("Пожалуйста, введите новый пароль",
-                  style: TextStyle(color: theme.hintColor)),
-              const SizedBox(height: 24),
-              TextFieldCustom(
-                prefixIcon: Icons.lock_outline,
-                password: true,
-                hintText: "Новый пароль",
-                controller: passwordController,
-                onChanged: (_) {
-                  setState(() {});
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFieldCustom(
-                prefixIcon: Icons.lock_outline,
-                password: true,
-                hintText: "Подтверждение пароля",
-                controller: passwordConfirmController,
-                onChanged: (_) {
-                  setState(() {});
-                },
-              ),
-            ],
+          body: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Введите новый пароль", style: theme.textTheme.headlineMedium),
+                const SizedBox(height: 12),
+                Text("Пожалуйста, введите новый пароль", style: TextStyle(color: theme.hintColor)),
+                const SizedBox(height: 24),
+                TextFieldCustom(
+                  prefixIcon: Icons.lock_outline,
+                  password: true,
+                  hintText: "Новый пароль",
+                  controller: passwordController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFieldCustom(
+                  prefixIcon: Icons.lock_outline,
+                  password: true,
+                  hintText: "Подтверждение пароля",
+                  controller: passwordConfirmController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  bool checkPassword() =>
-      passwordController.text == passwordConfirmController.text;
+  bool checkPassword() => passwordController.text == passwordConfirmController.text;
 }

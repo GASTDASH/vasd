@@ -38,4 +38,6 @@ abstract class AuthInterface {
   });
 
   Future<bool> hasPermission(String userId);
+
+  Future<void> updatePassword(String newPassword);
 }

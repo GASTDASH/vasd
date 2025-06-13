@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
 import 'package:vasd/ui/ui.dart';
-import 'package:vasd/ui/widgets/avatar_container.dart';
-import 'package:vasd/ui/widgets/intl_phone_field_custom.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -65,8 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             title: Text(
               "Профиль",
-              style: theme.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
             centerTitle: true,
           ),
@@ -74,9 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(18),
             child: ButtonBase(
               onTap: () {
-                authBloc.add(AuthChangeUserInfo(
-                    username: usernameController.text,
-                    phone: phoneController.text));
+                authBloc.add(AuthChangeUserInfo(username: usernameController.text, phone: phoneController.text));
               },
               text: "Сохранить",
             ),
@@ -96,8 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           final bloc = context.read<AuthBloc>();
 
                           final picker = ImagePicker();
-                          final XFile? image = await picker.pickImage(
-                              source: ImageSource.gallery);
+                          final XFile? image = await picker.pickImage(source: ImageSource.gallery);
                           if (image == null) return;
                           final imageBytes = await image.readAsBytes();
                           bloc.add(
