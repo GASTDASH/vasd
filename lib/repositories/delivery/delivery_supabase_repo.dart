@@ -106,4 +106,45 @@ class DeliverySupabaseRepo implements DeliveryInterface {
       "update_time": DateTime.now().toIso8601String(),
     });
   }
+
+  @override
+  Future<void> addPayment({required Delivery delivery}) async {
+    await _supabaseClient.from("payment").insert({
+      "delivery_id": delivery.deliveryId,
+      "amount": delivery.cost,
+      "payment_date": DateTime.now().toIso8601String(),
+      "payment_method_id": 1,
+    });
+  }
+
+  @override
+  Future<void> addNotification({
+    required int statusCode,
+    required Delivery delivery,
+  }) async {
+    String? title;
+    String? text;
+
+    if (statusCode == 2) {
+      title = "Посылка готова к отправке";
+      text = "Ваша посылка скоро будет отправлена из ${delivery.cityFrom} в ${delivery.cityTo}";
+    } else if (statusCode == 3) {
+      title = "Посылка была отправлена";
+      text = "Ваша посылка была отправлена из ${delivery.cityFrom} и скоро будет доставлена в ${delivery.cityTo}";
+    } else if (statusCode == 4) {
+      title = "Посылка была доставлена";
+      text = "Ваша посылка была успешно доставлена в ${delivery.cityTo}";
+    }
+
+    if (title != null && text != null) {
+      await _supabaseClient.from("notification").insert({
+        "created_at": DateTime.now().toIso8601String(),
+        "user_id": _supabaseClient.auth.currentSession!.user.id,
+        "title": title,
+        "text": text,
+        "delivery_id": delivery.deliveryId,
+        "status_code": statusCode,
+      });
+    }
+  }
 }

@@ -8,8 +8,7 @@ class PackageInfoEditorScreen extends StatefulWidget {
   const PackageInfoEditorScreen({super.key});
 
   @override
-  State<PackageInfoEditorScreen> createState() =>
-      _PackageInfoEditorScreenState();
+  State<PackageInfoEditorScreen> createState() => _PackageInfoEditorScreenState();
 }
 
 class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
@@ -50,8 +49,7 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
           );
         } else if (state is DeliveryLoaded) {
           setState(() {
-            delivery = state.deliveries
-                .firstWhere((d) => d.deliveryId == delivery!.deliveryId);
+            delivery = state.deliveries.firstWhere((d) => d.deliveryId == delivery!.deliveryId);
           });
         }
       },
@@ -66,8 +64,7 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
           appBar: AppBar(
             title: Text(
               "Детали заказа",
-              style: theme.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
             centerTitle: true,
           ),
@@ -227,7 +224,7 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
                           _deliveryBloc.add(
                             DeliveryAddTracking(
                               statusCode: statusCode!,
-                              deliveryId: delivery!.deliveryId!,
+                              delivery: delivery!,
                             ),
                           );
                         }
@@ -236,18 +233,14 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Список статусов отслеживания:",
-                        style: theme.textTheme.titleLarge
-                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    Text("Список статусов отслеживания:", style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                     delivery!.trackingList != null
                         ? Padding(
                             padding: const EdgeInsets.only(left: 24),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                for (int i = 0;
-                                    i < delivery!.trackingList!.length;
-                                    i++)
+                                for (int i = 0; i < delivery!.trackingList!.length; i++)
                                   Text(
                                       "${i + 1}) ${delivery!.trackingList![i].status.name} (${delivery!.trackingList![i].updateTime.toString()})"),
                               ],

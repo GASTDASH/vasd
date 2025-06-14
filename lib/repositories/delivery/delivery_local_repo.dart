@@ -43,8 +43,17 @@ class DeliveryLocalRepo implements DeliveryInterface {
   }
 
   @override
-  Future<void> addTracking(
-      {required int statusCode, required String deliveryId}) {
+  Future<void> addTracking({required int statusCode, required String deliveryId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addPayment({required Delivery delivery}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addNotification({required int statusCode, required Delivery delivery}) {
     throw UnimplementedError();
   }
 }

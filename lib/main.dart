@@ -13,6 +13,7 @@ import 'package:vasd/repositories/auth/auth.dart';
 import 'package:vasd/repositories/delivery/delivery.dart';
 import 'package:vasd/repositories/delivery_variant/delivery_variant_local_repo.dart';
 import 'package:vasd/repositories/delivery_variant/models/delivery_variant.dart';
+import 'package:vasd/repositories/notification/notification.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
 import 'package:vasd/repositories/point/point.dart';
@@ -23,16 +24,40 @@ import 'package:vasd/vasd_app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  try {
-    await dotenv.load(fileName: ".env"); // Load environment variables
-  } catch (e) {
-    throw Exception('Error loading .env file: $e'); // Print error if any
-  }
+  await loadDotEnv();
+  await initSupabase();
+  await initHive();
+  initStaticMap();
 
-  await Supabase.initialize(
-      url: dotenv.env['SUPABASE_URL'].toString(),
-      anonKey: dotenv.env['SUPABASE_ANON_KEY'].toString());
+  final dio = Dio();
+  final talker = Talker();
+  Bloc.observer =
+      TalkerBlocObserver(talker: talker, settings: const TalkerBlocLoggerSettings(printStateFullData: true, printEventFullData: true));
 
+  GetIt.I.registerSingleton(dio);
+  GetIt.I.registerSingleton(talker);
+  GetIt.I.registerSingleton(Supabase.instance.client);
+  GetIt.I.registerSingleton<AuthInterface>(AuthSupabaseRepo(Supabase.instance.client));
+  GetIt.I.registerSingleton<AddressCompleterInterface>(AddressCompleterDadataRepo());
+  GetIt.I.registerSingleton(const DeliveryVariantLocalRepo());
+  GetIt.I.registerSingleton(const PaymentMethodLocalRepo());
+  GetIt.I.registerSingleton<DeliverySupabaseRepo>(DeliverySupabaseRepo(supabaseClient: Supabase.instance.client));
+  GetIt.I.registerSingleton<DeliveryLocalRepo>(DeliveryLocalRepo());
+  GetIt.I.registerSingleton(PointSupabaseRepo(supabaseClient: Supabase.instance.client));
+  GetIt.I.registerSingleton(NotificationSupabaseRepo(supabaseClient: Supabase.instance.client));
+
+  runApp(const VASDApp());
+}
+
+void initStaticMap() {
+  StaticMap.initialize(apiKey: dotenv.env['STATIC_MAP_API_KEY'].toString());
+}
+
+Future<void> initSupabase() async {
+  await Supabase.initialize(url: dotenv.env['SUPABASE_URL'].toString(), anonKey: dotenv.env['SUPABASE_ANON_KEY'].toString());
+}
+
+Future<void> initHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(DeliveryAdapter());
   Hive.registerAdapter(DeliveryVariantAdapter());
@@ -41,31 +66,12 @@ Future<void> main() async {
   Hive.registerAdapter(StatusAdapter());
   Hive.registerAdapter(TrackingAdapter());
   await Hive.openBox<Delivery>('delivery');
+}
 
-  StaticMap.initialize(apiKey: dotenv.env['STATIC_MAP_API_KEY'].toString());
-
-  final dio = Dio();
-  final talker = Talker();
-
-  GetIt.I.registerSingleton(dio);
-  GetIt.I.registerSingleton(talker);
-  GetIt.I.registerSingleton(Supabase.instance.client);
-  GetIt.I.registerSingleton<AuthInterface>(
-      AuthSupabaseRepo(Supabase.instance.client));
-  GetIt.I.registerSingleton<AddressCompleterInterface>(
-      AddressCompleterDadataRepo());
-  GetIt.I.registerSingleton(const DeliveryVariantLocalRepo());
-  GetIt.I.registerSingleton(const PaymentMethodLocalRepo());
-  GetIt.I.registerSingleton<DeliverySupabaseRepo>(
-      DeliverySupabaseRepo(supabaseClient: Supabase.instance.client));
-  GetIt.I.registerSingleton<DeliveryLocalRepo>(DeliveryLocalRepo());
-  GetIt.I.registerSingleton(
-      PointSupabaseRepo(supabaseClient: Supabase.instance.client));
-
-  Bloc.observer = TalkerBlocObserver(
-      talker: talker,
-      settings: const TalkerBlocLoggerSettings(
-          printStateFullData: true, printEventFullData: true));
-
-  runApp(const VASDApp());
+Future<void> loadDotEnv() async {
+  try {
+    await dotenv.load(fileName: ".env"); // Load environment variables
+  } catch (e) {
+    throw Exception('Error loading .env file: $e'); // Print error if any
+  }
 }

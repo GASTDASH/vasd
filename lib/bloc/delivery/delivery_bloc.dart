@@ -25,6 +25,7 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
       await Future.delayed(const Duration(seconds: 1));
       try {
         await _deliverySupabaseRepo.createDelivery(delivery: event.delivery);
+        if (event.isPaid) await _deliverySupabaseRepo.addPayment(delivery: event.delivery);
 
         emit(DeliverySuccess(deliveries: state.deliveries));
       } catch (e) {
@@ -35,8 +36,7 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
       emit(DeliveryFinding(deliveries: state.deliveries));
 
       await Future.delayed(const Duration(seconds: 1));
-      final delivery = await _deliverySupabaseRepo.findDelivery(
-          deliveryId: event.deliveryId);
+      final delivery = await _deliverySupabaseRepo.findDelivery(deliveryId: event.deliveryId);
 
       if (delivery == null) {
         emit(DeliveryLoaded(deliveries: state.deliveries));
@@ -52,16 +52,14 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
           throw Exception("User is null");
         }
 
-        final List<Delivery> deliveries = await _deliverySupabaseRepo
-            .getDeliveriesByUser(userId: _authRepo.user!.id);
+        final List<Delivery> deliveries = await _deliverySupabaseRepo.getDeliveriesByUser(userId: _authRepo.user!.id);
 
         // deliveries.insertAll(
         //   0,
         //   await _deliveryLocalRepo.getDeliveriesByUser(
         //       userId: _authRepo.user!.id),
         // );
-        deliveries.addAll(await _deliveryLocalRepo.getDeliveriesByUser(
-            userId: _authRepo.user!.id));
+        deliveries.addAll(await _deliveryLocalRepo.getDeliveriesByUser(userId: _authRepo.user!.id));
 
         emit(DeliveryLoaded(deliveries: deliveries));
       } catch (e) {
@@ -82,8 +80,7 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
           throw Exception("User is not Editor");
         }
 
-        final List<Delivery> deliveries =
-            await _deliverySupabaseRepo.getDeliveriesAll();
+        final List<Delivery> deliveries = await _deliverySupabaseRepo.getDeliveriesAll();
 
         emit(DeliveryLoaded(deliveries: deliveries));
       } catch (e) {
@@ -103,7 +100,11 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
 
         await _deliverySupabaseRepo.addTracking(
           statusCode: event.statusCode,
-          deliveryId: event.deliveryId,
+          deliveryId: event.delivery.deliveryId!,
+        );
+        await _deliverySupabaseRepo.addNotification(
+          statusCode: event.statusCode,
+          delivery: event.delivery,
         );
 
         add(DeliveryLoadAll());

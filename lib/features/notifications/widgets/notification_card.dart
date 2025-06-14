@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:vasd/repositories/notification/notification.dart' as notification_vasd;
 
 class NotificationCard extends StatelessWidget {
   const NotificationCard({
     super.key,
-    required this.title,
-    required this.text,
-    required this.icon,
+    required this.notification,
   });
 
-  final String title;
-  final String text;
-  final IconData icon;
+  final notification_vasd.Notification notification;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +34,20 @@ class NotificationCard extends StatelessWidget {
             // onTap: () {},
             child: Ink(
               padding: const EdgeInsets.all(6),
-              height: 100,
+              height: 110,
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 32,
                     backgroundColor: theme.primaryColor.withOpacity(0.1),
                     child: Icon(
-                      icon,
+                      notification.statusCode == 2
+                          ? Icons.mail_outline
+                          : notification.statusCode == 3
+                              ? Icons.local_shipping_outlined
+                              : notification.statusCode == 4
+                                  ? Icons.mark_email_read_outlined
+                                  : Icons.shopping_bag_sharp,
                       size: 32,
                       color: theme.primaryColor,
                     ),
@@ -55,9 +58,9 @@ class NotificationCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(title, style: theme.textTheme.bodyLarge),
+                        Text(notification.title, style: theme.textTheme.bodyLarge),
                         const SizedBox(height: 4),
-                        Text(text, style: TextStyle(color: theme.hintColor)),
+                        Text(notification.text, style: TextStyle(color: theme.hintColor)),
                       ],
                     ),
                   ),

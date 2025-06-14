@@ -513,7 +513,7 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                             // TODO: Пипец
                                             Navigator.of(context).pushNamed(
                                               "/payment",
-                                              arguments: state.delivery,
+                                              arguments: state,
                                             );
                                           }
                                         : null,

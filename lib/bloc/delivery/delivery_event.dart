@@ -10,9 +10,11 @@ sealed class DeliveryEvent extends Equatable {
 final class DeliveryCreate extends DeliveryEvent {
   const DeliveryCreate({
     required this.delivery,
+    this.isPaid = false,
   });
 
   final Delivery delivery;
+  final bool isPaid;
 }
 
 final class DeliveryFind extends DeliveryEvent {
@@ -30,11 +32,11 @@ final class DeliveryLoadAll extends DeliveryEvent {}
 final class DeliveryAddTracking extends DeliveryEvent {
   const DeliveryAddTracking({
     required this.statusCode,
-    required this.deliveryId,
+    required this.delivery,
   });
 
   final int statusCode;
-  final String deliveryId;
+  final Delivery delivery;
 }
 
 final class DeliverySave extends DeliveryEvent {
