@@ -139,7 +139,7 @@ class DeliverySupabaseRepo implements DeliveryInterface {
     if (title != null && text != null) {
       await _supabaseClient.from("notification").insert({
         "created_at": DateTime.now().toIso8601String(),
-        "user_id": _supabaseClient.auth.currentSession!.user.id,
+        "user_id": delivery.userId,
         "title": title,
         "text": text,
         "delivery_id": delivery.deliveryId,

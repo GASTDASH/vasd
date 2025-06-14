@@ -27,6 +27,7 @@ class Delivery {
     this.trackingList,
     this.createdAt,
     this.isSaved = false,
+    this.userId,
   }) {
     deliveryId ??= _generateId();
   }
@@ -95,16 +96,17 @@ class Delivery {
   @HiveField(15)
   final bool isSaved;
 
+  /// ID пользователя
+  @HiveField(16)
+  final String? userId;
+
   factory Delivery.fromJson({required Map<String, dynamic> json}) => Delivery(
+      userId: json["user_id"],
       deliveryId: json["delivery_id"],
       cityFrom: json["city_from"],
       cityTo: json["city_to"],
-      pointFrom: json["point_from"] != null
-          ? Point.fromJson(json: json["point_from"])
-          : null,
-      pointTo: json["point_to"] != null
-          ? Point.fromJson(json: json["point_to"])
-          : null,
+      pointFrom: json["point_from"] != null ? Point.fromJson(json: json["point_from"]) : null,
+      pointTo: json["point_to"] != null ? Point.fromJson(json: json["point_to"]) : null,
       // packageSize: json[] // TODO
       cost: json["cost"],
       distance: json["distance"] ?? 0,
@@ -137,6 +139,7 @@ class Delivery {
     bool? isSaved,
     String? deliveryId,
     List<Tracking>? trackingList,
+    String? userId,
   }) {
     return Delivery(
       cityFrom: cityFrom ?? this.cityFrom,
@@ -155,6 +158,7 @@ class Delivery {
       isSaved: isSaved ?? this.isSaved,
       deliveryId: deliveryId ?? this.deliveryId,
       trackingList: trackingList ?? this.trackingList,
+      userId: userId ?? this.userId,
     );
   }
 
@@ -175,6 +179,7 @@ class Delivery {
       deliveryId: deliveryId,
       isSaved: isSaved,
       trackingList: trackingList,
+      userId: userId,
       deliveryVariant: null,
     );
   }
@@ -187,12 +192,7 @@ class Delivery {
     double packageVolume = 0;
 
     if (packageSize != null) {
-      final sizes = packageSize.size
-          .split(' ')
-          .first
-          .split('x')
-          .map((e) => double.parse(e))
-          .toList();
+      final sizes = packageSize.size.split(' ').first.split('x').map((e) => double.parse(e)).toList();
 
       packageVolume = 1;
       for (var size in sizes) {
