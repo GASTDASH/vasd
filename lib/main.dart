@@ -75,3 +75,58 @@ Future<void> loadDotEnv() async {
     throw Exception('Error loading .env file: $e'); // Print error if any
   }
 }
+
+String dateToString(String date) {
+  List<String> dateList = date.split('-'); // YYYY-MM-DD
+  String result = dateList[2];
+
+  switch (dateList[1]) {
+    case "01":
+      result += " января";
+      break;
+    case "02":
+      result += " февраля";
+      break;
+    case "03":
+      result += " марта";
+      break;
+    case "04":
+      result += " апреля";
+      break;
+    case "05":
+      result += " мая";
+      break;
+    case "06":
+      result += " июня";
+      break;
+    case "07":
+      result += " июля";
+      break;
+    case "08":
+      result += " августа";
+      break;
+    case "09":
+      result += " сентября";
+      break;
+    case "10":
+      result += " октября";
+      break;
+    case "11":
+      result += " ноября";
+      break;
+    case "12":
+      result += " декабря";
+      break;
+  }
+
+  return result;
+}
+
+String dateTimeToString(String date) {
+  List<String> dateTimeList = date.split(' ');
+
+  String dateString = dateToString(dateTimeList[0]);
+  String timeString = dateTimeList[1].split('.')[0];
+
+  return "$dateString $timeString";
+}

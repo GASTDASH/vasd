@@ -103,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.of(context).pushNamed("/profile");
                             },
                           ),
-                          const Divider(thickness: 0.2, height: 0),
+                          const Divider(thickness: 0.3, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset(
                               "assets/icons/lock.svg",
@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.of(context).pushNamed("/new_password");
                             },
                           ),
-                          const Divider(thickness: 0.2, height: 0),
+                          const Divider(thickness: 0.3, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset("assets/icons/banner.svg",
                                 colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn)),
@@ -123,7 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Navigator.of(context).pushNamed("/privacy");
                             },
                           ),
-                          const Divider(thickness: 0.2, height: 0),
+                          const Divider(thickness: 0.3, height: 0),
                           SettingsButton(
                             icon: SvgPicture.asset("assets/icons/terms.svg",
                                 colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn)),

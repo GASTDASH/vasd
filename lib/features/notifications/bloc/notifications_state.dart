@@ -8,7 +8,7 @@ sealed class NotificationsState extends Equatable {
   final List<Notification> notifications;
 
   @override
-  List<Object> get props => [notifications];
+  List<Object> get props => [];
 }
 
 final class NotificationsLoaded extends NotificationsState {

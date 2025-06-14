@@ -60,6 +60,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^29.1.39
   static_map: ^0.3.1
   flutter_dotenv: ^5.2.1
+  grouped_list: ^6.0.0
 
 dev_dependencies:
   flutter_test:

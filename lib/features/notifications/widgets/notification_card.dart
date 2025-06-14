@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/repositories/notification/notification.dart' as notification_vasd;
 
 class NotificationCard extends StatelessWidget {
@@ -12,6 +14,7 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    var deliveryBloc = context.read<DeliveryBloc>();
 
     return Dismissible(
       key: UniqueKey(),
@@ -31,10 +34,12 @@ class NotificationCard extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            // onTap: () {},
+            onTap: () {
+              deliveryBloc.add(DeliveryFind(deliveryId: notification.deliveryId));
+            },
             child: Ink(
               padding: const EdgeInsets.all(6),
-              height: 110,
+              height: 120,
               child: Row(
                 children: [
                   CircleAvatar(
@@ -68,7 +73,7 @@ class NotificationCard extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(thickness: 0.2, height: 0),
+          const Divider(thickness: 0.3, height: 0),
         ],
       ),
     );

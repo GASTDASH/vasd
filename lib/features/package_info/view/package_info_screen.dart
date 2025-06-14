@@ -8,6 +8,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:static_map/static_map.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/features/package_info/view/barcode_screen.dart';
+import 'package:vasd/main.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/repositories/tracking/tracking.dart';
 import 'package:vasd/ui/ui.dart';
@@ -50,11 +51,9 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
       },
     );
 
-    List<dynamic> coordinates =
-        response.data["features"][0]["geometry"]["coordinates"];
+    List<dynamic> coordinates = response.data["features"][0]["geometry"]["coordinates"];
 
-    var pathPoints =
-        coordinates.map((c) => StaticMapLatLng(c[1], c[0])).toList();
+    var pathPoints = coordinates.map((c) => StaticMapLatLng(c[1], c[0])).toList();
 
     while (pathPoints.length > 2000) {
       for (var i = 0; i < pathPoints.length; i++) {
@@ -90,8 +89,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
           appBar: AppBar(
             title: Text(
               "Детали заказа",
-              style: theme.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
             centerTitle: true,
             actions: [
@@ -107,8 +105,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                               ),
                               color: theme.primaryColor,
                               title: "Сохранить этот заказ?",
-                              text:
-                                  "После сохранения заказа Вы сможете просмотреть его ещё раз в списке заказов",
+                              text: "После сохранения заказа Вы сможете просмотреть его ещё раз в списке заказов",
                               child: Row(
                                 spacing: 12,
                                 children: [
@@ -116,8 +113,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                     child: ButtonBase(
                                       text: "Да",
                                       onTap: () {
-                                        context.read<DeliveryBloc>().add(
-                                            DeliverySave(delivery: delivery!));
+                                        context.read<DeliveryBloc>().add(DeliverySave(delivery: delivery!));
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -147,8 +143,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                               ),
                               color: theme.primaryColor,
                               title: "Удалить заказ?",
-                              text:
-                                  "Вы удалите этот заказ из сохранённых, но он продолжит существовать в облаке",
+                              text: "Вы удалите этот заказ из сохранённых, но он продолжит существовать в облаке",
                               child: Row(
                                 spacing: 12,
                                 children: [
@@ -156,10 +151,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                     child: ButtonBase(
                                       text: "Да",
                                       onTap: () {
-                                        context.read<DeliveryBloc>().add(
-                                            DeliveryRemove(
-                                                deliveryId:
-                                                    delivery!.deliveryId!));
+                                        context.read<DeliveryBloc>().add(DeliveryRemove(deliveryId: delivery!.deliveryId!));
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -179,9 +171,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                             ),
                           );
                         },
-                  icon: !delivery!.isSaved
-                      ? const Icon(Icons.save_outlined)
-                      : const Icon(Icons.delete_outline)),
+                  icon: !delivery!.isSaved ? const Icon(Icons.save_outlined) : const Icon(Icons.delete_outline)),
             ],
           ),
           body: SingleChildScrollView(
@@ -194,9 +184,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                   DeliveryItemWidget(delivery: delivery),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => BarcodeScreen(
-                              deliveryId: delivery!.deliveryId!)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => BarcodeScreen(deliveryId: delivery!.deliveryId!)));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -220,8 +208,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            border:
-                                Border.all(color: theme.hintColor, width: 1),
+                            border: Border.all(color: theme.hintColor, width: 1),
                           ),
                           child: Stack(
                             children: [
@@ -233,10 +220,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                       lng2: delivery!.pointTo!.lng),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
-                                      return const Center(
-                                          child: LoadingIndicator(
-                                              indicatorType:
-                                                  Indicator.ballPulse));
+                                      return const Center(child: LoadingIndicator(indicatorType: Indicator.ballPulse));
                                     }
                                     return StaticMapBuilder(
                                         options: StaticMapOptions(
@@ -245,48 +229,32 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                           scale: 1,
                                           zoom: zoom,
                                           center: StaticMapLatLng(
-                                            (delivery!.pointFrom!.lat +
-                                                    delivery!.pointTo!.lat) /
-                                                2,
-                                            (delivery!.pointFrom!.lng +
-                                                    delivery!.pointTo!.lng) /
-                                                2,
+                                            (delivery!.pointFrom!.lat + delivery!.pointTo!.lat) / 2,
+                                            (delivery!.pointFrom!.lng + delivery!.pointTo!.lng) / 2,
                                           ),
                                           overlays: [
                                             StaticMapMarker(
-                                                point: StaticMapLatLng(
-                                                    delivery!.pointFrom!.lat,
-                                                    delivery!.pointFrom!.lng),
+                                                point: StaticMapLatLng(delivery!.pointFrom!.lat, delivery!.pointFrom!.lng),
                                                 label: "От",
                                                 color: theme.primaryColor),
                                             StaticMapMarker(
-                                              point: StaticMapLatLng(
-                                                  delivery!.pointTo!.lat,
-                                                  delivery!.pointTo!.lng),
+                                              point: StaticMapLatLng(delivery!.pointTo!.lat, delivery!.pointTo!.lng),
                                               label: "Куда",
                                               color: theme.primaryColor,
                                             ),
                                             StaticMapPath.points(
-                                              points:
-                                                  snapshot.connectionState ==
-                                                              ConnectionState
-                                                                  .done &&
-                                                          snapshot.data != null
-                                                      ? snapshot.data!
-                                                      : [
-                                                          StaticMapLatLng(
-                                                            delivery!
-                                                                .pointFrom!.lat,
-                                                            delivery!
-                                                                .pointFrom!.lng,
-                                                          ),
-                                                          StaticMapLatLng(
-                                                            delivery!
-                                                                .pointTo!.lat,
-                                                            delivery!
-                                                                .pointTo!.lng,
-                                                          ),
-                                                        ],
+                                              points: snapshot.connectionState == ConnectionState.done && snapshot.data != null
+                                                  ? snapshot.data!
+                                                  : [
+                                                      StaticMapLatLng(
+                                                        delivery!.pointFrom!.lat,
+                                                        delivery!.pointFrom!.lng,
+                                                      ),
+                                                      StaticMapLatLng(
+                                                        delivery!.pointTo!.lat,
+                                                        delivery!.pointTo!.lng,
+                                                      ),
+                                                    ],
                                               size: 1,
                                             ),
                                           ],
@@ -294,30 +262,17 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                         builder: (context, url) {
                                           return Image.network(
                                             url,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Center(
-                                                  child: Text(
-                                                      "Что-то пошло не так!"));
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Center(child: Text("Что-то пошло не так!"));
                                             },
-                                            loadingBuilder:
-                                                (BuildContext context,
-                                                    Widget child,
-                                                    ImageChunkEvent?
-                                                        loadingProgress) {
+                                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                               if (loadingProgress == null) {
                                                 return child;
                                               }
                                               return Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
+                                                  child: CircularProgressIndicator(
+                                                value: loadingProgress.expectedTotalBytes != null
+                                                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                                                     : null,
                                               ));
                                             },
@@ -352,8 +307,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                       : const SizedBox.shrink(),
                   Text(
                     "Отслеживание посылки",
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   AnotherStepper(
                     scrollPhysics: const NeverScrollableScrollPhysics(),
@@ -367,8 +321,7 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                       for (Tracking tracking in delivery!.trackingList ?? [])
                         StepperData(
                           iconWidget: CircleAvatar(
-                            backgroundColor:
-                                theme.primaryColor.withValues(alpha: 0.3),
+                            backgroundColor: theme.primaryColor.withValues(alpha: 0.3),
                             child: Padding(
                               padding: const EdgeInsets.all(6),
                               child: CircleAvatar(
@@ -376,11 +329,9 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                               ),
                             ),
                           ),
-                          title: StepperText(tracking.updateTime.toString(),
-                              textStyle: theme.textTheme.bodyMedium
-                                  ?.copyWith(color: theme.hintColor)),
-                          subtitle: StepperText(tracking.status.name,
-                              textStyle: theme.textTheme.bodyMedium),
+                          title: StepperText(dateTimeToString(tracking.updateTime.toString()),
+                              textStyle: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor)),
+                          subtitle: StepperText(tracking.status.name, textStyle: theme.textTheme.bodyMedium),
                         ),
                     ],
                   )
