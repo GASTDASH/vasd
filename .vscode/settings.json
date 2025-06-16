@@ -5,5 +5,11 @@
         "Rhmtr",
         "XVCJ",
         "ZSIs"
-    ]
+    ],
+    "files.exclude": {
+        "**/*.rpyc": true,
+        "**/*.rpa": true,
+        "**/*.rpymc": true,
+        "**/cache/": true
+    }
 }

@@ -32,13 +32,15 @@ class DeliveryAdapter extends TypeAdapter<Delivery> {
       receiverPhone: fields[12] as String?,
       trackingList: (fields[13] as List?)?.cast<Tracking>(),
       createdAt: fields[14] as DateTime?,
+      isSaved: fields[15] as bool,
+      userId: fields[16] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Delivery obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.deliveryId)
       ..writeByte(1)
@@ -68,7 +70,11 @@ class DeliveryAdapter extends TypeAdapter<Delivery> {
       ..writeByte(13)
       ..write(obj.trackingList)
       ..writeByte(14)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(15)
+      ..write(obj.isSaved)
+      ..writeByte(16)
+      ..write(obj.userId);
   }
 
   @override
