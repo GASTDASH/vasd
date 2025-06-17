@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:location/location.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/ui/ui.dart';
@@ -15,6 +16,9 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
   late final DeliveryBloc _deliveryBloc;
   Delivery? delivery;
   int? statusCode;
+
+  final latController = TextEditingController();
+  final lngController = TextEditingController();
 
   @override
   void initState() {
@@ -150,14 +154,6 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
                         ),
                         Text(delivery!.packageSize?.size ?? ""),
                       ]),
-                      // TableRow(children: [
-                      //   const Text(""),
-                      //   Text("${delivery.pointFrom}"),
-                      // ]),
-                      // TableRow(children: [
-                      //   const Text(""),
-                      //   Text("${delivery.pointTo}"),
-                      // ]),
                       TableRow(children: [
                         const Text("ФИО получателя"),
                         Text(delivery!.receiverFIO ?? ""),
@@ -209,12 +205,29 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
                       ),
                     ],
                   ),
-                  (statusCode == 3)
-                      ? const Column(
+                  (statusCode != null)
+                      ? Column(
                           spacing: 12,
                           children: [
-                            TextFieldCustom(hintText: "Широта"),
-                            TextFieldCustom(hintText: "Долгота"),
+                            TextFieldCustom(
+                              hintText: "Широта",
+                              controller: latController,
+                            ),
+                            TextFieldCustom(
+                              hintText: "Долгота",
+                              controller: lngController,
+                            ),
+                            ButtonBase(
+                              onTap: () async {
+                                var pos = await Location.instance.getLocation();
+                                setState(() {
+                                  latController.text = pos.latitude.toString();
+                                  lngController.text = pos.longitude.toString();
+                                });
+                              },
+                              outlined: true,
+                              text: "Указать текущее местоположение",
+                            ),
                           ],
                         )
                       : const SizedBox.shrink(),
@@ -222,10 +235,14 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
                     text: "Добавить статус",
                     onTap: statusCode != null
                         ? () {
+                            double? lat = double.tryParse(latController.text);
+                            double? lng = double.tryParse(lngController.text);
+
                             _deliveryBloc.add(
                               DeliveryAddTracking(
                                 statusCode: statusCode!,
                                 delivery: delivery!,
+                                point: (lat != null && lng != null) ? [lat, lng] : null,
                               ),
                             );
                           }

@@ -115,6 +115,7 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
         await _deliverySupabaseRepo.addTracking(
           statusCode: event.statusCode,
           deliveryId: event.delivery.deliveryId!,
+          point: event.point,
         );
         await _deliverySupabaseRepo.addNotification(
           statusCode: event.statusCode,

@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:static_map/static_map.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
-import 'package:vasd/features/package_info/view/barcode_screen.dart';
+import 'package:vasd/features/package_info/package_info.dart';
 import 'package:vasd/main.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/repositories/tracking/tracking.dart';
@@ -62,6 +62,11 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
     }
 
     return pathPoints;
+  }
+
+  double round(num n) {
+    return n.toDouble();
+    // return (n * 1000).truncate() / 1000;
   }
 
   @override
@@ -222,85 +227,137 @@ class _PackageInfoScreenState extends State<PackageInfoScreen> {
                                     if (!snapshot.hasData) {
                                       return const Center(child: LoadingIndicator(indicatorType: Indicator.ballPulse));
                                     }
-                                    return StaticMapBuilder(
-                                        options: StaticMapOptions(
-                                          width: 400,
-                                          height: 200,
-                                          scale: 1,
-                                          zoom: zoom,
-                                          center: StaticMapLatLng(
-                                            (delivery!.pointFrom!.lat + delivery!.pointTo!.lat) / 2,
-                                            (delivery!.pointFrom!.lng + delivery!.pointTo!.lng) / 2,
-                                          ),
-                                          overlays: [
-                                            StaticMapMarker(
-                                                point: StaticMapLatLng(delivery!.pointFrom!.lat, delivery!.pointFrom!.lng),
-                                                label: "От",
-                                                color: theme.primaryColor),
-                                            StaticMapMarker(
-                                              point: StaticMapLatLng(delivery!.pointTo!.lat, delivery!.pointTo!.lng),
-                                              label: "Куда",
-                                              color: theme.primaryColor,
-                                            ),
-                                            StaticMapPath.points(
-                                              points: snapshot.connectionState == ConnectionState.done && snapshot.data != null
-                                                  ? snapshot.data!
-                                                  : [
-                                                      StaticMapLatLng(
-                                                        delivery!.pointFrom!.lat,
-                                                        delivery!.pointFrom!.lng,
-                                                      ),
-                                                      StaticMapLatLng(
-                                                        delivery!.pointTo!.lat,
-                                                        delivery!.pointTo!.lng,
-                                                      ),
-                                                    ],
-                                              size: 1,
-                                            ),
-                                          ],
-                                        ),
-                                        builder: (context, url) {
-                                          return Image.network(
-                                            url,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return const Center(child: Text("Что-то пошло не так!"));
-                                            },
-                                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                  child: CircularProgressIndicator(
-                                                value: loadingProgress.expectedTotalBytes != null
-                                                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                                    : null,
-                                              ));
-                                            },
-                                          );
-                                        });
+
+                                    List<Tracking>? trackingList = (delivery!.trackingList);
+                                    Tracking? lastTracking = trackingList != null && trackingList.isNotEmpty ? trackingList.last : null;
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => PackageMapScreen(
+                                                      center: [
+                                                        (delivery!.pointFrom!.lat + delivery!.pointTo!.lat) / 2,
+                                                        (delivery!.pointFrom!.lng + delivery!.pointTo!.lng) / 2
+                                                      ],
+                                                      path: snapshot.connectionState == ConnectionState.done && snapshot.data != null
+                                                          ? snapshot.data!
+                                                          : [],
+                                                      pointFrom: [delivery!.pointFrom!.lat, delivery!.pointFrom!.lng],
+                                                      pointTo: [delivery!.pointTo!.lat, delivery!.pointTo!.lng],
+                                                      pointNow: [lastTracking?.lat ?? 0, lastTracking?.lng ?? 0],
+                                                    )));
+                                      },
+                                      child: PackageMap(
+                                        width: 360,
+                                        height: 180,
+                                        zoom: 7,
+                                        center: [
+                                          (delivery!.pointFrom!.lat + delivery!.pointTo!.lat) / 2,
+                                          (delivery!.pointFrom!.lng + delivery!.pointTo!.lng) / 2
+                                        ],
+                                        path:
+                                            snapshot.connectionState == ConnectionState.done && snapshot.data != null ? snapshot.data! : [],
+                                        pointFrom: [delivery!.pointFrom!.lat, delivery!.pointFrom!.lng],
+                                        pointTo: [delivery!.pointTo!.lat, delivery!.pointTo!.lng],
+                                        pointNow: [lastTracking?.lat ?? 0, lastTracking?.lng ?? 0],
+                                      ),
+                                      // child: StaticMapBuilder(
+                                      //     options: StaticMapOptions(
+                                      //       width: 400,
+                                      //       height: 200,
+                                      //       scale: 1,
+                                      //       zoom: zoom,
+                                      //       center: StaticMapLatLng(
+                                      //         (delivery!.pointFrom!.lat + delivery!.pointTo!.lat) / 2,
+                                      //         (delivery!.pointFrom!.lng + delivery!.pointTo!.lng) / 2,
+                                      //       ),
+                                      //       overlays: [
+                                      //         StaticMapMarker(
+                                      //           point: StaticMapLatLng(
+                                      //             delivery!.pointTo!.lat,
+                                      //             delivery!.pointTo!.lng,
+                                      //           ),
+                                      //           label: "Куда",
+                                      //           color: theme.primaryColor,
+                                      //         ),
+                                      //         StaticMapMarker(
+                                      //           point: StaticMapLatLng(
+                                      //             delivery!.pointFrom!.lat,
+                                      //             delivery!.pointFrom!.lng,
+                                      //           ),
+                                      //           label: "От",
+                                      //           color: theme.primaryColor,
+                                      //         ),
+                                      //         StaticMapMarker(
+                                      //           point: StaticMapLatLng(
+                                      //             lastTracking?.lat ?? 0,
+                                      //             lastTracking?.lng ?? 0,
+                                      //           ),
+                                      //           label: "Посылка",
+                                      //           color: theme.colorScheme.error,
+                                      //         ),
+                                      //         StaticMapPath.points(
+                                      //           points: snapshot.connectionState == ConnectionState.done && snapshot.data != null
+                                      //               ? snapshot.data!
+                                      //               : [
+                                      //                   StaticMapLatLng(
+                                      //                     delivery!.pointFrom!.lat,
+                                      //                     delivery!.pointFrom!.lng,
+                                      //                   ),
+                                      //                   StaticMapLatLng(
+                                      //                     delivery!.pointTo!.lat,
+                                      //                     delivery!.pointTo!.lng,
+                                      //                   ),
+                                      //                 ],
+                                      //           size: 1,
+                                      //         ),
+                                      //       ],
+                                      //     ),
+                                      //     builder: (context, url) {
+                                      //       return Image.network(
+                                      //         url,
+                                      //         errorBuilder: (context, error, stackTrace) {
+                                      //           return const Center(child: Text("Что-то пошло не так!"));
+                                      //         },
+                                      //         loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                      //           if (loadingProgress == null) {
+                                      //             return child;
+                                      //           }
+                                      //           return Center(
+                                      //               child: CircularProgressIndicator(
+                                      //             value: loadingProgress.expectedTotalBytes != null
+                                      //                 ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                      //                 : null,
+                                      //           ));
+                                      //         },
+                                      //       );
+                                      //     }),
+                                    );
                                   }),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton.filled(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (zoom != 1) zoom--;
-                                          });
-                                        },
-                                        icon: const Icon(Icons.zoom_out)),
-                                    IconButton.filled(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (zoom != 8) zoom++;
-                                          });
-                                        },
-                                        icon: const Icon(Icons.zoom_in)),
-                                  ],
-                                ),
-                              ),
+                              // Align(
+                              //   alignment: Alignment.bottomCenter,
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.end,
+                              //     children: [
+                              //       IconButton.filled(
+                              //           onPressed: () {
+                              //             setState(() {
+                              //               if (zoom != 1) zoom--;
+                              //             });
+                              //           },
+                              //           icon: const Icon(Icons.zoom_out)),
+                              //       IconButton.filled(
+                              //           onPressed: () {
+                              //             setState(() {
+                              //               if (zoom != 8) zoom++;
+                              //             });
+                              //           },
+                              //           icon: const Icon(Icons.zoom_in)),
+                              //     ],
+                              //   ),
+                              // ),
                             ],
                           ),
                         )

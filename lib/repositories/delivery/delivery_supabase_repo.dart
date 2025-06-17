@@ -99,10 +99,13 @@ class DeliverySupabaseRepo implements DeliveryInterface {
   Future<void> addTracking({
     required int statusCode,
     required String deliveryId,
+    List<double>? point,
   }) async {
     await _supabaseClient.from("tracking").insert({
       "delivery_id": deliveryId,
       "status_code": statusCode,
+      "lat": point?[0],
+      "lng": point?[1],
       "update_time": DateTime.now().toIso8601String(),
     });
   }

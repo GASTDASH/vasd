@@ -33,10 +33,12 @@ final class DeliveryAddTracking extends DeliveryEvent {
   const DeliveryAddTracking({
     required this.statusCode,
     required this.delivery,
+    this.point,
   });
 
   final int statusCode;
   final Delivery delivery;
+  final List<double>? point;
 }
 
 final class DeliverySave extends DeliveryEvent {
