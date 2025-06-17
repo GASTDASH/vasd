@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:vasd/bloc/auth/auth_bloc.dart';
+import 'package:vasd/repositories/user_location/user_location_repo.dart';
 import 'package:vasd/ui/widgets/avatar_container.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSize {
@@ -15,7 +16,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
 
     return PreferredSize(
       preferredSize: preferredSize,
-      child: Ink(
+      child: Material(
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -29,15 +30,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                 child: Ink(
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(
-                      color: theme.primaryColor.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: theme.primaryColor.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: SvgPicture.asset(
                       "assets/icons/map_marker.svg",
-                      colorFilter:
-                          ColorFilter.mode(theme.primaryColor, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(theme.primaryColor, BlendMode.srcIn),
                     ),
                   ),
                 ),
@@ -51,12 +49,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                   children: [
                     const Text("Ваше местоположение"),
                     SizedBox(
-                      child: Text(
-                        "Орехово-Зуево, Московская обл.",
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w800),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      child: Consumer<UserLocationRepo>(builder: (context, repo, child) {
+                        return Text(
+                          // "Орехово-Зуево, Московская обл.",
+                          repo.location == null ? "Ещё не определено" : repo.location!.address,
+                          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -73,8 +73,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSize {
                   child: Hero(
                     tag: "avatar",
                     child: AvatarContainer(
-                      photoUrl:
-                          context.read<AuthBloc>().authRepo.user!.photoUrl,
+                      photoUrl: context.read<AuthBloc>().authRepo.user!.photoUrl,
                       margin: EdgeInsets.zero,
                     ),
                   ),

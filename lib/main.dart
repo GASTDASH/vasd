@@ -59,13 +59,16 @@ Future<void> initSupabase() async {
 
 Future<void> initHive() async {
   await Hive.initFlutter();
+
   Hive.registerAdapter(DeliveryAdapter());
   Hive.registerAdapter(DeliveryVariantAdapter());
   Hive.registerAdapter(PackageSizeAdapter());
   Hive.registerAdapter(PointAdapter());
   Hive.registerAdapter(StatusAdapter());
   Hive.registerAdapter(TrackingAdapter());
+
   await Hive.openBox<Delivery>('delivery');
+  await Hive.openBox('settings');
 }
 
 Future<void> loadDotEnv() async {

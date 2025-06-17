@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:universe/universe.dart';
+import 'package:vasd/repositories/point/point.dart' as point_repo;
+import 'package:vasd/repositories/user_location/user_location_repo.dart';
 import 'package:vasd/ui/ui.dart';
 import 'package:yandex_geocoder/yandex_geocoder.dart';
 
@@ -7,8 +10,7 @@ class SetCurrentLocationScreen extends StatefulWidget {
   const SetCurrentLocationScreen({super.key});
 
   @override
-  State<SetCurrentLocationScreen> createState() =>
-      _SetCurrentLocationScreenState();
+  State<SetCurrentLocationScreen> createState() => _SetCurrentLocationScreenState();
 }
 
 class _SetCurrentLocationScreenState extends State<SetCurrentLocationScreen> {
@@ -17,16 +19,14 @@ class _SetCurrentLocationScreenState extends State<SetCurrentLocationScreen> {
   List<double> lastCoordinates = [55.811049, 38.970480];
   double lastZoom = 16;
   final addressController = TextEditingController();
-  final YandexGeocoder geo =
-      YandexGeocoder(apiKey: '113bba24-0265-43bc-9589-e7b7e88285da');
+  final YandexGeocoder geo = YandexGeocoder(apiKey: '113bba24-0265-43bc-9589-e7b7e88285da');
 
-  Future<void> getAddress() async {
+  Future<point_repo.Point?> getAddress() async {
     final lat = mapController.center?.lat;
     final lng = mapController.center?.lng;
 
     if (lat != null && lng != null) {
-      final address = await geo.getGeocode(
-          ReverseGeocodeRequest(pointGeocode: (lat: lat, lon: lng)));
+      final address = await geo.getGeocode(ReverseGeocodeRequest(pointGeocode: (lat: lat, lon: lng)));
 
       setState(() {
         this.address = address.firstAddress?.formatted.toString() ?? "";
@@ -35,7 +35,10 @@ class _SetCurrentLocationScreenState extends State<SetCurrentLocationScreen> {
         lastCoordinates = [lat, lng];
         lastZoom = mapController.zoom ?? 16;
       });
+
+      return point_repo.Point(id: 0, address: this.address, lat: lat, lng: lng);
     }
+    return null;
   }
 
   @override
@@ -69,8 +72,7 @@ class _SetCurrentLocationScreenState extends State<SetCurrentLocationScreen> {
                             child: TextField(
                               controller: addressController,
                               canRequestFocus: false,
-                              decoration: const InputDecoration(
-                                  border: InputBorder.none),
+                              decoration: const InputDecoration(border: InputBorder.none),
                             ),
                           ),
                         ),
@@ -89,7 +91,10 @@ class _SetCurrentLocationScreenState extends State<SetCurrentLocationScreen> {
                             color: Colors.white,
                           ),
                     onTap: () async {
-                      await getAddress();
+                      var repo = context.read<UserLocationRepo>();
+
+                      var point = await getAddress();
+                      if (point != null) repo.updateLocation(point);
                     },
                   ),
                 ),

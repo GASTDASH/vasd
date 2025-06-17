@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:universe/universe.dart';
 import 'package:vasd/repositories/point/point.dart';
+import 'package:vasd/repositories/user_location/user_location_repo.dart';
 import 'package:vasd/ui/ui.dart';
 
 class SelectPointScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class SelectPointScreen extends StatefulWidget {
 
 class _SelectPointScreenState extends State<SelectPointScreen> {
   final mapController = U.MapController();
-  List<double> lastCoordinates = [55.811049, 38.970480];
+  List<double> userLocation = [55.811049, 38.970480];
   final addressController = TextEditingController();
 
   void moveToAddress(String address, List<Point> points) {
@@ -23,6 +25,14 @@ class _SelectPointScreenState extends State<SelectPointScreen> {
     );
 
     mapController.move([target.lat, target.lng], zoom: 10, animate: true);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Point? point = context.read<UserLocationRepo>().location;
+    if (point != null) userLocation = [point.lat, point.lng];
   }
 
   @override
@@ -79,7 +89,7 @@ class _SelectPointScreenState extends State<SelectPointScreen> {
           body: (snapshot.hasData)
               ? U.GoogleMap(
                   controller: mapController,
-                  center: lastCoordinates,
+                  center: userLocation,
                   zoom: 10,
                   markers: U.MarkerLayer(
                     snapshot.data!
