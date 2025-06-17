@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:vasd/repositories/additional_func/additional_func.dart';
 
 class AdditionalFuncCard extends StatefulWidget {
   const AdditionalFuncCard({
     super.key,
+    required this.func,
   });
+
+  final AdditionalFunc func;
 
   @override
   State<AdditionalFuncCard> createState() => _AdditionalFuncCardState();
@@ -11,8 +15,6 @@ class AdditionalFuncCard extends StatefulWidget {
 
 class _AdditionalFuncCardState extends State<AdditionalFuncCard> {
   bool selected = false;
-
-  // TODO: Добавить отдельный класс AdditionalFunc
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +50,19 @@ class _AdditionalFuncCardState extends State<AdditionalFuncCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Дополнительная функция",
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(color: selected ? Colors.white : null),
+                      widget.func.name,
+                      style: theme.textTheme.titleMedium?.copyWith(color: selected ? Colors.white : null),
                     ),
                     Text(
-                      "Описание описание описание описание описание",
+                      widget.func.text,
                       style: TextStyle(color: selected ? Colors.white : null),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "100₽",
-                          style: theme.textTheme.titleLarge
-                              ?.copyWith(color: selected ? Colors.white : null),
+                          "${widget.func.price % 1 == 0 ? widget.func.price.truncate() : widget.func.price} ₽",
+                          style: theme.textTheme.titleLarge?.copyWith(color: selected ? Colors.white : null),
                         ),
                       ],
                     ),

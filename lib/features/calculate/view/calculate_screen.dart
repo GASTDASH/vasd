@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:vasd/features/calculate/bloc/calculate_bloc.dart';
 import 'package:vasd/features/calculate/calculate.dart';
+import 'package:vasd/repositories/additional_func/additional_func.dart';
 import 'package:vasd/repositories/package_size/models/package_size.dart';
 import 'package:vasd/repositories/package_size/package_size_local_repo.dart';
 import 'package:vasd/repositories/payment_method/payment_method_local_repo.dart';
@@ -226,34 +228,6 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 12),
-                                  // Autocomplete<String>(
-                                  //   optionsBuilder: (textEditingValue) async {
-                                  //     return await GetIt.I<
-                                  //             AddressCompleterInterface>()
-                                  //         .getAddresses(textEditingValue.text);
-                                  //   },
-                                  //   onSelected: (option) => _bloc.add(
-                                  //       CalculateSetCity(cityFrom: option)),
-                                  //   fieldViewBuilder: (context,
-                                  //       textEditingController,
-                                  //       focusNode,
-                                  //       onFieldSubmitted) {
-                                  //     return TextFieldCustom(
-                                  //       onEditingComplete: onFieldSubmitted,
-                                  //       focusNode: focusNode,
-                                  //       label: "Откуда",
-                                  //       controller: textEditingController,
-                                  //       onChanged: (text) {
-                                  //         if (text != state.delivery.cityFrom &&
-                                  //             state.delivery.cityFrom != "") {
-                                  //           _bloc.add(
-                                  //               CalculateSetCity(cityFrom: ""));
-                                  //         }
-                                  //       },
-                                  //     );
-                                  //   },
-                                  // ),
-                                  // const SizedBox(height: 12),
                                   TextFieldButton(
                                     text: state.delivery.pointFrom == null ? "Откуда" : state.delivery.pointFrom!.address,
                                     onTap: () async {
@@ -265,34 +239,6 @@ class _CalculateScreenState extends State<CalculateScreen> {
                                   ),
                                   Text("Город: ${state.delivery.cityFrom == "" ? "..." : state.delivery.cityFrom}"),
                                   const SizedBox(height: 12),
-                                  // Autocomplete<String>(
-                                  //   optionsBuilder: (textEditingValue) async {
-                                  //     return await GetIt.I<
-                                  //             AddressCompleterInterface>()
-                                  //         .getAddresses(textEditingValue.text);
-                                  //   },
-                                  //   onSelected: (option) => _bloc
-                                  //       .add(CalculateSetCity(cityTo: option)),
-                                  //   fieldViewBuilder: (context,
-                                  //       textEditingController,
-                                  //       focusNode,
-                                  //       onFieldSubmitted) {
-                                  //     return TextFieldCustom(
-                                  //       onEditingComplete: onFieldSubmitted,
-                                  //       focusNode: focusNode,
-                                  //       label: "Куда",
-                                  //       controller: textEditingController,
-                                  //       onChanged: (text) {
-                                  //         if (text != state.delivery.cityTo &&
-                                  //             state.delivery.cityTo != "") {
-                                  //           _bloc.add(
-                                  //               CalculateSetCity(cityTo: ""));
-                                  //         }
-                                  //       },
-                                  //     );
-                                  //   },
-                                  // ),
-                                  // const SizedBox(height: 12),
                                   TextFieldButton(
                                     text: state.delivery.pointTo == null ? "Куда" : state.delivery.pointTo!.address,
                                     onTap: () async {
@@ -394,10 +340,25 @@ class _CalculateScreenState extends State<CalculateScreen> {
                               spacing: 14,
                               children: [
                                 const SizedBox(height: 12),
-                                const AdditionalFuncCard(),
-                                const AdditionalFuncCard(),
-                                const AdditionalFuncCard(),
-                                const AdditionalFuncCard(),
+                                FutureBuilder(
+                                  future: Future(() async {
+                                    return GetIt.I<AdditionalFuncLocalRepo>().additionalFuncList;
+                                  }),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const SizedBox(height: 100, child: LoadingIndicator(indicatorType: Indicator.ballPulse));
+                                    }
+                                    return Column(
+                                      spacing: 12,
+                                      children: [
+                                        for (var func in snapshot.data!)
+                                          AdditionalFuncCard(
+                                            func: func,
+                                          )
+                                      ],
+                                    );
+                                  },
+                                ),
                                 ButtonBase(
                                   text: "Продолжить",
                                   onTap: () {

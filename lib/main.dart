@@ -8,6 +8,7 @@ import 'package:static_map/static_map.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:vasd/repositories/additional_func/additional_func.dart';
 import 'package:vasd/repositories/address_completer/address_completer.dart';
 import 'package:vasd/repositories/auth/auth.dart';
 import 'package:vasd/repositories/delivery/delivery.dart';
@@ -45,6 +46,7 @@ Future<void> main() async {
   GetIt.I.registerSingleton<DeliveryLocalRepo>(DeliveryLocalRepo());
   GetIt.I.registerSingleton(PointSupabaseRepo(supabaseClient: Supabase.instance.client));
   GetIt.I.registerSingleton(NotificationSupabaseRepo(supabaseClient: Supabase.instance.client));
+  GetIt.I.registerSingleton<AdditionalFuncLocalRepo>(AdditionalFuncLocalRepo());
 
   runApp(const VASDApp());
 }
