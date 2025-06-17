@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
+import 'package:vasd/features/package_info_editor/package_info_editor.dart';
 import 'package:vasd/repositories/delivery/models/delivery.dart';
 import 'package:vasd/ui/ui.dart';
 
@@ -227,6 +228,25 @@ class _PackageInfoEditorScreenState extends State<PackageInfoEditorScreen> {
                               },
                               outlined: true,
                               text: "Указать текущее местоположение",
+                            ),
+                            ButtonBase(
+                              onTap: () async {
+                                final List<double>? point = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const SetLocationScreen(),
+                                    ));
+
+                                if (point != null) {
+                                  setState(() {
+                                    latController.text = point[0].toString();
+                                    lngController.text = point[1].toString();
+                                  });
+                                }
+                              },
+                              outlined: true,
+                              text: "Указать вручную",
+                              prefixIcon: const Icon(Icons.place),
                             ),
                           ],
                         )
