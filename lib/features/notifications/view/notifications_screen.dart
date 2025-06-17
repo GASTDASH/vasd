@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -120,20 +122,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       ],
                     );
                   } else if (state is NotificationsError) {
-                    return Column(
-                      spacing: 12,
-                      children: [
-                        const Icon(
-                          Icons.warning_amber,
-                          size: 48,
-                        ),
-                        Text(
-                          "Что-то пошло не так!",
-                          style: theme.textTheme.headlineSmall,
-                        ),
-                        Text(state.error.toString())
-                      ],
-                    );
+                    String errorText = state.error.toString();
+
+                    return ErrorBanner(
+                        errorText: errorText.contains("host")
+                            ? "Ошибка соединения с сервером\n(${(state.error as SocketException).message})"
+                            : errorText);
                   } else {
                     return const Text("Unexpected state");
                   }

@@ -13,6 +13,8 @@ class PackagesEditorScreen extends StatefulWidget {
 
 class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
   late final DeliveryBloc deliveryBloc;
+  bool isSearch = false;
+  final filterController = TextEditingController();
 
   @override
   void initState() {
@@ -43,26 +45,35 @@ class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
                   SliverAppBar(
                     title: const Text("Заказы"),
                     actions: [
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.sort)),
-                      IconButton(
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed("/settings"),
-                          icon: const Icon(Icons.settings)),
+                      IconButton(onPressed: () {}, icon: const Icon(Icons.sort)),
+                      IconButton(onPressed: () => Navigator.of(context).pushNamed("/settings"), icon: const Icon(Icons.settings)),
                     ],
                   ),
                   SliverAppBar(
                     centerTitle: true,
-                    title: TextButton(
-                        onPressed: () {},
-                        child: const Text("Выбрать пользователя")),
-                    leading: IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.qr_code)),
+                    title: TextButton(onPressed: () {}, child: const Text("Выбрать пользователя")),
+                    leading: IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code)),
                     actions: [
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.search)),
+                        onPressed: () => setState(() => isSearch = !isSearch),
+                        icon: const Icon(Icons.search),
+                      ),
                     ],
                   ),
+                  isSearch
+                      ? SliverAppBar(
+                          title: Flexible(
+                              child: TextFieldCustom(
+                            controller: filterController,
+                            onChanged: (_) => setState(() {}),
+                          )),
+                          toolbarHeight: 100,
+                          leading: IconButton(
+                            onPressed: () => setState(() => isSearch = !isSearch),
+                            icon: const Icon(Icons.search_off),
+                          ),
+                        )
+                      : const SliverToBoxAdapter(),
                   BlocBuilder<DeliveryBloc, DeliveryState>(
                     bloc: deliveryBloc,
                     builder: (context, state) {
@@ -72,27 +83,30 @@ class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
                           child: SizedBox(
                             height: 300,
                             width: 100,
-                            child: LoadingIndicator(
-                                indicatorType: Indicator.ballRotate),
+                            child: LoadingIndicator(indicatorType: Indicator.ballRotate),
                           ),
                         ));
                       } else if (state is DeliveryLoaded) {
                         var deliveries = state.deliveries;
-                        deliveries.sort(
-                            (a, b) => b.createdAt!.compareTo(a.createdAt!));
+                        deliveries.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+                        if (filterController.text.isNotEmpty) {
+                          deliveries = deliveries
+                              .where(
+                                (d) => d.deliveryId!.toLowerCase().contains(filterController.text.toLowerCase()),
+                              )
+                              .toList();
+                        }
+
                         return SliverList.builder(
                           itemCount: deliveries.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                               child: DeliveryItemWidget(
                                 isShowShadow: true,
-                                delivery: state.deliveries[index],
+                                delivery: deliveries[index],
                                 onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                      "/package_info_editor",
-                                      arguments: state.deliveries[index]);
+                                  Navigator.of(context).pushNamed("/package_info_editor", arguments: deliveries[index]);
                                 },
                               ),
                             );

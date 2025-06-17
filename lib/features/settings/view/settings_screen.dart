@@ -29,8 +29,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             builder: (context) => const LoadingDialog(),
           );
         } else if (state.error != null) {
+          var errorText = state.error.toString();
+
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.error.toString()),
+            content: Text(errorText.contains("host") ? "Ошибка соединения с сервером. Проверьте подключение к интернету." : errorText),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 2),
           ));

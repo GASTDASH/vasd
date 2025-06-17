@@ -44,6 +44,7 @@ class DeliveryItemWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: onTap,
       child: Ink(
+        key: UniqueKey(),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -152,8 +153,7 @@ class DeliveryItemWidget extends StatelessWidget {
                           : "1",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(color: theme.hintColor),
+                      style: theme.textTheme.titleMedium?.copyWith(color: theme.hintColor),
                     ),
                   ],
                 ),
@@ -190,8 +190,7 @@ class DeliveryItemWidget extends StatelessWidget {
                   style: theme.textTheme.bodyLarge,
                 ),
                 Text(
-                  delivery?.trackingList != null &&
-                          delivery!.trackingList!.isNotEmpty
+                  delivery?.trackingList != null && delivery!.trackingList!.isNotEmpty
                       ? delivery!.trackingList!.last.status.name
                       : "Неизвестно",
                   style: theme.textTheme.titleMedium,

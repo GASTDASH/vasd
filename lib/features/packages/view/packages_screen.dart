@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vasd/bloc/delivery/delivery_bloc.dart';
-import 'package:vasd/ui/widgets/delivery_item_widget.dart';
-import 'package:vasd/ui/widgets/shimmer_custom.dart';
+import 'package:vasd/ui/ui.dart';
 
 class PackagesScreen extends StatefulWidget {
   const PackagesScreen({super.key});
@@ -30,8 +31,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
         appBar: AppBar(
           title: Text(
             "История заказов",
-            style: theme.textTheme.titleLarge
-                ?.copyWith(fontWeight: FontWeight.w700),
+            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
           ),
           centerTitle: true,
         ),
@@ -44,7 +44,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
               BlocBuilder<DeliveryBloc, DeliveryState>(
                 bloc: _deliveryBloc,
                 builder: (context, state) {
-                  if (state is DeliveryLoaded) {
+                  if (state is DeliveryLoaded || (state is DeliveryError && state.deliveries.isNotEmpty)) {
                     if (state.deliveries.isEmpty) {
                       return const SliverToBoxAdapter(
                         child: Center(
@@ -63,40 +63,49 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         ),
                       );
                     }
+
                     final deliveries = state.deliveries.reversed.toList();
-                    return SliverList.builder(
-                      itemCount: deliveries.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 16),
-                          child: DeliveryItemWidget(
-                            isShowShadow: true,
-                            delivery: deliveries[index],
-                            onTap: () {
-                              Navigator.of(context).pushNamed("/package_info",
-                                  arguments: deliveries[index]);
-                            },
+                    return SliverMainAxisGroup(
+                      slivers: [
+                        if (state is DeliveryError)
+                          const SliverToBoxAdapter(
+                            child: ErrorBanner(errorText: "Не удалось подключиться к серверу, но вы можете просмотреть сохранённые заказы"),
                           ),
-                        );
-                      },
+                        SliverList.builder(
+                          itemCount: deliveries.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              child: DeliveryItemWidget(
+                                isShowShadow: true,
+                                delivery: deliveries[index],
+                                onTap: () {
+                                  Navigator.of(context).pushNamed("/package_info", arguments: deliveries[index]);
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     );
                   } else if (state is DeliveryLoading) {
                     return SliverList.builder(
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         return const Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                           child: ShimmerCustom(height: 150),
                         );
                       },
                     );
                   } else if (state is DeliveryError) {
+                    String errorText = state.error.toString();
+
                     return SliverToBoxAdapter(
-                      child: Center(
-                        child: Text("Error:\n${state.error}"),
-                      ),
+                      child: ErrorBanner(
+                          errorText: errorText.contains("host")
+                              ? "Ошибка соединения с сервером\n(${(state.error as SocketException).message})"
+                              : errorText),
                     );
                   }
                   return const SliverToBoxAdapter(

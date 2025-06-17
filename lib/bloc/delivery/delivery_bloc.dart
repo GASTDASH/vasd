@@ -52,16 +52,30 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
           throw Exception("User is null");
         }
 
-        final List<Delivery> deliveries = await _deliverySupabaseRepo.getDeliveriesByUser(userId: _authRepo.user!.id);
+        List<Delivery> deliveries = [];
 
-        // deliveries.insertAll(
-        //   0,
-        //   await _deliveryLocalRepo.getDeliveriesByUser(
-        //       userId: _authRepo.user!.id),
-        // );
-        deliveries.addAll(await _deliveryLocalRepo.getDeliveriesByUser(userId: _authRepo.user!.id));
+        Object? error;
+        // SUPABASE
+        try {
+          deliveries = await _deliverySupabaseRepo.getDeliveriesByUser(userId: _authRepo.user!.id);
+        } catch (e) {
+          error = e;
+          deliveries = [];
+        }
 
-        emit(DeliveryLoaded(deliveries: deliveries));
+        // LOCAL
+        var localDeliveries = await _deliveryLocalRepo.getDeliveriesByUser(userId: _authRepo.user!.id);
+        if (deliveries.isNotEmpty) {
+          deliveries.addAll(localDeliveries);
+
+          emit(DeliveryLoaded(deliveries: deliveries));
+        } else {
+          deliveries = localDeliveries;
+          emit(DeliveryError(
+            error: error,
+            deliveries: deliveries,
+          ));
+        }
       } catch (e) {
         emit(DeliveryError(
           error: e,

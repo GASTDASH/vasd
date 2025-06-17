@@ -26,8 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkSavedLogin() async {
     final authBloc = context.read<AuthBloc>();
-    final supabase.Session? session =
-        GetIt.I<supabase.SupabaseClient>().auth.currentSession;
+    final supabase.Session? session = GetIt.I<supabase.SupabaseClient>().auth.currentSession;
 
     if (mounted) {
       if (session != null) {
@@ -47,11 +46,12 @@ class _SplashScreenState extends State<SplashScreen> {
         if (state is AuthAuthorizedState) {
           Navigator.of(context).pushReplacementNamed("/home");
         } else if (state is AuthUnauthorizedState && state.error != null) {
+          var errorText = state.error.toString();
+
           // TODO: Сделать автоматический повтор 3 раза
           if (attempts < 3) {
             attempts++;
-            GetIt.I<Talker>().debug(
-                "Ошибка входа (${state.error})\nПовторная попытка $attempts/3");
+            GetIt.I<Talker>().debug("Ошибка входа (${state.error})\nПовторная попытка $attempts/3");
             checkSavedLogin();
             return;
           }
@@ -63,8 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Colors.white,
               ),
               color: Colors.red,
-              title: "Произошла ошибка",
-              text: state.error.toString(),
+              title: errorText.contains("host") ? "Ошибка соединения" : "Произошла ошибка",
+              text: errorText.contains("host")
+                  ? "Невозможно подключиться к серверу. Проверьте соединение с интернетом или попробуйте позже"
+                  : errorText,
               child: ButtonBase(
                 text: "Повторить попытку",
                 onTap: () {
