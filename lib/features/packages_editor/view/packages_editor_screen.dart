@@ -14,6 +14,9 @@ class PackagesEditorScreen extends StatefulWidget {
 class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
   late final DeliveryBloc deliveryBloc;
   bool isSearch = false;
+  String? userId;
+  DateTimeRange? dateTimeRange;
+  bool isDescSort = false;
   final filterController = TextEditingController();
 
   @override
@@ -32,6 +35,8 @@ class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SafeArea(
       child: Scaffold(
         body: SafeArea(
@@ -45,14 +50,75 @@ class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
                   SliverAppBar(
                     title: const Text("Заказы"),
                     actions: [
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.sort)),
-                      IconButton(onPressed: () => Navigator.of(context).pushNamed("/settings"), icon: const Icon(Icons.settings)),
+                      IconButton(
+                          onPressed: () => setState(() => isDescSort = !isDescSort),
+                          icon: Icon(isDescSort ? Icons.filter_list : Icons.sort)),
+                      // IconButton(onPressed: () => Navigator.of(context).pushNamed("/settings"), icon: const Icon(Icons.settings)),
                     ],
                   ),
                   SliverAppBar(
                     centerTitle: true,
-                    title: TextButton(onPressed: () {}, child: const Text("Выбрать пользователя")),
-                    leading: IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code)),
+                    title: BlocBuilder<DeliveryBloc, DeliveryState>(
+                      builder: (context, state) {
+                        return TextButton(
+                            onPressed: () {
+                              var users = state.deliveries.map((d) => d.userId).toSet().toList();
+                              users.removeWhere((u) => u == null);
+
+                              showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  insetPadding: const EdgeInsets.symmetric(vertical: 120, horizontal: 32),
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                      color: theme.scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(24),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListTile(
+                                                title: const Text(
+                                                  "Убрать фильтр",
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                                ),
+                                                onTap: () => setState(() => userId = null),
+                                              ),
+                                              ...users.map(
+                                                (user) => ListTile(
+                                                  title: Text(user!),
+                                                  onTap: () => setState(() => userId = user),
+                                                ),
+                                              )
+                                            ]),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text("Выбрать пользователя"));
+                      },
+                    ),
+                    leading: IconButton(
+                        onPressed: dateTimeRange == null
+                            ? () async {
+                                dateTimeRange = await showDateRangePicker(
+                                  context: context,
+                                  firstDate: DateTime(2024),
+                                  lastDate: DateTime.now(),
+                                  saveText: "Выбрать",
+                                );
+                                setState(() {});
+                              }
+                            : () {
+                                setState(() => dateTimeRange = null);
+                              },
+                        icon: Icon(dateTimeRange == null ? Icons.calendar_month : Icons.edit_calendar)),
                     actions: [
                       IconButton(
                         onPressed: () => setState(() => isSearch = !isSearch),
@@ -62,11 +128,11 @@ class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
                   ),
                   isSearch
                       ? SliverAppBar(
-                          title: Flexible(
-                              child: TextFieldCustom(
+                          title: TextFieldCustom(
                             controller: filterController,
+                            hintText: "Введите номер заказа или город",
                             onChanged: (_) => setState(() {}),
-                          )),
+                          ),
                           toolbarHeight: 100,
                           leading: IconButton(
                             onPressed: () => setState(() => isSearch = !isSearch),
@@ -88,11 +154,34 @@ class _PackagesEditorScreenState extends State<PackagesEditorScreen> {
                         ));
                       } else if (state is DeliveryLoaded) {
                         var deliveries = state.deliveries;
+
                         deliveries.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
+                        if (isDescSort) deliveries = deliveries.reversed.toList();
+
                         if (filterController.text.isNotEmpty) {
                           deliveries = deliveries
                               .where(
-                                (d) => d.deliveryId!.toLowerCase().contains(filterController.text.toLowerCase()),
+                                (d) =>
+                                    d.deliveryId!.toLowerCase().contains(filterController.text.toLowerCase()) ||
+                                    d.cityFrom.toLowerCase().contains(filterController.text.toLowerCase()) ||
+                                    d.cityTo.toLowerCase().contains(filterController.text.toLowerCase()),
+                              )
+                              .toList();
+                        }
+
+                        if (dateTimeRange != null) {
+                          deliveries = deliveries
+                              .where(
+                                (d) => dateTimeRange!.start.isBefore(d.createdAt!) && dateTimeRange!.end.isAfter(d.createdAt!),
+                              )
+                              .toList();
+                        }
+
+                        if (userId != null) {
+                          deliveries = deliveries
+                              .where(
+                                (d) => d.userId == userId,
                               )
                               .toList();
                         }
