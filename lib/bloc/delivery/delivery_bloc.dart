@@ -70,11 +70,19 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState> {
 
           emit(DeliveryLoaded(deliveries: deliveries));
         } else {
-          deliveries = localDeliveries;
-          emit(DeliveryError(
-            error: error,
-            deliveries: deliveries,
-          ));
+          if (localDeliveries.isNotEmpty) {
+            deliveries = localDeliveries;
+          }
+          if (error == null) {
+            emit(DeliveryLoaded(
+              deliveries: deliveries,
+            ));
+          } else {
+            emit(DeliveryError(
+              error: error,
+              deliveries: deliveries,
+            ));
+          }
         }
       } catch (e) {
         emit(DeliveryError(

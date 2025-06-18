@@ -17,8 +17,6 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       bottomNavigationBar: Container(
         height: 100,
@@ -32,27 +30,6 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // address.isNotEmpty
-              //     ? Expanded(
-              //         child: Padding(
-              //           padding: const EdgeInsets.only(right: 12),
-              //           child: Container(
-              //             decoration: BoxDecoration(
-              //               color: theme.hintColor.withOpacity(0.5),
-              //               borderRadius: BorderRadius.circular(16),
-              //             ),
-              //             child: Padding(
-              //               padding: const EdgeInsets.symmetric(horizontal: 12),
-              //               child: TextField(
-              //                 controller: addressController,
-              //                 canRequestFocus: false,
-              //                 decoration: const InputDecoration(border: InputBorder.none),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       )
-              //     : const SizedBox.shrink(),
               SizedBox(
                 child: Material(
                   child: ButtonBase(

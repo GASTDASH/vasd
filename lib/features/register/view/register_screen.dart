@@ -17,6 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
+  bool emailError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +47,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           );
         } else if (state.error != null) {
+          String errorText = state.error.toString();
+
+          if (errorText.contains("email") && errorText.contains("invalid format")) {
+            errorText = "Неверно введён адрес эл. почты";
+            setState(() => emailError = true);
+          }
+
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.error.toString()),
+            content: Text(errorText),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 2),
           ));
@@ -68,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 32),
-                  SvgPicture.asset("assets/images/CDEK_logo.svg"),
+                  SvgPicture.asset("assets/images/CDfEK_logo.svg"),
                   const SizedBox(height: 60),
                   Text("Создайте свой новый аккаунт!", style: theme.textTheme.headlineMedium),
                   const SizedBox(height: 12),
@@ -85,13 +93,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   TextFieldCustom(
                     hintText: "Эл. почта",
                     controller: emailController,
-                    onChanged: (_) {
-                      setState(() {});
-                    },
+                    onChanged: (_) => setState(() {
+                      if (emailError) emailError = false;
+                    }),
+                    error: emailError,
                   ),
-                  // TODO: Заменить на IntlPhone
                   const SizedBox(height: 16),
-
                   IntlPhoneFieldCustom(
                     controller: phoneController,
                     onChanged: (_) {
@@ -106,6 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (_) {
                       setState(() {});
                     },
+                    error: !checkPasswordLength(passwordController.text),
                   ),
                   const SizedBox(height: 16),
                   TextFieldCustom(
@@ -115,6 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (_) {
                       setState(() {});
                     },
+                    error: !checkPasswordLength(passwordConfirmController.text),
                   ),
                   const SizedBox(height: 24),
                   ButtonBase(
@@ -165,4 +174,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       passwordConfirmController.text.isNotEmpty;
 
   bool checkPassword() => passwordController.text == passwordConfirmController.text;
+
+  bool checkPasswordLength(String password) => password.length >= 6;
 }

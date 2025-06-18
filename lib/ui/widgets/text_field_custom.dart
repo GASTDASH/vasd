@@ -15,6 +15,7 @@ class TextFieldCustom extends StatefulWidget {
     this.label,
     this.focusNode,
     this.onEditingComplete,
+    this.error = false,
   })  : assert(!password || !multiline),
         assert(!password || suffixIcon == null);
 
@@ -30,6 +31,7 @@ class TextFieldCustom extends StatefulWidget {
   final void Function()? onTap;
   final FocusNode? focusNode;
   final void Function()? onEditingComplete;
+  final bool error;
 
   @override
   State<TextFieldCustom> createState() => _TextFieldCustomState();
@@ -63,18 +65,20 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
         label: widget.label != null ? Text(widget.label!) : null,
         contentPadding: const EdgeInsets.all(20),
         border: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.hintColor, width: 1)),
+          borderSide: BorderSide(color: widget.error ? theme.colorScheme.error : theme.hintColor, width: 1),
+        ),
         disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: theme.hintColor, width: 1)),
+          borderSide: BorderSide(color: widget.error ? theme.colorScheme.error : theme.hintColor, width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: widget.error ? theme.colorScheme.error : theme.hintColor, width: 1),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: theme.primaryColor),
         ),
         hintText: widget.hintText,
-        prefixIcon: widget.prefixIcon != null
-            ? Icon(widget.prefixIcon, color: theme.hintColor)
-            : null,
-        hintStyle:
-            const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon, color: theme.hintColor) : null,
+        hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
         suffixIcon: widget.password
             ? IconButton(
                 onPressed: () {
@@ -84,8 +88,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                 },
                 icon: !showPassword
                     ? Icon(Icons.visibility_outlined, color: theme.hintColor)
-                    : Icon(Icons.visibility_off_outlined,
-                        color: theme.hintColor))
+                    : Icon(Icons.visibility_off_outlined, color: theme.hintColor))
             : widget.suffixIcon != null
                 ? Icon(
                     widget.suffixIcon,
